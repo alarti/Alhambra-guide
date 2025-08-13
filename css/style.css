@@ -38,3 +38,25 @@ body {
     font-size: 16px;
     cursor: pointer;
 }
+
+#support-container {
+    margin-top: 20px;
+}
+
+.support-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #000;
+    background-color: #FFDD00;
+    border-radius: 5px;
+    text-decoration: none;
+    font-family: sans-serif;
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: background-color 0.3s;
+}
+
+.support-btn:hover {
+    background-color: #FFC000;
+}

@@ -28,51 +28,29 @@ document.addEventListener('DOMContentLoaded', () => {
     let userMarker; // Leaflet marker for user's position
     const poiMarkers = {}; // To store POI marker instances { poiId: marker }
 
-    // --- Points of Interest (static data) ---
-    const pois = [
-        { id: 'poi-1', lat: 37.1768, lon: -3.5885 },
-        { id: 'poi-2', lat: 37.1775, lon: -3.5880 },
-        { id: 'poi-3', lat: 37.1760, lon: -3.5895 },
-        { id: 'poi-4', lat: 37.1785, lon: -3.5860 }
-    ];
-
-    // --- Translations ---
-    const translations = {
+    // Data will be loaded from assets/pois.json
+    let pois = [];
+    let translations = {
         en: {
             title: "Alhambra Voice Guide", welcome: "Welcome to the Alhambra! Your tour will begin shortly.", play: "Play", pause: "Pause", stop: "Stop",
             geolocationNotSupported: "Geolocation is not supported by this browser.", geolocationDenied: "User denied the request for Geolocation.",
             geolocationUnavailable: "Location information is unavailable.", geolocationTimeout: "The request to get user location timed out.",
-            geolocationUnknownError: "An unknown error occurred.", yourPosition: "Your position: Latitude: {lat}, Longitude: {lon}", nearPoi: "You are near {poiName}.",
-            pois: {
-                'poi-1': { name: 'Palace of Charles V', description: "The Palace of Charles V is a Renaissance building in Granada, southern Spain, located on the top of the hill of the Assabica, inside the Nasrid fortification of the Alhambra." },
-                'poi-2': { name: 'Court of the Lions', description: "The Court of the Lions is the main courtyard of the Nasrid dynasty Palace of the Lions, in the heart of the Alhambra." },
-                'poi-3': { name: 'Alcazaba', description: "The Alcazaba is the oldest part of the Alhambra, a fortress that was used as a military precinct." },
-                'poi-4': { name: 'Generalife', description: "The Generalife was the summer palace and country estate of the Nasrid rulers of the Emirate of Granada in Al-Andalus." }
-            }
+            geolocationUnknownError: "An unknown error occurred.", yourPosition: "Your position: Latitude: {lat}, Longitude: {lon}",
+            pois: {}
         },
         es: {
             title: "Audioguía de la Alhambra", welcome: "¡Bienvenido a la Alhambra! Su recorrido comenzará en breve.", play: "Reproducir", pause: "Pausar", stop: "Detener",
             geolocationNotSupported: "La geolocalización no es compatible con este navegador.", geolocationDenied: "El usuario denegó la solicitud de geolocalización.",
             geolocationUnavailable: "La información de ubicación no está disponible.", geolocationTimeout: "La solicitud para obtener la ubicación del usuario ha caducado.",
-            geolocationUnknownError: "Ocurrió un error desconocido.", yourPosition: "Tu posición: Latitud: {lat}, Longitud: {lon}", nearPoi: "Estás cerca de {poiName}.",
-            pois: {
-                'poi-1': { name: 'Palacio de Carlos V', description: "El Palacio de Carlos V es un edificio renacentista en Granada, sur de España, situado en la cima de la colina de la Assabica, dentro de la fortificación nazarí de la Alhambra." },
-                'poi-2': { name: 'Patio de los Leones', description: "El Patio de los Leones es el patio principal del palacio de la dinastía nazarí de los Leones, en el corazón de la Alhambra." },
-                'poi-3': { name: 'Alcazaba', description: "La Alcazaba es la parte más antigua de la Alhambra, una fortaleza que se utilizó como recinto militar." },
-                'poi-4': { name: 'Generalife', description: "El Generalife fue el palacio de verano y finca rural de los gobernantes nazaríes del Emirato de Granada en Al-Ándalus." }
-            }
+            geolocationUnknownError: "Ocurrió un error desconocido.", yourPosition: "Tu posición: Latitud: {lat}, Longitud: {lon}",
+            pois: {}
         },
         fr: {
             title: "Audioguide de l'Alhambra", welcome: "Bienvenue à l'Alhambra ! Votre visite commencera sous peu.", play: "Jouer", pause: "Pause", stop: "Arrêter",
             geolocationNotSupported: "La géolocalisation n'est pas prise en charge par ce navigateur.", geolocationDenied: "L'utilisateur a refusé la demande de géolocalisation.",
             geolocationUnavailable: "Les informations de localisation ne sont pas disponibles.", geolocationTimeout: "La demande de localisation de l'utilisateur a expiré.",
-            geolocationUnknownError: "Une erreur inconnue est survenue.", yourPosition: "Votre position : Latitude : {lat}, Longitude : {lon}", nearPoi: "Vous êtes près de {poiName}.",
-            pois: {
-                'poi-1': { name: 'Palais de Charles Quint', description: "Le palais de Charles Quint est un édifice de la Renaissance à Grenade, dans le sud de l'Espagne, situé au sommet de la colline de l'Assabica, à l'intérieur de la fortification nasride de l'Alhambra." },
-                'poi-2': { name: 'Cour des Lions', description: "La Cour des Lions est la cour principale du palais de la dynastie nasride des Lions, au cœur de l'Alhambra." },
-                'poi-3': { name: 'Alcazaba', description: "L'Alcazaba est la partie la plus ancienne de l'Alhambra, une forteresse qui servait d'enceinte militaire." },
-                'poi-4': { name: 'Generalife', description: "Le Generalife était le palais d'été et le domaine de campagne des souverains nasrides de l'émirat de Grenade en Al-Andalus." }
-            }
+            geolocationUnknownError: "Une erreur inconnue est survenue.", yourPosition: "Votre position : Latitude : {lat}, Longitude : {lon}",
+            pois: {}
         }
     };
 
@@ -228,15 +206,37 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    function init() {
-        map = L.map('map-container').setView([37.177, -3.588], 16);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
+  async function init() {
+        try {
+            const response = await fetch('assets/pois.json');
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const poiData = await response.json();
 
-        renderPois();
-        setLanguage(currentLang);
-        getLocation();
+            // Populate the pois and translations objects from the fetched data
+            pois = poiData.map(p => ({ id: p.id, lat: p.lat, lon: p.lon }));
+            poiData.forEach(p => {
+                translations.en.pois[p.id] = p.en;
+                translations.es.pois[p.id] = p.es;
+                translations.fr.pois[p.id] = p.fr;
+            });
+
+            // Initialize the map now that we have the data
+            map = L.map('map-container').setView([37.177, -3.588], 16);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            // Set initial UI text and render markers
+            setLanguage(currentLang);
+            renderPois();
+            getLocation();
+
+        } catch (error) {
+            console.error("Could not load POI data:", error);
+            guideText.textContent = "Could not load tour data. Please try again later.";
+        }
     }
 
     init();
