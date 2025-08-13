@@ -206,7 +206,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    async function init() {
+  async function init() {
         try {
             const response = await fetch('assets/pois.json');
             if (!response.ok) {
