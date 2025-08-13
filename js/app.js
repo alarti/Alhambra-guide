@@ -17,11 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const pauseBtn = document.getElementById('pause-btn');
     const stopBtn = document.getElementById('stop-btn');
     const guideText = document.getElementById('guide-text').querySelector('p');
-    const mapContainer = document.getElementById('map-container');
-    const map = document.getElementById('alhambra-map');
-    const userMarker = document.createElement('div');
-    userMarker.id = 'user-marker';
-    mapContainer.appendChild(userMarker);
 
     // --- State and Config ---
     const synth = window.speechSynthesis;
@@ -29,6 +24,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let lastTriggeredPoiId = null;
     const PROXIMITY_THRESHOLD = 20; // meters
     let currentLang = 'en'; // Default language
+    let map; // Leaflet map instance
+    let userMarker; // Leaflet marker for user's position
+    const poiMarkers = {}; // To store POI marker instances { poiId: marker }
 
     // --- Points of Interest (static data) ---
     const pois = [
@@ -92,29 +90,22 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Update POI labels on the map
-        document.querySelectorAll('.poi-marker').forEach(marker => {
-            const poiId = marker.dataset.poiId;
-            const poiLabel = marker.querySelector('.poi-label');
-            if (poiId && poiLabel && translations[lang].pois[poiId]) {
-                poiLabel.textContent = translations[lang].pois[poiId].name;
+        // Update POI popups on the map
+        for (const poiId in poiMarkers) {
+            const poiInfo = translations[lang].pois[poiId];
+            if (poiInfo) {
+                const marker = poiMarkers[poiId];
+                marker.getPopup().setContent(poiInfo.name);
             }
-        });
+        }
     }
 
     function renderPois() {
         pois.forEach(poi => {
-            const { x, y } = mapGpsToSvgCoords(poi.lat, poi.lon);
-            const poiMarker = document.createElement('div');
-            poiMarker.className = 'poi-marker';
-            poiMarker.style.left = `${x}px`;
-            poiMarker.style.top = `${y}px`;
-            poiMarker.dataset.poiId = poi.id;
-            const poiLabel = document.createElement('span');
-            poiLabel.className = 'poi-label';
-            poiLabel.textContent = translations[currentLang].pois[poi.id].name;
-            poiMarker.appendChild(poiLabel);
-            mapContainer.appendChild(poiMarker);
+            const poiInfo = translations[currentLang].pois[poi.id];
+            const marker = L.marker([poi.lat, poi.lon]).addTo(map)
+                .bindPopup(poiInfo.name);
+            poiMarkers[poi.id] = marker;
         });
     }
 
@@ -137,10 +128,18 @@ document.addEventListener('DOMContentLoaded', () => {
     function showPosition(position) {
         const lat = position.coords.latitude;
         const lon = position.coords.longitude;
-        const { x, y } = mapGpsToSvgCoords(lat, lon);
-        userMarker.style.left = `${x}px`;
-        userMarker.style.top = `${y}px`;
-        userMarker.style.display = 'block';
+
+        if (!userMarker) {
+            const userIcon = L.divIcon({
+                html: '<div style="background-color: blue; width: 15px; height: 15px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 5px rgba(0,0,0,0.5);"></div>',
+                className: '', // No default class
+                iconSize: [15, 15],
+                iconAnchor: [9, 9]
+            });
+            userMarker = L.marker([lat, lon], { icon: userIcon }).addTo(map);
+        } else {
+            userMarker.setLatLng([lat, lon]);
+        }
 
         if (!synth.speaking) {
             guideText.textContent = translations[currentLang].yourPosition
@@ -161,34 +160,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function checkProximity(lat, lon) {
         let inRangeOfPoi = null;
+        let closestPoi = null;
+        let minDistance = Infinity;
+
         for (const poi of pois) {
             const distance = getDistance(lat, lon, poi.lat, poi.lon);
-            if (distance < PROXIMITY_THRESHOLD) {
-                inRangeOfPoi = poi;
-                break;
+            if (distance < minDistance) {
+                minDistance = distance;
+                closestPoi = poi;
             }
         }
 
-        document.querySelectorAll('.poi-marker.active').forEach(m => m.classList.remove('active'));
-
-        if (inRangeOfPoi) {
-            document.querySelector(`[data-poi-id="${inRangeOfPoi.id}"]`).classList.add('active');
-            if (lastTriggeredPoiId !== inRangeOfPoi.id) {
-                lastTriggeredPoiId = inRangeOfPoi.id;
-                const poiInfo = translations[currentLang].pois[inRangeOfPoi.id];
-                guideText.textContent = poiInfo.description;
-                speak(poiInfo.description);
-            }
+        if (minDistance < PROXIMITY_THRESHOLD) {
+            inRangeOfPoi = closestPoi;
         }
-    }
 
-    function mapGpsToSvgCoords(lat, lon) {
-        const mapBounds = { latMin: 37.1750, lonMin: -3.5900, latMax: 37.1800, lonMax: -3.5840 };
-        const mapRect = map.getBoundingClientRect();
-        if (mapRect.width === 0) return { x: 0, y: 0 };
-        const yPercent = (lat - mapBounds.latMin) / (mapBounds.latMax - mapBounds.latMin);
-        const xPercent = (lon - mapBounds.lonMin) / (mapBounds.lonMax - mapBounds.lonMin);
-        return { x: xPercent * mapRect.width, y: (1 - yPercent) * mapRect.height };
+        const newTriggerId = inRangeOfPoi ? inRangeOfPoi.id : null;
+
+        if (lastTriggeredPoiId && lastTriggeredPoiId !== newTriggerId) {
+            poiMarkers[lastTriggeredPoiId].closePopup();
+        }
+
+        if (newTriggerId && newTriggerId !== lastTriggeredPoiId) {
+            poiMarkers[newTriggerId].openPopup();
+
+            lastTriggeredPoiId = newTriggerId;
+            const poiInfo = translations[currentLang].pois[newTriggerId];
+            guideText.textContent = poiInfo.description;
+            speak(poiInfo.description);
+        } else if (!newTriggerId && lastTriggeredPoiId) {
+            lastTriggeredPoiId = null;
+        }
     }
 
     function showError(error) {
@@ -201,7 +203,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Event Listeners and Init ---
-
     langSelector.addEventListener('change', (event) => {
         setLanguage(event.target.value);
     });
@@ -221,17 +222,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     stopBtn.addEventListener('click', () => {
         if (synth.speaking) synth.cancel();
-        lastTriggeredPoiId = null;
+        if (lastTriggeredPoiId) {
+            poiMarkers[lastTriggeredPoiId].closePopup();
+            lastTriggeredPoiId = null;
+        }
     });
 
     function init() {
+        map = L.map('map-container').setView([37.177, -3.588], 16);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
         renderPois();
-        setLanguage(currentLang); // Set initial language for UI
+        setLanguage(currentLang);
         getLocation();
     }
 
-    map.addEventListener('load', init);
-    if (map.complete) {
-        init();
-    }
+    init();
 });
