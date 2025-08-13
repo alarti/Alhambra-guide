@@ -1,10 +1,14 @@
+/* Author: Alberto Arce, Arcasoft */
 const CACHE_NAME = 'alhambra-guide-v1';
 const urlsToCache = [
     '/',
     '/index.html',
     '/css/style.css',
     '/js/app.js',
-    '/assets/alhambra-map.svg'
+    '/assets/alhambra-map.svg',
+    '/manifest.json',
+    '/assets/icons/icon-192x192.png',
+    '/assets/icons/icon-512x512.png'
 ];
 
 self.addEventListener('install', event => {

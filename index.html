@@ -1,3 +1,4 @@
+<!-- Author: Alberto Arce, Arcasoft -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,22 +6,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alhambra Voice Guide</title>
     <link rel="stylesheet" href="css/style.css">
+
+    <!-- PWA Support -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#8B0000"/>
+
+    <!-- Apple-specific meta tags for PWA -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Alhambra Guide">
+    <link rel="apple-touch-icon" href="assets/icons/icon-192x192.png">
 </head>
 <body>
-    <h1>Alhambra Voice Guide</h1>
+    <div id="language-selector-container">
+        <select id="language-selector">
+            <option value="en">English</option>
+            <option value="es">Español</option>
+            <option value="fr">Français</option>
+        </select>
+    </div>
+    <h1 data-key="title">Alhambra Voice Guide</h1>
 
     <div id="map-container">
         <img src="assets/alhambra-map.svg" alt="Alhambra Map" id="alhambra-map">
     </div>
 
     <div id="guide-text">
-        <p>Welcome to the Alhambra! Your tour will begin shortly.</p>
+        <p data-key="welcome">Welcome to the Alhambra! Your tour will begin shortly.</p>
     </div>
 
     <div id="controls">
-        <button id="play-btn">Play</button>
-        <button id="pause-btn">Pause</button>
-        <button id="stop-btn">Stop</button>
+        <button id="play-btn" data-key="play">Play</button>
+        <button id="pause-btn" data-key="pause">Pause</button>
+        <button id="stop-btn" data-key="stop">Stop</button>
     </div>
 
     <script src="js/app.js"></script>
