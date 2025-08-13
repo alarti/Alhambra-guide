@@ -18,14 +18,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const stopBtn = document.getElementById('stop-btn');
     const guideText = document.getElementById('guide-text').querySelector('p');
 
+    const simulationModeToggle = document.getElementById('simulation-mode-toggle');
+
+
     // --- State and Config ---
     const synth = window.speechSynthesis;
     let utterance = new SpeechSynthesisUtterance();
     let lastTriggeredPoiId = null;
     const PROXIMITY_THRESHOLD = 20; // meters
     let currentLang = 'en'; // Default language
+
+    let isSimulationMode = false;
     let map; // Leaflet map instance
     let userMarker; // Leaflet marker for user's position
+    let geolocationId = null; // To store the ID of the geolocation watch
     const poiMarkers = {}; // To store POI marker instances { poiId: marker }
 
     // Data will be loaded from assets/pois.json
@@ -33,6 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let translations = {
         en: {
             title: "Alhambra Voice Guide", welcome: "Welcome to the Alhambra! Your tour will begin shortly.", play: "Play", pause: "Pause", stop: "Stop",
+            simulationMode: "Simulation Mode",
             geolocationNotSupported: "Geolocation is not supported by this browser.", geolocationDenied: "User denied the request for Geolocation.",
             geolocationUnavailable: "Location information is unavailable.", geolocationTimeout: "The request to get user location timed out.",
             geolocationUnknownError: "An unknown error occurred.", yourPosition: "Your position: Latitude: {lat}, Longitude: {lon}",
@@ -40,6 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         es: {
             title: "Audioguía de la Alhambra", welcome: "¡Bienvenido a la Alhambra! Su recorrido comenzará en breve.", play: "Reproducir", pause: "Pausar", stop: "Detener",
+            simulationMode: "Modo Simulación",
             geolocationNotSupported: "La geolocalización no es compatible con este navegador.", geolocationDenied: "El usuario denegó la solicitud de geolocalización.",
             geolocationUnavailable: "La información de ubicación no está disponible.", geolocationTimeout: "La solicitud para obtener la ubicación del usuario ha caducado.",
             geolocationUnknownError: "Ocurrió un error desconocido.", yourPosition: "Tu posición: Latitud: {lat}, Longitud: {lon}",
@@ -47,6 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         fr: {
             title: "Audioguide de l'Alhambra", welcome: "Bienvenue à l'Alhambra ! Votre visite commencera sous peu.", play: "Jouer", pause: "Pause", stop: "Arrêter",
+            simulationMode: "Mode Simulation",
             geolocationNotSupported: "La géolocalisation n'est pas prise en charge par ce navigateur.", geolocationDenied: "L'utilisateur a refusé la demande de géolocalisation.",
             geolocationUnavailable: "Les informations de localisation ne sont pas disponibles.", geolocationTimeout: "La demande de localisation de l'utilisateur a expiré.",
             geolocationUnknownError: "Une erreur inconnue est survenue.", yourPosition: "Votre position : Latitude : {lat}, Longitude : {lon}",
@@ -83,6 +92,20 @@ document.addEventListener('DOMContentLoaded', () => {
             const poiInfo = translations[currentLang].pois[poi.id];
             const marker = L.marker([poi.lat, poi.lon]).addTo(map)
                 .bindPopup(poiInfo.name);
+            marker.on('click', () => {
+                if (isSimulationMode) {
+                    const lat = poi.lat;
+                    const lon = poi.lon;
+
+                    if (!userMarker) {
+                        createUserMarker(lat, lon);
+                    } else {
+                        userMarker.setLatLng([lat, lon]);
+                    }
+                    map.flyTo([lat, lon]);
+                    checkProximity(lat, lon);
+                }
+            });
             poiMarkers[poi.id] = marker;
         });
     }
@@ -95,11 +118,40 @@ document.addEventListener('DOMContentLoaded', () => {
         synth.speak(utterance);
     }
 
-    function getLocation() {
+    function startGpsTracking() {
+        if (geolocationId) { // Clear any existing watch
+            navigator.geolocation.clearWatch(geolocationId);
+        }
         if (navigator.geolocation) {
-            navigator.geolocation.watchPosition(showPosition, showError, { enableHighAccuracy: true });
+            geolocationId = navigator.geolocation.watchPosition(showPosition, showError, { enableHighAccuracy: true });
         } else {
             guideText.textContent = translations[currentLang].geolocationNotSupported;
+        }
+    }
+
+    function stopGpsTracking() {
+        if (geolocationId) {
+            navigator.geolocation.clearWatch(geolocationId);
+            geolocationId = null;
+        }
+    }
+
+    function getLocation() {
+        if (!isSimulationMode) {
+            startGpsTracking();
+        }
+    }
+
+    function createUserMarker(lat, lon) {
+        const userIcon = L.divIcon({
+            html: '<div style="background-color: blue; width: 15px; height: 15px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 5px rgba(0,0,0,0.5);"></div>',
+            className: '', // No default class
+            iconSize: [15, 15],
+            iconAnchor: [9, 9]
+        });
+        userMarker = L.marker([lat, lon], { icon: userIcon }).addTo(map);
+        if (isSimulationMode) {
+            userMarker.setOpacity(0.5);
         }
     }
 
@@ -108,6 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const lon = position.coords.longitude;
 
         if (!userMarker) {
+            createUserMarker(lat, lon);
             const userIcon = L.divIcon({
                 html: '<div style="background-color: blue; width: 15px; height: 15px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 5px rgba(0,0,0,0.5);"></div>',
                 className: '', // No default class
@@ -115,6 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 iconAnchor: [9, 9]
             });
             userMarker = L.marker([lat, lon], { icon: userIcon }).addTo(map);
+
         } else {
             userMarker.setLatLng([lat, lon]);
         }
@@ -155,6 +209,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const newTriggerId = inRangeOfPoi ? inRangeOfPoi.id : null;
 
+
         if (lastTriggeredPoiId && lastTriggeredPoiId !== newTriggerId) {
             poiMarkers[lastTriggeredPoiId].closePopup();
         }
@@ -181,9 +236,27 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Event Listeners and Init ---
+    function handleModeChange() {
+        isSimulationMode = simulationModeToggle.checked;
+        if (isSimulationMode) {
+            stopGpsTracking();
+            if (userMarker) {
+                // In simulation mode, the marker is placed by clicking, not by GPS
+                userMarker.setOpacity(0.5); // Make it clear this is not a live position
+            }
+        } else {
+            if (userMarker) {
+                userMarker.setOpacity(1.0);
+            }
+            startGpsTracking();
+        }
+    }
+
     langSelector.addEventListener('change', (event) => {
         setLanguage(event.target.value);
     });
+
+    simulationModeToggle.addEventListener('change', handleModeChange);
 
     playBtn.addEventListener('click', () => {
         if (synth.paused) {
@@ -206,7 +279,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-  async function init() {
+
+    async function init() {
         try {
             const response = await fetch('assets/pois.json');
             if (!response.ok) {

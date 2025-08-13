@@ -21,6 +21,11 @@ body {
     text-align: center;
 }
 
+#simulation-mode-container {
+    margin: 10px 0;
+    font-size: 16px;
+}
+
 #map-container {
     width: 80%;
     max-width: 800px;
