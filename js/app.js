@@ -176,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (lastTriggeredPoiId !== inRangeOfPoi.id) {
                 lastTriggeredPoiId = inRangeOfPoi.id;
                 const poiInfo = translations[currentLang].pois[inRangeOfPoi.id];
-                guideText.textContent = translations[currentLang].nearPoi.replace('{poiName}', poiInfo.name);
+                guideText.textContent = poiInfo.description;
                 speak(poiInfo.description);
             }
         }
