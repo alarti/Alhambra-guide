@@ -17,7 +17,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const pauseBtn = document.getElementById('pause-btn');
     const stopBtn = document.getElementById('stop-btn');
     const guideText = document.getElementById('guide-text').querySelector('p');
+
     const simulationModeToggle = document.getElementById('simulation-mode-toggle');
+
 
     // --- State and Config ---
     const synth = window.speechSynthesis;
@@ -25,6 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let lastTriggeredPoiId = null;
     const PROXIMITY_THRESHOLD = 20; // meters
     let currentLang = 'en'; // Default language
+
     let isSimulationMode = false;
     let map; // Leaflet map instance
     let userMarker; // Leaflet marker for user's position
@@ -89,7 +92,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const poiInfo = translations[currentLang].pois[poi.id];
             const marker = L.marker([poi.lat, poi.lon]).addTo(map)
                 .bindPopup(poiInfo.name);
-
             marker.on('click', () => {
                 if (isSimulationMode) {
                     const lat = poi.lat;
@@ -104,7 +106,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     checkProximity(lat, lon);
                 }
             });
-
             poiMarkers[poi.id] = marker;
         });
     }
@@ -160,6 +161,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (!userMarker) {
             createUserMarker(lat, lon);
+            const userIcon = L.divIcon({
+                html: '<div style="background-color: blue; width: 15px; height: 15px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 5px rgba(0,0,0,0.5);"></div>',
+                className: '', // No default class
+                iconSize: [15, 15],
+                iconAnchor: [9, 9]
+            });
+            userMarker = L.marker([lat, lon], { icon: userIcon }).addTo(map);
+
         } else {
             userMarker.setLatLng([lat, lon]);
         }
@@ -200,6 +209,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const newTriggerId = inRangeOfPoi ? inRangeOfPoi.id : null;
 
+
         if (lastTriggeredPoiId && lastTriggeredPoiId !== newTriggerId) {
             poiMarkers[lastTriggeredPoiId].closePopup();
         }
@@ -226,7 +236,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Event Listeners and Init ---
-
     function handleModeChange() {
         isSimulationMode = simulationModeToggle.checked;
         if (isSimulationMode) {
@@ -269,6 +278,7 @@ document.addEventListener('DOMContentLoaded', () => {
             lastTriggeredPoiId = null;
         }
     });
+
 
     async function init() {
         try {
