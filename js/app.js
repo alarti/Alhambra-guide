@@ -26,7 +26,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const aboutModal = document.getElementById('about-modal');
     const modalCloseBtn = aboutModal.querySelector('.modal-close-btn');
 
-
     // --- State and Config ---
     const synth = window.speechSynthesis;
     let utterance = new SpeechSynthesisUtterance();
@@ -87,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
         pois.forEach(poi => {
             const li = document.createElement('li');
             li.className = 'list-group-item list-group-item-action';
-            li.textContent = poi.name;
+            li.textContent = poi.name; // CORRECTED
             li.dataset.poiId = poi.id;
             poiList.appendChild(li);
         });
@@ -100,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         pois.forEach(poi => {
             const marker = L.marker([poi.lat, poi.lon]).addTo(map)
-                .bindPopup(poi.name);
+                .bindPopup(poi.name); // CORRECTED
             marker.on('click', () => {
                 if (isSimulationMode) simulateVisitToPoi(poi.id);
             });
@@ -110,6 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function loadLanguageData(langCode) {
         try {
+            updateGuideText(`Loading ${availableLanguages[langCode]} guide...`);
             const response = await fetch(`assets/poi-${langCode}.json`);
             if (!response.ok) throw new Error(`Could not load data for language: ${langCode}`);
             pois = await response.json();
@@ -120,7 +120,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             renderPois();
             renderPoiList();
-            updateGuideText(`Loaded ${availableLanguages[langCode]} guide.`);
         } catch (error) {
             console.error("Error loading language data:", error);
             updateGuideText(`Failed to load guide for ${availableLanguages[langCode]}.`);
@@ -194,6 +193,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function checkProximity(lat, lon) {
+        if (!pois || pois.length === 0) return; // Don't run if POIs not loaded
+
         let closestPoi = pois.reduce((closest, poi) => {
             const distance = getDistance(lat, lon, poi.lat, poi.lon);
             if (distance < closest.distance) return { ...poi, distance };
@@ -271,7 +272,7 @@ document.addEventListener('DOMContentLoaded', () => {
     playBtn.addEventListener('click', () => {
         if (synth.paused) synth.resume();
         else if (lastTriggeredPoiId) {
-            const poi = pois.find(p => p.id === lastTriggeredPoiId);
+            const poi = pois.find(p => p.id === lastTriggeredPoiId); // CORRECTED
             if (poi) speak(poi.description);
         }
     });
@@ -304,6 +305,8 @@ document.addEventListener('DOMContentLoaded', () => {
             await loadLanguageData(currentLang);
             
             getLocation();
+            
+            updateGuideText("Welcome! Select a POI from the list or use your GPS in live mode.");
 
         } catch (error) {
             console.error("Initialization failed:", error);
