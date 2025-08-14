@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const playBtn = document.getElementById('play-btn');
     const pauseBtn = document.getElementById('pause-btn');
     const stopBtn = document.getElementById('stop-btn');
-    const guideText = document.getElementById('guide-text-overlay').querySelector('p');
+    const guideText = document.getElementById('guide-text-overlay'); // Changed to container
     const simulationModeToggle = document.getElementById('simulation-mode-toggle');
     const sidePanel = document.getElementById('side-panel');
     const panelToggleBtn = document.getElementById('panel-toggle-btn');
@@ -27,15 +27,15 @@ document.addEventListener('DOMContentLoaded', () => {
     let lastTriggeredPoiId = null;
     const PROXIMITY_THRESHOLD = 20; // meters
     let currentLang = 'en'; // Default language
-    let isSimulationMode = false;
+    let isSimulationMode = simulationModeToggle.checked;
     let map; // Leaflet map instance
     let userMarker; // Leaflet marker for user's position
     let geolocationId = null; // To store the ID of the geolocation watch
     let typewriterInterval = null; // To store the typewriter effect interval
     const poiMarkers = {}; // To store POI marker instances { poiId: marker }
-    
+
     // Data will be loaded from assets/pois.json
-    let pois = []; 
+    let pois = [];
     let translations = {
         en: {
             title: "Alhambra Voice Guide", welcome: "Welcome to the Alhambra! Your tour will begin shortly.", play: "Play", pause: "Pause", stop: "Stop",
@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
             clearInterval(typewriterInterval);
         }
         let i = 0;
-        element.textContent = "";
+        element.textContent = ""; // Clear the specific paragraph
         typewriterInterval = setInterval(() => {
             if (i < text.length) {
                 element.textContent += text.charAt(i);
@@ -83,15 +83,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateGuideText(text, useTypewriter = false) {
-        if (useTypewriter) {
-            typewriterEffect(guideText, text);
-        } else {
-            if (typewriterInterval) {
-                clearInterval(typewriterInterval);
-                typewriterInterval = null;
-            }
-            guideText.textContent = text;
+        if (typewriterInterval) {
+            clearInterval(typewriterInterval);
+            typewriterInterval = null;
         }
+
+        const newParagraph = document.createElement('p');
+        guideText.appendChild(newParagraph);
+
+        if (useTypewriter) {
+            typewriterEffect(newParagraph, text);
+        } else {
+            newParagraph.textContent = text;
+        }
+
+        // Auto-scroll to the bottom
+        guideText.scrollTop = guideText.scrollHeight;
     }
 
     function setLanguage(lang) {
@@ -121,12 +128,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const poiInfo = translations[currentLang].pois[poi.id];
             const marker = L.marker([poi.lat, poi.lon]).addTo(map)
                 .bindPopup(poiInfo.name);
-            
+
             marker.on('click', () => {
                 if (isSimulationMode) {
                     const lat = poi.lat;
                     const lon = poi.lon;
-                    
+
                     if (!userMarker) {
                         createUserMarker(lat, lon);
                     } else {
@@ -195,7 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             userMarker.setLatLng([lat, lon]);
         }
-        
+
         if (!synth.speaking) {
             const text = translations[currentLang].yourPosition
                 .replace('{lat}', lat.toFixed(4))
@@ -230,7 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (minDistance < PROXIMITY_THRESHOLD) {
             inRangeOfPoi = closestPoi;
         }
-        
+
         const newTriggerId = inRangeOfPoi ? inRangeOfPoi.id : null;
 
         if (lastTriggeredPoiId && lastTriggeredPoiId !== newTriggerId) {
@@ -239,7 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (newTriggerId && newTriggerId !== lastTriggeredPoiId) {
             poiMarkers[newTriggerId].openPopup();
-            
+
             lastTriggeredPoiId = newTriggerId;
             const poiInfo = translations[currentLang].pois[newTriggerId];
             updateGuideText(poiInfo.description, true); // Use typewriter effect here
@@ -265,8 +272,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isSimulationMode) {
             stopGpsTracking();
             if (userMarker) {
-                // In simulation mode, the marker is placed by clicking, not by GPS
-                userMarker.setOpacity(0.5); // Make it clear this is not a live position
+                userMarker.setOpacity(0.5);
             }
         } else {
             if (userMarker) {
@@ -284,7 +290,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     panelToggleBtn.addEventListener('click', () => {
         sidePanel.classList.toggle('collapsed');
-        // Optional: change icon on toggle
         if (sidePanel.classList.contains('collapsed')) {
             panelToggleBtn.textContent = '☰';
         } else {
@@ -321,7 +326,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             const poiData = await response.json();
 
-            // Populate the pois and translations objects from the fetched data
             pois = poiData.map(p => ({ id: p.id, lat: p.lat, lon: p.lon }));
             poiData.forEach(p => {
                 translations.en.pois[p.id] = p.en;
@@ -329,16 +333,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 translations.fr.pois[p.id] = p.fr;
             });
 
-            // Initialize the map now that we have the data
             map = L.map('map-container').setView([37.177, -3.588], 16);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(map);
-            
-            // Set initial UI text and render markers
+
+            // Clear welcome message and set initial UI text
+            guideText.innerHTML = ''; // Clear initial <p> tag
             setLanguage(currentLang);
             renderPois();
             getLocation();
+            handleModeChange(); // Set initial mode state
 
         } catch (error) {
             console.error("Could not load POI data:", error);
