@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const playBtn = document.getElementById('play-btn');
     const pauseBtn = document.getElementById('pause-btn');
     const stopBtn = document.getElementById('stop-btn');
-    const guideText = document.getElementById('guide-text-overlay'); // Changed to container
+    const guideText = document.getElementById('guide-text-overlay').querySelector('p'); // Select the paragraph tag
     const simulationModeToggle = document.getElementById('simulation-mode-toggle');
     const sidePanel = document.getElementById('side-panel');
     const panelToggleBtn = document.getElementById('panel-toggle-btn');
@@ -33,9 +33,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let geolocationId = null; // To store the ID of the geolocation watch
     let typewriterInterval = null; // To store the typewriter effect interval
     const poiMarkers = {}; // To store POI marker instances { poiId: marker }
-
+    
     // Data will be loaded from assets/pois.json
-    let pois = [];
+    let pois = []; 
     let translations = {
         en: {
             title: "Alhambra Voice Guide", welcome: "Welcome to the Alhambra! Your tour will begin shortly.", play: "Play", pause: "Pause", stop: "Stop",
@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
             clearInterval(typewriterInterval);
         }
         let i = 0;
-        element.textContent = ""; // Clear the specific paragraph
+        element.textContent = ""; // Clear the specific element
         typewriterInterval = setInterval(() => {
             if (i < text.length) {
                 element.textContent += text.charAt(i);
@@ -83,22 +83,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateGuideText(text, useTypewriter = false) {
-        if (typewriterInterval) {
-            clearInterval(typewriterInterval);
-            typewriterInterval = null;
-        }
-
-        const newParagraph = document.createElement('p');
-        guideText.appendChild(newParagraph);
-
+        // The guideText variable now points to the single <p> tag
         if (useTypewriter) {
-            typewriterEffect(newParagraph, text);
+            typewriterEffect(guideText, text);
         } else {
-            newParagraph.textContent = text;
+            if (typewriterInterval) {
+                clearInterval(typewriterInterval);
+                typewriterInterval = null;
+            }
+            guideText.textContent = text;
         }
-
-        // Auto-scroll to the bottom
-        guideText.scrollTop = guideText.scrollHeight;
+        // Auto-scroll the parent container if text overflows
+        if (guideText.parentElement.scrollHeight > guideText.parentElement.clientHeight) {
+            guideText.parentElement.scrollTop = 0; // Scroll to top for new message
+        }
     }
 
     function setLanguage(lang) {
@@ -128,12 +126,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const poiInfo = translations[currentLang].pois[poi.id];
             const marker = L.marker([poi.lat, poi.lon]).addTo(map)
                 .bindPopup(poiInfo.name);
-
+            
             marker.on('click', () => {
                 if (isSimulationMode) {
                     const lat = poi.lat;
                     const lon = poi.lon;
-
+                    
                     if (!userMarker) {
                         createUserMarker(lat, lon);
                     } else {
@@ -202,7 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             userMarker.setLatLng([lat, lon]);
         }
-
+        
         if (!synth.speaking) {
             const text = translations[currentLang].yourPosition
                 .replace('{lat}', lat.toFixed(4))
@@ -237,7 +235,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (minDistance < PROXIMITY_THRESHOLD) {
             inRangeOfPoi = closestPoi;
         }
-
+        
         const newTriggerId = inRangeOfPoi ? inRangeOfPoi.id : null;
 
         if (lastTriggeredPoiId && lastTriggeredPoiId !== newTriggerId) {
@@ -246,7 +244,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (newTriggerId && newTriggerId !== lastTriggeredPoiId) {
             poiMarkers[newTriggerId].openPopup();
-
+            
             lastTriggeredPoiId = newTriggerId;
             const poiInfo = translations[currentLang].pois[newTriggerId];
             updateGuideText(poiInfo.description, true); // Use typewriter effect here
@@ -337,9 +335,9 @@ document.addEventListener('DOMContentLoaded', () => {
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(map);
-
-            // Clear welcome message and set initial UI text
-            guideText.innerHTML = ''; // Clear initial <p> tag
+            
+            // Set initial UI text and render markers
+            updateGuideText(translations[currentLang].welcome);
             setLanguage(currentLang);
             renderPois();
             getLocation();
