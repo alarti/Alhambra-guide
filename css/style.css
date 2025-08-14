@@ -119,18 +119,4 @@ hr {
     font-size: 1.8rem;
     font-weight: 500;
     text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
-=======
-/* Custom styles that complement Bootstrap */
-
-body {
-    background-color: #f8f9fa; /* A light gray background for the page */
-}
-
-#map-container {
-    height: 45vh; /* Use viewport height for responsiveness */
-    min-height: 350px;
-}
-
-#guide-text .card-body {
-    min-height: 120px; /* Ensure the guide text box has a consistent height */
 }
