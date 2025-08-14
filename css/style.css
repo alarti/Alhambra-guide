@@ -1,5 +1,125 @@
 /* Author: Alberto Arce, Arcasoft */
 
+/* --- Base & Layout --- */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    overflow: hidden; /* Prevent scrollbars from the layout */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: #121212;
+}
+
+#map-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+/* --- Side Panel --- */
+#side-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 320px;
+    height: 100%;
+    background-color: rgba(26, 26, 26, 0.9);
+    backdrop-filter: blur(10px);
+    border-left: 1px solid #333;
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
+    transform: translateX(0);
+    transition: transform 0.3s ease-in-out;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+}
+
+#side-panel.collapsed {
+    transform: translateX(320px);
+}
+
+.panel-content {
+    padding: 20px;
+    overflow-y: auto;
+    color: #e0e0e0;
+}
+
+#panel-toggle-btn {
+    position: absolute;
+    top: 50%;
+    left: -40px;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 60px;
+    background-color: rgba(26, 26, 26, 0.8);
+    border: 1px solid #333;
+    border-right: none;
+    color: #e0e0e0;
+    cursor: pointer;
+    font-size: 20px;
+    border-radius: 8px 0 0 8px;
+    z-index: -1;
+}
+
+/* --- UI Elements Styling (Dark Theme) --- */
+.panel-content h1 {
+    font-size: 1.5rem;
+    color: #ffffff;
+}
+
+.form-label {
+    color: #bbb;
+}
+
+.form-select, .form-check-input {
+    background-color: #333;
+    color: #e0e0e0;
+    border-color: #555;
+}
+
+.form-select:focus, .form-check-input:focus {
+    background-color: #444;
+    color: #e0e0e0;
+    border-color: #888;
+    box-shadow: none;
+}
+
+.form-check-input:checked {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+hr {
+    border-color: #444;
+}
+
+/* --- Guide Text Overlay --- */
+#guide-text-overlay {
+    position: fixed;
+    bottom: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    max-width: 900px;
+    padding: 15px 25px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #ffffff;
+    border-radius: 12px;
+    text-align: center;
+    z-index: 999;
+    pointer-events: none; /* Allow clicks to go through to the map */
+}
+
+#guide-text-overlay p {
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 500;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+=======
 /* Custom styles that complement Bootstrap */
 
 body {
