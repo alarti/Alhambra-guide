@@ -103,6 +103,12 @@ html, body {
     color: var(--text-color-heading);
 }
 
+.list-group-item.visited {
+    background-color: rgba(40, 167, 69, 0.2) !important;
+    color: var(--text-color-secondary) !important;
+    text-decoration: line-through;
+}
+
 .form-label {
     color: var(--text-color-secondary);
 }

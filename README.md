@@ -1,9 +1,11 @@
 # Alhambra Voice Guide
 
-An advanced, offline-first Progressive Web App (PWA) that serves as an interactive, multilingual voice guide for the Alhambra palace and fortress complex in Granada, Spain.
+An advanced, offline-first Progressive Web App (PWA) that serves as an interactive, multilingual voice guide for the Alhambra palace and fortress complex in Granada, Spain. This app features a full guided tour route with progress tracking.
 
 ## Features
 
+*   **Guided Tour Route:** A predefined walking tour is drawn directly on the map, showing the suggested path through all 25 points of interest.
+*   **Route Progress Tracking:** As you visit each POI, the corresponding segment of the route on the map turns green, providing clear visual feedback on your progress through the tour.
 *   **Fully Interactive Map:** Displays a dynamic, zoomable map of the Alhambra grounds using Leaflet.js and OpenStreetMap.
 *   **Real-time GPS Tracking:** Uses the browser's Geolocation API to track your position in real-time and display it on the map with a marker.
 *   **Simulation Mode:** For users not physically at the Alhambra, a simulation mode allows for a virtual tour. In this mode, users can click on any Point of Interest (POI) on the map or in the side panel list to be taken to that location and hear the guide.

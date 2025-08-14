@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let utterance = new SpeechSynthesisUtterance();
     let lastTriggeredPoiId = null;
     const PROXIMITY_THRESHOLD = 20; // meters
-    let currentLang = 'es';
+    let currentLang = 'en';
     let isSimulationMode = simulationModeToggle.checked;
     let map;
     let userMarker;
@@ -40,6 +40,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const poiMarkers = {};
     let pois = [];
     let availableLanguages = {};
+    const tourRoute = [
+        "poi-22", "poi-9", "poi-7", "poi-8", "poi-1", "poi-24", "poi-15", "poi-14", "poi-13", "poi-3",
+        "poi-25", "poi-16", "poi-2", "poi-6", "poi-17", "poi-5", "poi-20", "poi-21", "poi-10", "poi-12",
+        "poi-23", "poi-4", "poi-18", "poi-19"
+    ];
+    let routePolylines = [];
+    let visitedPois = new Set();
+
+    const introPhrases = {
+        en: ["You have arrived at", "You are now at", "This is"],
+        es: ["Has llegado a", "Te encuentras en", "Esto es"],
+        fr: ["Vous êtes arrivé à", "Vous êtes maintenant à", "Voici"],
+        de: ["Sie sind angekommen bei", "Sie befinden sich jetzt bei", "Das ist"],
+        zh: ["您已到达", "您现在在", "这里是"]
+    };
 
     // --- Functions ---
 
@@ -83,13 +98,40 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderPoiList() {
         poiList.innerHTML = '';
-        pois.forEach(poi => {
-            const li = document.createElement('li');
-            li.className = 'list-group-item list-group-item-action';
-            li.textContent = poi.name; // CORRECTED
-            li.dataset.poiId = poi.id;
-            poiList.appendChild(li);
+        tourRoute.forEach(poiId => {
+            const poi = pois.find(p => p.id === poiId);
+            if (poi) {
+                const li = document.createElement('li');
+                li.className = 'list-group-item list-group-item-action';
+                li.textContent = poi.name;
+                li.dataset.poiId = poi.id;
+                if (visitedPois.has(poiId)) {
+                    li.classList.add('visited'); // Custom class for styling
+                }
+                poiList.appendChild(li);
+            }
         });
+    }
+
+    function drawTourRoute() {
+        routePolylines.forEach(line => line.remove());
+        routePolylines = [];
+
+        for (let i = 0; i < tourRoute.length - 1; i++) {
+            const startPoi = pois.find(p => p.id === tourRoute[i]);
+            const endPoi = pois.find(p => p.id === tourRoute[i + 1]);
+
+            if (startPoi && endPoi) {
+                const isVisited = visitedPois.has(endPoi.id);
+                const color = isVisited ? '#28a745' : '#3388ff'; // Green if visited, else blue
+                const line = L.polyline([[startPoi.lat, startPoi.lon], [endPoi.lat, endPoi.lon]], {
+                    color: color,
+                    weight: 3,
+                    opacity: 0.7
+                }).addTo(map);
+                routePolylines.push(line);
+            }
+        }
     }
 
     function renderPois() {
@@ -99,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         pois.forEach(poi => {
             const marker = L.marker([poi.lat, poi.lon]).addTo(map)
-                .bindPopup(poi.name); // CORRECTED
+                .bindPopup(poi.name);
             marker.on('click', () => {
                 if (isSimulationMode) simulateVisitToPoi(poi.id);
             });
@@ -120,6 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             renderPois();
             renderPoiList();
+            drawTourRoute();
         } catch (error) {
             console.error("Error loading language data:", error);
             updateGuideText(`Failed to load guide for ${availableLanguages[langCode]}.`);
@@ -132,7 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const { lat, lon } = poi;
         if (!userMarker) createUserMarker(lat, lon);
         else userMarker.setLatLng([lat, lon]);
-        map.flyTo([lat, lon]);
+        map.flyTo([lat, lon], 18);
         checkProximity(lat, lon);
     }
     
@@ -193,7 +236,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function checkProximity(lat, lon) {
-        if (!pois || pois.length === 0) return; // Don't run if POIs not loaded
+        if (!pois || pois.length === 0) return;
 
         let closestPoi = pois.reduce((closest, poi) => {
             const distance = getDistance(lat, lon, poi.lat, poi.lon);
@@ -210,8 +253,17 @@ document.addEventListener('DOMContentLoaded', () => {
         if (newTriggerId && newTriggerId !== lastTriggeredPoiId) {
             poiMarkers[newTriggerId].openPopup();
             lastTriggeredPoiId = newTriggerId;
-            updateGuideText(inRangeOfPoi.description, true);
-            speak(inRangeOfPoi.description);
+            
+            visitedPois.add(newTriggerId); // Mark POI as visited
+            drawTourRoute(); // Redraw route to update colors
+            renderPoiList(); // Redraw list to update styles
+
+            const intros = introPhrases[currentLang] || introPhrases.en;
+            const randomIntro = intros[Math.floor(Math.random() * intros.length)];
+            const fullDescription = `${randomIntro} ${inRangeOfPoi.name}. ${inRangeOfPoi.description}`;
+            
+            updateGuideText(fullDescription, true);
+            speak(fullDescription);
         } else if (!newTriggerId && lastTriggeredPoiId) {
             lastTriggeredPoiId = null;
         }
@@ -272,7 +324,7 @@ document.addEventListener('DOMContentLoaded', () => {
     playBtn.addEventListener('click', () => {
         if (synth.paused) synth.resume();
         else if (lastTriggeredPoiId) {
-            const poi = pois.find(p => p.id === lastTriggeredPoiId); // CORRECTED
+            const poi = pois.find(p => p.id === lastTriggeredPoiId);
             if (poi) speak(poi.description);
         }
     });
@@ -293,7 +345,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             populateLanguageSelector();
             
-            map = L.map('map-container').setView([37.177, -3.588], 16);
+            map = L.map('map-container').setView([37.177, -3.588], 17);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(map);
