@@ -1,0 +1,177 @@
+[
+    {
+      "id": "poi-22",
+      "lat": 37.1761,
+      "lon": -3.5927,
+      "name": "Puerta de las Granadas y Cuesta de Gomérez",
+      "description": "Ascenso clásico desde Plaza Nueva a través de la arbolada Cuesta de Gomérez hasta la monumental Puerta de las Granadas, el preludio del bosque y la Puerta de la Justicia. Consejo: Este pintoresco y sombreado acceso marca el tono y evita el tráfico."
+    },
+    {
+      "id": "poi-9",
+      "lat": 37.1754,
+      "lon": -3.5908,
+      "name": "Bosque de la Alhambra",
+      "description": "Bosque histórico plantado en tiempos de Carlos V, con especies traídas de las Américas como los castaños de Indias; un fresco paseo entre fuentes, murallas y memoriales. Consejo: Visítalo al amanecer para escuchar el agua y el canto de los pájaros en una zona sin tráfico."
+    },
+    {
+      "id": "poi-7",
+      "lat": 37.1767,
+      "lon": -3.5906,
+      "name": "Puerta de la Justicia",
+      "description": "Entrada monumental con arco en recodo, una mano de Fátima y una llave en la clave; diseñada para recepciones oficiales y defensa, con un pasaje curvo resistente a los asedios. Consejo: Disfruta del pintoresco acceso desde la Cuesta de Gomérez y el Bosque de la Alhambra."
+    },
+    {
+      "id": "poi-8",
+      "lat": 37.1759,
+      "lon": -3.591,
+      "name": "Pilar de Carlos V",
+      "description": "Fuente renacentista de 1554 con tres caras y varios caños, llena de alegorías a los ríos de Granada, las estaciones y los símbolos imperiales. Consejo: Observa la iconografía desde el lado sur con la luz de la mañana."
+    },
+    {
+      "id": "poi-1",
+      "lat": 37.1773,
+      "lon": -3.5903,
+      "name": "Palacio de Carlos V",
+      "description": "Palacio imperial renacentista con un monumental patio circular, iniciado por Carlos V sobre un antiguo palacio nazarí y completado estructuralmente en el siglo XX. Hoy alberga museos y contrasta fuertemente con el arte islámico circundante. Consejo: Entra en el patio al amanecer o al atardecer para apreciar la acústica y las proporciones."
+    },
+    {
+      "id": "poi-25",
+      "lat": 37.1774,
+      "lon": -3.5895,
+      "name": "Patio de los Arrayanes (Comares)",
+      "description": "Espejo de agua entre setos de arrayanes que refleja la Torre de Comares, un ejemplo modélico del control de la lámina de agua y del microclima en torno al estanque. Consejo: Detente junto al largo estanque para capturar reflejos simétricos."
+    },
+    {
+      "id": "poi-2",
+      "lat": 37.1771,
+      "lon": -3.5893,
+      "name": "Patio de los Leones",
+      "description": "El corazón de los palacios nazaríes, célebre por su fuente central sostenida por doce leones de mármol y su complejo sistema hidráulico restaurado, un símbolo de la elegancia y sofisticación técnica andalusí. Consejo: Observa la superficie inmóvil del agua alrededor del pilón, un efecto originalmente buscado por los ingenieros nazaríes."
+    },
+    {
+      "id": "poi-6",
+      "lat": 37.177,
+      "lon": -3.5894,
+      "name": "Sala de los Abencerrajes",
+      "description": "Una sala legendaria en el Palacio de los Leones con una cúpula de mocárabes en forma de estrella y una acústica distintiva, una obra maestra de la artesanía nazarí. Consejo: Habla en voz baja bajo el punto central de la cúpula para apreciar la resonancia."
+    },
+    {
+      "id": "poi-16",
+      "lat": 37.1772,
+      "lon": -3.5896,
+      "name": "Baños Reales (Hammam Nazarí)",
+      "description": "Complejo de baños con salas fría, templada y caliente, una caldera de cobre, suelos radiantes mediante canales de vapor y lucernas en forma de estrella con aberturas ajustables. Consejo: Fíjate en las lucernas estrelladas y los vestigios de la calefacción bajo el suelo."
+    },
+    {
+      "id": "poi-17",
+      "lat": 37.1772,
+      "lon": -3.5892,
+      "name": "Canales de Agua del Patio de los Leones",
+      "description": "Red de canales poco profundos en cuatro ejes que irradian desde la fuente; el pilón central contenía antiguamente un cilindro hidráulico con aberturas calibradas para mantener una lámina estable y activar surtidores. Consejo: Sigue los cuatro ejes para comprender el diseño simbólico e hidráulico del patio."
+    },
+    {
+      "id": "poi-20",
+      "lat": 37.1779,
+      "lon": -3.5899,
+      "name": "Jardines y Paseos del Partal",
+      "description": "Avenidas de setos de arrayán, miradores y pequeños estanques que unen el Partal con los palacios; canales de agua utilizados para refrescar el microclima. Consejo: Sigue el curso del agua para entender cómo refresca y guía el paseo."
+    },
+    {
+      "id": "poi-5",
+      "lat": 37.1775,
+      "lon": -3.5886,
+      "name": "Palacio del Partal",
+      "description": "Complejo palaciego con un pórtico reflejado en un gran estanque, uno de los más antiguos conservados en la Alhambra, donde la arquitectura y el paisaje se fusionan en serenidad. Consejo: Captura fotos con reflejos al atardecer para encontrar menos multitudes."
+    },
+    {
+      "id": "poi-24",
+      "lat": 37.1777,
+      "lon": -3.5898,
+      "name": "Museo de la Alhambra (en Palacio de Carlos V)",
+      "description": "Colección de artefactos nazaríes y piezas originales como el cilindro hidráulico de la Fuente de los Leones, epigrafía, cerámicas y yeserías. Consejo: Entra si tienes tiempo entre los palacios y la Alcazaba."
+    },
+    {
+      "id": "poi-15",
+      "lat": 37.1769,
+      "lon": -3.589,
+      "name": "Medina de la Alhambra",
+      "description": "Área excavada entre la Alcazaba y el Generalife que albergaba residencias nobles, talleres de artesanos, mercados y baños públicos: la ciudad palatina en funcionamiento. Consejo: Lee los paneles sobre los oficios y el trazado de las callejuelas para imaginar la vida cotidiana."
+    },
+    {
+      "id": "poi-3",
+      "lat": 37.1786,
+      "lon": -3.5904,
+      "name": "Alcazaba",
+      "description": "El sector más antiguo, una ciudadela militar con torres de vigilancia y vistas sobre Granada y Sierra Nevada; conserva plazas, restos de viviendas, aljibes, hammams y jardines junto a las murallas. Consejo: Sube a primera hora de la mañana para evitar colas y vientos fuertes en la Torre de la Vela."
+    },
+    {
+      "id": "poi-13",
+      "lat": 37.1768,
+      "lon": -3.5901,
+      "name": "Puerta de las Armas",
+      "description": "Acceso militar original en la ladera del Darro, vinculado a la Torre de las Armas; anterior a las puertas monumentales posteriores. Consejo: Observa el vínculo estratégico entre la puerta y la ruta fluvial inferior."
+    },
+    {
+      "id": "poi-18",
+      "lat": 37.1768,
+      "lon": -3.5922,
+      "name": "Puerta de los Siete Suelos (Bab al-Gudur)",
+      "description": "Puerta en la muralla sur con baluartes tardíos; parte de la ruta bajo las murallas entre torres y baluartes cristianos. Consejo: Camina por el sendero exterior sur para ver la secuencia de torres y la Torre del Agua en la entrada del canal."
+    },
+    {
+      "id": "poi-14",
+      "lat": 37.1763,
+      "lon": -3.5901,
+      "name": "Iglesia de Santa María de la Alhambra",
+      "description": "Iglesia del siglo XVI construida sobre el solar de la antigua mezquita de la Alhambra, con interiores barrocos y restos de baños cercanos. Consejo: Busca las ruinas de un hammam adyacente para entender el circuito del agua."
+    },
+    {
+      "id": "poi-10",
+      "lat": 37.1779,
+      "lon": -3.5869,
+      "name": "Torre del Agua (Entrada del Acueducto)",
+      "description": "Punto por donde la Acequia Real entra en la Alhambra a través de un acueducto oriental junto a la torre, distribuyendo el agua al complejo. Consejo: Localiza el acueducto para entender la altura de llegada del canal."
+    },
+    {
+      "id": "poi-11",
+      "lat": 37.1802,
+      "lon": -3.5838,
+      "name": "Acequia Real (Tramo Exterior)",
+      "description": "Canal maestro que desvía el agua del río Darro unos 6,1 km aguas arriba, llevándola por laderas, túneles y acueductos con una pendiente mínima hasta la Alhambra y el Generalife. Consejo: Considera una excursión lateral para ver tramos exteriores si el tiempo y la logística lo permiten."
+    },
+    {
+      "id": "poi-12",
+      "lat": 37.1789,
+      "lon": -3.5861,
+      "name": "Albercones del Generalife",
+      "description": "Gran aljibe medieval (~400 m³) utilizado para presurizar e irrigar las terrazas más altas; abastecido por una galería subterránea, un pozo de 17,4 m y una noria de sangre bajo una torre de tapial. Consejo: Fíjate en el trazado que gana altura para el riego."
+    },
+    {
+      "id": "poi-23",
+      "lat": 37.1793,
+      "lon": -3.5866,
+      "name": "Paseo de las Adelfas (entorno del Generalife)",
+      "description": "Paseo vinculado a galerías de captación subterráneas que abastecen los albercones y derivaciones de la Acequia del Tercio a niveles superiores. Consejo: Un tramo más tranquilo e interpretativo para los interesados en las obras hidráulicas históricas."
+    },
+    {
+      "id": "poi-4",
+      "lat": 37.1742,
+      "lon": -3.5873,
+      "name": "Generalife",
+      "description": "La residencia de recreo y huertos de los sultanes nazaríes, concebida como un paraíso terrenal con patios, acequias, estanques, cipreses y el aroma de arrayanes y azahar, irrigada por la Acequia Real. Consejo: Recorre las terrazas superiores para ver el trazado de las acequias históricas."
+    },
+    {
+      "id": "poi-21",
+      "lat": 37.1783,
+      "lon": -3.5887,
+      "name": "Mirador de la Sultana (Generalife Alto)",
+      "description": "Terrazas altas con vistas directas a los palacios nazaríes y vestigios de canales secundarios; una lectura privilegiada del conjunto. Consejo: Mirador final ideal para apreciar la composición general."
+    },
+    {
+      "id": "poi-19",
+      "lat": 37.1752,
+      "lon": -3.5906,
+      "name": "Monumento a Ángel Ganivet",
+      "description": "Rincón del Bosque de la Alhambra dedicado al escritor y diplomático granadino; un lugar tranquilo para escuchar el agua entre castaños y tilos. Consejo: Una pausa apacible en el descenso de vuelta hacia Plaza Nueva."
+    }
+]
