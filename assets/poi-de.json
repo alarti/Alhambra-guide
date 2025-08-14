@@ -1,0 +1,44 @@
+[
+  {
+    "id": "poi-1",
+    "lat": 37.1773,
+    "lon": -3.5903,
+    "name": "Palast von Karl V.",
+    "description": "Ein massives Renaissance-Gebäude, das in starkem Kontrast zur umgebenden maurischen Architektur steht. Obwohl es für den Kaiser nie fertiggestellt wurde, ist sein großer runder Innenhof ein atemberaubender Anblick."
+  },
+  {
+    "id": "poi-2",
+    "lat": 37.1771,
+    "lon": -3.5893,
+    "name": "Löwenhof",
+    "description": "Das Herz der Nasridenpaläste, berühmt für seinen zentralen Brunnen, der von zwölf Marmorlöwen getragen wird. Ein ikonisches Beispiel für die Schönheit und Komplexität der maurischen Kunst und Wasserbautechnik."
+  },
+  {
+    "id": "poi-3",
+    "lat": 37.1786,
+    "lon": -3.5904,
+    "name": "Alcazaba",
+    "description": "Der älteste Teil der Alhambra, eine beeindruckende Militärfestung mit imposanten Türmen. Besteigen Sie die Torre de la Vela für die spektakulärsten Panoramablicke auf Granada und die Sierra Nevada."
+  },
+  {
+    "id": "poi-4",
+    "lat": 37.1742,
+    "lon": -3.5873,
+    "name": "Generalife",
+    "description": "Der ruhige Sommerpalast und Landsitz der Nasridenherrscher. Seine atemberaubenden Gärten, Innenhöfe und Wasserspiele wurden als friedlicher Rückzugsort und als Darstellung des Paradieses konzipiert."
+  },
+  {
+    "id": "poi-5",
+    "lat": 37.1775,
+    "lon": -3.5886,
+    "name": "Partal-Palast",
+    "description": "Einer der ältesten erhaltenen Paläste in der Alhambra, bekannt für seinen ikonischen Portikus, der sich in einem großen Becken spiegelt. Ein ruhiger Bereich, der Architektur und Natur wunderbar integriert."
+  },
+  {
+    "id": "poi-6",
+    "lat": 37.1770,
+    "lon": -3.5894,
+    "name": "Saal der Abencerrajes",
+    "description": "Ein legendärer Saal im Löwenpalast, berühmt für seine spektakuläre sternförmige Muqarnas-Decke. Die Akustik und das komplizierte Design sind ein Zeugnis der meisterhaften Handwerker der Epoche."
+  }
+]
