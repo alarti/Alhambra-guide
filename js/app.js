@@ -33,9 +33,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let geolocationId = null; // To store the ID of the geolocation watch
     let typewriterInterval = null; // To store the typewriter effect interval
     const poiMarkers = {}; // To store POI marker instances { poiId: marker }
-
+    
     // Data will be loaded from assets/pois.json
-    let pois = [];
+    let pois = []; 
     let translations = {
         en: {
             title: "Alhambra Voice Guide", welcome: "Welcome to the Alhambra! Your tour will begin shortly.", play: "Play", pause: "Pause", stop: "Stop",
@@ -121,12 +121,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const poiInfo = translations[currentLang].pois[poi.id];
             const marker = L.marker([poi.lat, poi.lon]).addTo(map)
                 .bindPopup(poiInfo.name);
-
+            
             marker.on('click', () => {
                 if (isSimulationMode) {
                     const lat = poi.lat;
                     const lon = poi.lon;
-
+                    
                     if (!userMarker) {
                         createUserMarker(lat, lon);
                     } else {
@@ -195,7 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             userMarker.setLatLng([lat, lon]);
         }
-
+        
         if (!synth.speaking) {
             const text = translations[currentLang].yourPosition
                 .replace('{lat}', lat.toFixed(4))
@@ -230,7 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (minDistance < PROXIMITY_THRESHOLD) {
             inRangeOfPoi = closestPoi;
         }
-
+        
         const newTriggerId = inRangeOfPoi ? inRangeOfPoi.id : null;
 
         if (lastTriggeredPoiId && lastTriggeredPoiId !== newTriggerId) {
@@ -239,7 +239,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (newTriggerId && newTriggerId !== lastTriggeredPoiId) {
             poiMarkers[newTriggerId].openPopup();
-
+            
             lastTriggeredPoiId = newTriggerId;
             const poiInfo = translations[currentLang].pois[newTriggerId];
             updateGuideText(poiInfo.description, true); // Use typewriter effect here
@@ -334,7 +334,7 @@ document.addEventListener('DOMContentLoaded', () => {
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(map);
-
+            
             // Set initial UI text and render markers
             setLanguage(currentLang);
             renderPois();

@@ -1,104 +1,104 @@
 [
   {
     "id": "poi-1",
-    "lat": 37.1773,
-    "lon": -3.5903,
-    "en": {
-      "name": "Palace of Charles V",
-      "description": "A massive Renaissance building that stands in stark contrast to the surrounding Moorish architecture. Though never completed for the emperor, its grand circular courtyard is a breathtaking sight."
-    },
+    "lat": 37.1770,
+    "lon": -3.5891,
     "es": {
-      "name": "Palacio de Carlos V",
-      "description": "Un imponente edificio renacentista que contrasta con la arquitectura nazarí circundante. Aunque nunca se completó para el emperador, su gran patio circular es una vista impresionante."
+      "name": "Alcazaba",
+      "description": "Bienvenidos a la Alcazaba, la semilla de la que brotó toda la Alhambra. Esta es la zona más antigua, una auténtica fortaleza militar del siglo XIII. Desde aquí, los sultanes nazaríes controlaban la ciudad y se defendían de cualquier amenaza. Pasear por sus murallas es como viajar en el tiempo, imaginando a los soldados vigilando el horizonte. La Alcazaba no era solo un cuartel; era el escudo protector de la ciudad palatina. Como anécdota histórica clave, recordad que fue justo aquí, en lo alto de su torre más emblemática, donde el 2 de enero de 1492 se izó por primera vez el estandarte de los Reyes Católicos, un acto que simbolizó la rendición de Boabdil y el fin del dominio nazarí en la península."
+    },
+    "en": {
+      "name": "Alcazaba",
+      "description": "Welcome to the Alcazaba, the seed from which the entire Alhambra sprouted. This is the oldest area, a true 13th-century military fortress. From here, the Nasrid sultans controlled the city and defended against any threat. Walking along its walls is like traveling back in time, imagining the soldiers watching the horizon. The Alcazaba was not just barracks; it was the protective shield of the palatine city. As a key historical anecdote, remember that it was right here, atop its most emblematic tower, where on January 2, 1492, the flag of the Catholic Monarchs was raised for the first time, an act that symbolized the surrender of Boabdil and the end of Nasrid rule on the peninsula."
     },
     "fr": {
-      "name": "Palais de Charles Quint",
-      "description": "Un imposant bâtiment de la Renaissance qui contraste fortement avec l'architecture maure environnante. Bien qu'il n'ait jamais été achevé pour l'empereur, sa grande cour circulaire est un spectacle à couper le souffle."
+      "name": "Alcazaba",
+      "description": "Bienvenue à l'Alcazaba, la graine d'où a germé toute l'Alhambra. C'est la zone la plus ancienne, une véritable forteresse militaire du XIIIe siècle. D'ici, les sultans nasrides contrôlaient la ville et se défendaient contre toute menace. Se promener le long de ses remparts, c'est comme voyager dans le temps, en imaginant les soldats surveillant l'horizon. L'Alcazaba n'était pas seulement une caserne ; c'était le bouclier protecteur de la cité palatine. Comme anecdote historique clé, souvenez-vous que c'est ici même, au sommet de sa tour la plus emblématique, que le 2 janvier 1492 fut hissé pour la première fois l'étendard des Rois Catholiques, un acte qui symbolisa la reddition de Boabdil et la fin du règne nasride sur la péninsule."
     }
   },
   {
     "id": "poi-2",
-    "lat": 37.1771,
-    "lon": -3.5893,
-    "en": {
-      "name": "Court of the Lions",
-      "description": "The heart of the Nasrid palaces, famous for its central fountain supported by twelve marble lions. An iconic example of the beauty and complexity of Moorish art and hydraulic engineering."
-    },
+    "lat": 37.1776,
+    "lon": -3.5890,
     "es": {
-      "name": "Patio de los Leones",
-      "description": "El corazón de los palacios nazaríes, famoso por su fuente central sostenida por doce leones de mármol. Un ejemplo icónico de la belleza y complejidad del arte y la ingeniería hidráulica nazarí."
+      "name": "Torre de la Vela",
+      "description": "Nos encontramos ante la Torre de la Vela, el vigía incansable de la Alcazaba y de toda Granada. Con sus imponentes 25 metros, no solo era un punto de vigilancia estratégico, sino que su campana marcaba el ritmo de la vida en la ciudad. Subir hasta aquí ofrece una panorámica que corta la respiración. Y aquí va una curiosidad muy granadina: cada 2 de enero, las jóvenes solteras de la ciudad suben a tocar la campana con la esperanza de encontrar marido antes de que acabe el año. Una tradición que mezcla historia y superstición."
+    },
+    "en": {
+      "name": "Torre de la Vela (Watchtower)",
+      "description": "We are now before the Torre de la Vela, the tireless watchman of the Alcazaba and all of Granada. At an imposing 25 meters, it was not only a strategic surveillance point, but its bell set the rhythm of life in the city. Climbing to the top offers a breathtaking panoramic view. And here is a very local Granada curiosity: every January 2nd, single young women from the city climb up to ring the bell, hoping to find a husband before the year is out. A tradition that blends history and superstition."
     },
     "fr": {
-      "name": "Cour des Lions",
-      "description": "Le cœur des palais nasrides, célèbre pour sa fontaine centrale soutenue par douze lions de marbre. Un exemple emblématique de la beauté et de la complexité de l'art et de l'ingénierie hydraulique nasrides."
+      "name": "Tour de la Vela (Tour de Guet)",
+      "description": "Nous nous trouvons devant la Torre de la Vela, le gardien infatigable de l'Alcazaba et de toute la Grenade. Avec ses 25 mètres imposants, ce n'était pas seulement un point de surveillance stratégique, mais sa cloche rythmait la vie de la ville. Monter jusqu'en haut offre une vue panoramique à couper le souffle. Et voici une curiosité très grenadine : chaque 2 janvier, les jeunes femmes célibataires de la ville montent pour sonner la cloche dans l'espoir de trouver un mari avant la fin de l'année. Une tradition qui mêle histoire et superstition."
     }
   },
   {
     "id": "poi-3",
-    "lat": 37.1786,
-    "lon": -3.5904,
-    "en": {
-      "name": "Alcazaba",
-      "description": "The oldest part of the Alhambra, a formidable military fortress with imposing towers. Climb the Torre de la Vela for the most spectacular panoramic views of Granada and the Sierra Nevada."
-    },
+    "lat": 37.1764,
+    "lon": -3.5882,
     "es": {
-      "name": "Alcazaba",
-      "description": "La parte más antigua de la Alhambra, una formidable fortaleza militar con imponentes torres. Sube a la Torre de la Vela para disfrutar de las vistas panorámicas más espectaculares de Granada y Sierra Nevada."
+      "name": "Sala de los Abencerrajes",
+      "description": "Entramos ahora en una de las salas más legendarias y dramáticas de la Alhambra: la Sala de los Abencerrajes. Fijaos en la espectacular cúpula de mocárabes que corona la estancia, una obra maestra que representa el cielo. Pero esta belleza esconde una historia oscura. La leyenda, que todo guía os contará con un deje de misterio, dice que el padre de Boabdil decapitó aquí a 37 caballeros de la familia Abencerrajes. Si os fijáis en el centro de la fuente, veréis unas manchas de óxido que el pueblo asegura que son las manchas de sangre de los caballeros, imborrables por el tiempo."
+    },
+    "en": {
+      "name": "Hall of the Abencerrajes",
+      "description": "We now enter one of the most legendary and dramatic halls of the Alhambra: the Hall of the Abencerrajes. Notice the spectacular muqarnas dome that crowns the room, a masterpiece representing the heavens. But this beauty hides a dark story. The legend, which every guide will tell you with a hint of mystery, says that Boabdil's father beheaded 37 knights of the Abencerrajes family here. If you look at the center of the fountain, you will see some rust-colored stains that the locals claim are the bloodstains of the knights, indelible through time."
     },
     "fr": {
-      "name": "Alcazaba",
-      "description": "La partie la plus ancienne de l'Alhambra, une formidable forteresse militaire aux tours imposantes. Montez à la Torre de la Vela pour les vues panoramiques les plus spectaculaires sur Grenade et la Sierra Nevada."
+      "name": "Salle des Abencérages",
+      "description": "Nous entrons maintenant dans l'une des salles les plus légendaires et dramatiques de l'Alhambra : la Salle des Abencérages. Remarquez la spectaculaire coupole de muqarnas qui couronne la pièce, un chef-d'œuvre représentant le ciel. Mais cette beauté cache une histoire sombre. La légende, que tout guide vous contera avec une pointe de mystère, dit que le père de Boabdil a décapité ici 37 chevaliers de la famille Abencérages. Si vous regardez au centre de la fontaine, vous verrez des taches couleur rouille dont les gens du pays affirment qu'il s'agit des taches de sang des chevaliers, ineffaçables par le temps."
     }
   },
   {
     "id": "poi-4",
-    "lat": 37.1742,
-    "lon": -3.5873,
-    "en": {
-      "name": "Generalife",
-      "description": "The tranquil summer palace and country estate of the Nasrid rulers. Its stunning gardens, patios, and water features were designed to be a peaceful retreat and a representation of paradise."
-    },
+    "lat": 37.1766,
+    "lon": -3.5887,
     "es": {
-      "name": "Generalife",
-      "description": "El tranquilo palacio de verano y finca rural de los gobernantes nazaríes. Sus impresionantes jardines, patios y fuentes fueron diseñados para ser un refugio de paz y una representación del paraíso."
+      "name": "Palacio de Carlos V",
+      "description": "Y de repente, damos un salto en el tiempo y en el estilo. Este es el Palacio de Carlos V. Tras la conquista, el emperador quiso dejar su propia huella imperial y ordenó construir este imponente palacio renacentista. Su patio circular es único en España. Como anécdota, su acústica es tan perfecta que en 1957 se utilizó como escenario para la première de la película-ópera ‘Don Giovanni’. Imaginen el sonido de Mozart resonando en este patio imperial."
+    },
+    "en": {
+      "name": "Palace of Charles V",
+      "description": "And suddenly, we take a leap in time and style. This is the Palace of Charles V. After the conquest, the emperor wanted to leave his own imperial mark and ordered the construction of this imposing Renaissance palace. Its circular courtyard is unique in Spain. As an anecdote, its acoustics are so perfect that in 1957 it was used as the stage for the premiere of the opera film 'Don Giovanni'. Imagine the sound of Mozart resonating in this imperial courtyard."
     },
     "fr": {
-      "name": "Generalife",
-      "description": "Le paisible palais d'été et domaine de campagne des souverains nasrides. Ses superbes jardins, patios et jeux d'eau ont été conçus pour être une retraite paisible et une représentation du paradis."
+      "name": "Palais de Charles Quint",
+      "description": "Et soudain, nous faisons un saut dans le temps et le style. Voici le Palais de Charles Quint. Après la conquête, l'empereur a voulu laisser sa propre empreinte impériale et a ordonné la construction de cet imposant palais de la Renaissance. Sa cour circulaire est unique en Espagne. Pour l'anecdote, son acoustique est si parfaite qu'en 1957, il a servi de scène pour la première du film-opéra 'Don Giovanni'. Imaginez le son de Mozart résonant dans cette cour impériale."
     }
   },
   {
     "id": "poi-5",
-    "lat": 37.1775,
-    "lon": -3.5886,
-    "en": {
-      "name": "Partal Palace",
-      "description": "One of the oldest remaining palaces in the Alhambra, known for its iconic portico reflecting in a large pool. A serene area that beautifully integrates architecture with nature."
-    },
+    "lat": 37.1774,
+    "lon": -3.5856,
     "es": {
-      "name": "Palacio del Partal",
-      "description": "Uno de los palacios más antiguos que se conservan en la Alhambra, conocido por su icónico pórtico que se refleja en un gran estanque. Una zona serena que integra maravillosamente la arquitectura con la naturaleza."
+      "name": "Generalife",
+      "description": "Estamos en el Generalife, el 'Jardín del Arquitecto'. Este era el palacio de recreo de los sultanes, un lugar para escapar del ajetreo de la corte. Concebido como una villa rural, está rodeado de huertos y jardines donde el sonido del agua es el protagonista, creando un ambiente de paz absoluta. Se dice que los jardines del Generalife, con su belleza serena, inspiraron profundamente al poeta Federico García Lorca para escribir parte de su obra, encontrando en sus rincones la esencia del 'duende' andaluz."
+    },
+    "en": {
+      "name": "Generalife",
+      "description": "We are in the Generalife, the 'Architect's Garden.' This was the recreational palace of the sultans, a place to escape the hustle and bustle of the court. Conceived as a rural villa, it is surrounded by orchards and gardens where the sound of water is the protagonist, creating an atmosphere of absolute peace. It is said that the gardens of the Generalife, with their serene beauty, deeply inspired the poet Federico García Lorca to write part of his work, finding in its corners the essence of the Andalusian 'duende'."
     },
     "fr": {
-      "name": "Palais du Partal",
-      "description": "L'un des plus anciens palais subsistants de l'Alhambra, connu pour son portique emblématique se reflétant dans un grand bassin. Un lieu serein qui intègre magnifiquement l'architecture à la nature."
+      "name": "Generalife",
+      "description": "Nous sommes au Generalife, le 'Jardin de l'Architecte'. C'était le palais de loisirs des sultans, un lieu pour échapper à l'agitation de la cour. Conçu comme une villa rurale, il est entouré de vergers et de jardins où le son de l'eau est le protagoniste, créant une atmosphère de paix absolue. On dit que les jardins du Generalife, avec leur beauté sereine, ont profondément inspiré le poète Federico García Lorca pour écrire une partie de son œuvre, trouvant dans ses recoins l'essence du 'duende' andalou."
     }
   },
   {
     "id": "poi-6",
-    "lat": 37.1770,
-    "lon": -3.5894,
-    "en": {
-      "name": "Hall of the Abencerrajes",
-      "description": "A legendary hall within the Palace of the Lions, renowned for its spectacular star-shaped muqarnas ceiling. The acoustics and intricate design are a testament to the master craftsmen of the era."
-    },
+    "lat": 37.1764,
+    "lon": -3.5884,
     "es": {
-      "name": "Sala de los Abencerrajes",
-      "description": "Una sala legendaria dentro del Palacio de los Leones, famosa por su espectacular techo de mocárabes en forma de estrella. La acústica y el intrincado diseño son un testimonio de los maestros artesanos de la época."
+      "name": "Patio de los Leones",
+      "description": "Ante ustedes, el corazón de la Alhambra y una de las mayores joyas del arte nazarí: el Patio de los Leones. Este patio es una alegoría del paraíso, donde los 12 leones de la fuente, lejos de ser fieros, representan las 12 tribus de Israel y simbolizan el poder del sultán. Una curiosidad sobre la fuente es que originalmente funcionaba como un reloj de agua: cada hora manaba agua de la boca de un león diferente, una maravilla de la ingeniería de la época."
+    },
+    "en": {
+      "name": "Court of the Lions",
+      "description": "Before you stands the heart of the Alhambra and one of the greatest jewels of Nasrid art: the Court of the Lions. This courtyard is an allegory of paradise, where the 12 lions of the fountain, far from being fierce, represent the 12 tribes of Israel and symbolize the sultan's power. A curiosity about the fountain is that it originally functioned as a water clock: every hour, water flowed from the mouth of a different lion, a marvel of engineering for its time."
     },
     "fr": {
-      "name": "Salle des Abencérages",
-      "description": "Une salle légendaire au sein du Palais des Lions, réputée pour son spectaculaire plafond de muqarnas en forme d'étoile. L'acoustique et la conception complexe témoignent des maîtres artisans de l'époque."
+      "name": "Cour des Lions",
+      "description": "Devant vous, le cœur de l'Alhambra et l'un des plus grands joyaux de l'art nasride : la Cour des Lions. Cette cour est une allégorie du paradis, où les 12 lions de la fontaine, loin d'être féroces, représentent les 12 tribus d'Israël et symbolisent le pouvoir du sultan. Une curiosité à propos de la fontaine est qu'elle fonctionnait à l'origine comme une horloge à eau : chaque heure, l'eau coulait de la bouche d'un lion différent, une merveille d'ingénierie pour l'époque."
     }
   }
 ]
