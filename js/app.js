@@ -16,10 +16,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const playBtn = document.getElementById('play-btn');
     const pauseBtn = document.getElementById('pause-btn');
     const stopBtn = document.getElementById('stop-btn');
-    const guideText = document.getElementById('guide-text-overlay').querySelector('p'); // Select the paragraph tag
+    const guideText = document.getElementById('guide-text-overlay').querySelector('p');
     const simulationModeToggle = document.getElementById('simulation-mode-toggle');
+    const themeToggle = document.getElementById('theme-toggle');
     const sidePanel = document.getElementById('side-panel');
     const panelToggleBtn = document.getElementById('panel-toggle-btn');
+    const poiList = document.getElementById('poi-list');
 
     // --- State and Config ---
     const synth = window.speechSynthesis;
@@ -70,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
             clearInterval(typewriterInterval);
         }
         let i = 0;
-        element.textContent = ""; // Clear the specific element
+        element.textContent = "";
         typewriterInterval = setInterval(() => {
             if (i < text.length) {
                 element.textContent += text.charAt(i);
@@ -83,7 +85,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateGuideText(text, useTypewriter = false) {
-        // The guideText variable now points to the single <p> tag
         if (useTypewriter) {
             typewriterEffect(guideText, text);
         } else {
@@ -93,10 +94,37 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             guideText.textContent = text;
         }
-        // Auto-scroll the parent container if text overflows
         if (guideText.parentElement.scrollHeight > guideText.parentElement.clientHeight) {
-            guideText.parentElement.scrollTop = 0; // Scroll to top for new message
+            guideText.parentElement.scrollTop = 0;
         }
+    }
+
+    function renderPoiList() {
+        poiList.innerHTML = '';
+        pois.forEach(poi => {
+            const poiInfo = translations[currentLang].pois[poi.id];
+            const li = document.createElement('li');
+            li.className = 'list-group-item list-group-item-action'; // Action class for hover effects
+            li.textContent = poiInfo.name;
+            li.dataset.poiId = poi.id;
+            poiList.appendChild(li);
+        });
+    }
+
+    function simulateVisitToPoi(poiId) {
+        const poi = pois.find(p => p.id === poiId);
+        if (!poi) return;
+
+        const lat = poi.lat;
+        const lon = poi.lon;
+        
+        if (!userMarker) {
+            createUserMarker(lat, lon);
+        } else {
+            userMarker.setLatLng([lat, lon]);
+        }
+        map.flyTo([lat, lon]);
+        checkProximity(lat, lon);
     }
 
     function setLanguage(lang) {
@@ -111,7 +139,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Update POI popups on the map
         for (const poiId in poiMarkers) {
             const poiInfo = translations[lang].pois[poiId];
             if (poiInfo) {
@@ -119,6 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 marker.getPopup().setContent(poiInfo.name);
             }
         }
+        renderPoiList();
     }
 
     function renderPois() {
@@ -129,16 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             marker.on('click', () => {
                 if (isSimulationMode) {
-                    const lat = poi.lat;
-                    const lon = poi.lon;
-                    
-                    if (!userMarker) {
-                        createUserMarker(lat, lon);
-                    } else {
-                        userMarker.setLatLng([lat, lon]);
-                    }
-                    map.flyTo([lat, lon]);
-                    checkProximity(lat, lon);
+                    simulateVisitToPoi(poi.id);
                 }
             });
 
@@ -155,7 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function startGpsTracking() {
-        if (geolocationId) { // Clear any existing watch
+        if (geolocationId) {
             navigator.geolocation.clearWatch(geolocationId);
         }
         if (navigator.geolocation) {
@@ -181,7 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function createUserMarker(lat, lon) {
         const userIcon = L.divIcon({
             html: '<div style="background-color: blue; width: 15px; height: 15px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 5px rgba(0,0,0,0.5);"></div>',
-            className: '', // No default class
+            className: '',
             iconSize: [15, 15],
             iconAnchor: [9, 9]
         });
@@ -211,7 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function getDistance(lat1, lon1, lat2, lon2) {
-        const R = 6371e3; // metres
+        const R = 6371e3;
         const φ1 = lat1 * Math.PI/180; const φ2 = lat2 * Math.PI/180;
         const Δφ = (lat2-lat1) * Math.PI/180; const Δλ = (lon2-lon1) * Math.PI/180;
         const a = Math.sin(Δφ/2) * Math.sin(Δφ/2) + Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ/2) * Math.sin(Δλ/2);
@@ -247,7 +266,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             lastTriggeredPoiId = newTriggerId;
             const poiInfo = translations[currentLang].pois[newTriggerId];
-            updateGuideText(poiInfo.description, true); // Use typewriter effect here
+            updateGuideText(poiInfo.description, true);
             speak(poiInfo.description);
         } else if (!newTriggerId && lastTriggeredPoiId) {
             lastTriggeredPoiId = null;
@@ -279,6 +298,12 @@ document.addEventListener('DOMContentLoaded', () => {
             startGpsTracking();
         }
     }
+    
+    function applyTheme(theme) {
+        document.body.dataset.theme = theme;
+        localStorage.setItem('alhambra-theme', theme);
+        themeToggle.checked = theme === 'light';
+    }
 
     langSelector.addEventListener('change', (event) => {
         setLanguage(event.target.value);
@@ -286,12 +311,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     simulationModeToggle.addEventListener('change', handleModeChange);
 
+    themeToggle.addEventListener('change', () => {
+        const newTheme = themeToggle.checked ? 'light' : 'dark';
+        applyTheme(newTheme);
+    });
+
     panelToggleBtn.addEventListener('click', () => {
         sidePanel.classList.toggle('collapsed');
         if (sidePanel.classList.contains('collapsed')) {
             panelToggleBtn.textContent = '☰';
         } else {
             panelToggleBtn.textContent = '→';
+        }
+    });
+
+    poiList.addEventListener('click', (event) => {
+        if (isSimulationMode && event.target.matches('li.list-group-item')) {
+            const poiId = event.target.dataset.poiId;
+            simulateVisitToPoi(poiId);
         }
     });
 
@@ -336,12 +373,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(map);
             
-            // Set initial UI text and render markers
             updateGuideText(translations[currentLang].welcome);
             setLanguage(currentLang);
             renderPois();
+            renderPoiList();
+            
+            const savedTheme = localStorage.getItem('alhambra-theme') || 'dark';
+            applyTheme(savedTheme);
+
             getLocation();
-            handleModeChange(); // Set initial mode state
+            handleModeChange();
 
         } catch (error) {
             console.error("Could not load POI data:", error);
