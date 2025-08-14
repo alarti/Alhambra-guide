@@ -1,97 +1,16 @@
 /* Author: Alberto Arce, Arcasoft */
 
-#language-selector-container {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    z-index: 20;
-    background-color: white;
-    padding: 5px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-}
-
-#language-selector {
-    font-size: 14px;
-    border: 1px solid #ccc;
-}
+/* Custom styles that complement Bootstrap */
 
 body {
-    font-family: sans-serif;
-    text-align: center;
+    background-color: #f8f9fa; /* A light gray background for the page */
 }
 
 #map-container {
-    width: 80%;
-    max-width: 800px;
-    height: auto;
-    border: 1px solid #ccc;
-    margin: 20px auto;
-    position: relative;
-    overflow: hidden; /* Hide parts of the map that overflow the container */
+    height: 45vh; /* Use viewport height for responsiveness */
+    min-height: 350px;
 }
 
-#alhambra-map {
-    width: 100%;
-    height: auto;
-    display: block;
-}
-
-#user-marker {
-    position: absolute;
-    width: 15px;
-    height: 15px;
-    background-color: blue;
-    border-radius: 50%;
-    border: 2px solid white;
-    box-shadow: 0 0 5px rgba(0,0,0,0.5);
-    transform: translate(-50%, -50%); /* Center the marker */
-    display: none; /* Hidden until position is known */
-    z-index: 10;
-}
-
-.poi-marker {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    background-color: red;
-    border-radius: 50%;
-    border: 2px solid white;
-    box-shadow: 0 0 5px rgba(0,0,0,0.5);
-    transform: translate(-50%, -50%);
-    z-index: 9;
-    cursor: pointer;
-}
-
-.poi-marker .poi-label {
-    position: absolute;
-    bottom: 25px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: white;
-    padding: 2px 5px;
-    border-radius: 3px;
-    font-size: 12px;
-    white-space: nowrap;
-    display: none; /* Hidden by default, shown on hover */
-}
-
-.poi-marker:hover .poi-label, .poi-marker.active .poi-label {
-    display: block;
-}
-
-.poi-marker.active {
-    background-color: #ffeb3b; /* Yellow */
-    transform: translate(-50%, -50%) scale(1.2);
-    z-index: 11;
-}
-
-#guide-text {
-    margin: 20px;
-}
-
-#controls button {
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
+#guide-text .card-body {
+    min-height: 120px; /* Ensure the guide text box has a consistent height */
 }
