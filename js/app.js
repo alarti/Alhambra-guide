@@ -28,49 +28,20 @@ document.addEventListener('DOMContentLoaded', () => {
     let utterance = new SpeechSynthesisUtterance();
     let lastTriggeredPoiId = null;
     const PROXIMITY_THRESHOLD = 20; // meters
-    let currentLang = 'en'; // Default language
+    let currentLang = 'en';
     let isSimulationMode = simulationModeToggle.checked;
-    let map; // Leaflet map instance
-    let userMarker; // Leaflet marker for user's position
-    let geolocationId = null; // To store the ID of the geolocation watch
-    let typewriterInterval = null; // To store the typewriter effect interval
-    const poiMarkers = {}; // To store POI marker instances { poiId: marker }
-    
-    // Data will be loaded from assets/pois.json
-    let pois = []; 
-    let translations = {
-        en: {
-            title: "Alhambra Voice Guide", welcome: "Welcome to the Alhambra! Your tour will begin shortly.", play: "Play", pause: "Pause", stop: "Stop",
-            simulationMode: "Simulation Mode",
-            geolocationNotSupported: "Geolocation is not supported by this browser.", geolocationDenied: "User denied the request for Geolocation.",
-            geolocationUnavailable: "Location information is unavailable.", geolocationTimeout: "The request to get user location timed out.",
-            geolocationUnknownError: "An unknown error occurred.", yourPosition: "Your position: Latitude: {lat}, Longitude: {lon}",
-            pois: {}
-        },
-        es: {
-            title: "Audioguía de la Alhambra", welcome: "¡Bienvenido a la Alhambra! Su recorrido comenzará en breve.", play: "Reproducir", pause: "Pausar", stop: "Detener",
-            simulationMode: "Modo Simulación",
-            geolocationNotSupported: "La geolocalización no es compatible con este navegador.", geolocationDenied: "El usuario denegó la solicitud de geolocalización.",
-            geolocationUnavailable: "La información de ubicación no está disponible.", geolocationTimeout: "La solicitud para obtener la ubicación del usuario ha caducado.",
-            geolocationUnknownError: "Ocurrió un error desconocido.", yourPosition: "Tu posición: Latitud: {lat}, Longitud: {lon}",
-            pois: {}
-        },
-        fr: {
-            title: "Audioguide de l'Alhambra", welcome: "Bienvenue à l'Alhambra ! Votre visite commencera sous peu.", play: "Jouer", pause: "Pause", stop: "Arrêter",
-            simulationMode: "Mode Simulation",
-            geolocationNotSupported: "La géolocalisation n'est pas prise en charge par ce navigateur.", geolocationDenied: "L'utilisateur a refusé la demande de géolocalisation.",
-            geolocationUnavailable: "Les informations de localisation ne sont pas disponibles.", geolocationTimeout: "La demande de localisation de l'utilisateur a expiré.",
-            geolocationUnknownError: "Une erreur inconnue est survenue.", yourPosition: "Votre position : Latitude : {lat}, Longitude : {lon}",
-            pois: {}
-        }
-    };
+    let map;
+    let userMarker;
+    let geolocationId = null;
+    let typewriterInterval = null;
+    const poiMarkers = {};
+    let pois = [];
+    let availableLanguages = {};
 
     // --- Functions ---
 
     function typewriterEffect(element, text, speed = 30) {
-        if (typewriterInterval) {
-            clearInterval(typewriterInterval);
-        }
+        if (typewriterInterval) clearInterval(typewriterInterval);
         let i = 0;
         element.textContent = "";
         typewriterInterval = setInterval(() => {
@@ -88,10 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (useTypewriter) {
             typewriterEffect(guideText, text);
         } else {
-            if (typewriterInterval) {
-                clearInterval(typewriterInterval);
-                typewriterInterval = null;
-            }
+            if (typewriterInterval) clearInterval(typewriterInterval);
             guideText.textContent = text;
         }
         if (guideText.parentElement.scrollHeight > guideText.parentElement.clientHeight) {
@@ -99,88 +67,84 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function populateLanguageSelector() {
+        langSelector.innerHTML = '';
+        for (const [code, name] of Object.entries(availableLanguages)) {
+            const option = document.createElement('option');
+            option.value = code;
+            option.textContent = name;
+            if (code === currentLang) option.selected = true;
+            langSelector.appendChild(option);
+        }
+    }
+
     function renderPoiList() {
         poiList.innerHTML = '';
         pois.forEach(poi => {
-            const poiInfo = translations[currentLang].pois[poi.id];
             const li = document.createElement('li');
-            li.className = 'list-group-item list-group-item-action'; // Action class for hover effects
-            li.textContent = poiInfo.name;
+            li.className = 'list-group-item list-group-item-action';
+            li.textContent = poi.name;
             li.dataset.poiId = poi.id;
             poiList.appendChild(li);
         });
     }
 
-    function simulateVisitToPoi(poiId) {
-        const poi = pois.find(p => p.id === poiId);
-        if (!poi) return;
-
-        const lat = poi.lat;
-        const lon = poi.lon;
-        
-        if (!userMarker) {
-            createUserMarker(lat, lon);
-        } else {
-            userMarker.setLatLng([lat, lon]);
-        }
-        map.flyTo([lat, lon]);
-        checkProximity(lat, lon);
-    }
-
-    function setLanguage(lang) {
-        currentLang = lang;
-        const langMap = { en: 'en-US', es: 'es-ES', fr: 'fr-FR' };
-        utterance.lang = langMap[lang] || 'en-US';
-
-        document.querySelectorAll('[data-key]').forEach(elem => {
-            const key = elem.getAttribute('data-key');
-            if (translations[lang] && translations[lang][key]) {
-                elem.textContent = translations[lang][key];
-            }
-        });
-
-        for (const poiId in poiMarkers) {
-            const poiInfo = translations[lang].pois[poiId];
-            if (poiInfo) {
-                const marker = poiMarkers[poiId];
-                marker.getPopup().setContent(poiInfo.name);
-            }
-        }
-        renderPoiList();
-    }
-
     function renderPois() {
+        for (const markerId in poiMarkers) {
+            poiMarkers[markerId].remove();
+            delete poiMarkers[markerId];
+        }
         pois.forEach(poi => {
-            const poiInfo = translations[currentLang].pois[poi.id];
             const marker = L.marker([poi.lat, poi.lon]).addTo(map)
-                .bindPopup(poiInfo.name);
-            
+                .bindPopup(poi.name);
             marker.on('click', () => {
-                if (isSimulationMode) {
-                    simulateVisitToPoi(poi.id);
-                }
+                if (isSimulationMode) simulateVisitToPoi(poi.id);
             });
-
             poiMarkers[poi.id] = marker;
         });
     }
 
-    function speak(text) {
-        if (synth.speaking) {
-            synth.cancel();
+    async function loadLanguageData(langCode) {
+        try {
+            const response = await fetch(`assets/poi-${langCode}.json`);
+            if (!response.ok) throw new Error(`Could not load data for language: ${langCode}`);
+            pois = await response.json();
+            
+            currentLang = langCode;
+            const langMap = { en: 'en-US', es: 'es-ES', fr: 'fr-FR' };
+            utterance.lang = langMap[langCode] || 'en-US';
+
+            renderPois();
+            renderPoiList();
+            updateGuideText(`Loaded ${availableLanguages[langCode]} guide.`);
+        } catch (error) {
+            console.error("Error loading language data:", error);
+            updateGuideText(`Failed to load guide for ${availableLanguages[langCode]}.`);
         }
+    }
+
+    function simulateVisitToPoi(poiId) {
+        const poi = pois.find(p => p.id === poiId);
+        if (!poi) return;
+        const { lat, lon } = poi;
+        if (!userMarker) createUserMarker(lat, lon);
+        else userMarker.setLatLng([lat, lon]);
+        map.flyTo([lat, lon]);
+        checkProximity(lat, lon);
+    }
+    
+    function speak(text) {
+        if (synth.speaking) synth.cancel();
         utterance.text = text;
         synth.speak(utterance);
     }
 
     function startGpsTracking() {
-        if (geolocationId) {
-            navigator.geolocation.clearWatch(geolocationId);
-        }
+        if (geolocationId) navigator.geolocation.clearWatch(geolocationId);
         if (navigator.geolocation) {
             geolocationId = navigator.geolocation.watchPosition(showPosition, showError, { enableHighAccuracy: true });
         } else {
-            updateGuideText(translations[currentLang].geolocationNotSupported);
+            updateGuideText("Geolocation is not supported by this browser.");
         }
     }
 
@@ -192,9 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function getLocation() {
-        if (!isSimulationMode) {
-            startGpsTracking();
-        }
+        if (!isSimulationMode) startGpsTracking();
     }
 
     function createUserMarker(lat, lon) {
@@ -205,26 +167,15 @@ document.addEventListener('DOMContentLoaded', () => {
             iconAnchor: [9, 9]
         });
         userMarker = L.marker([lat, lon], { icon: userIcon }).addTo(map);
-        if (isSimulationMode) {
-            userMarker.setOpacity(0.5);
-        }
+        if (isSimulationMode) userMarker.setOpacity(0.5);
     }
 
     function showPosition(position) {
-        const lat = position.coords.latitude;
-        const lon = position.coords.longitude;
-
-        if (!userMarker) {
-            createUserMarker(lat, lon);
-        } else {
-            userMarker.setLatLng([lat, lon]);
-        }
-        
+        const { latitude: lat, longitude: lon } = position.coords;
+        if (!userMarker) createUserMarker(lat, lon);
+        else userMarker.setLatLng([lat, lon]);
         if (!synth.speaking) {
-            const text = translations[currentLang].yourPosition
-                .replace('{lat}', lat.toFixed(4))
-                .replace('{lon}', lon.toFixed(4));
-            updateGuideText(text);
+            updateGuideText(`Your position: Latitude: ${lat.toFixed(4)}, Longitude: ${lon.toFixed(4)}`);
         }
         checkProximity(lat, lon);
     }
@@ -239,47 +190,35 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function checkProximity(lat, lon) {
-        let inRangeOfPoi = null;
-        let closestPoi = null;
-        let minDistance = Infinity;
-
-        for (const poi of pois) {
+        let closestPoi = pois.reduce((closest, poi) => {
             const distance = getDistance(lat, lon, poi.lat, poi.lon);
-            if (distance < minDistance) {
-                minDistance = distance;
-                closestPoi = poi;
-            }
-        }
+            if (distance < closest.distance) return { ...poi, distance };
+            return closest;
+        }, { distance: Infinity });
 
-        if (minDistance < PROXIMITY_THRESHOLD) {
-            inRangeOfPoi = closestPoi;
-        }
-        
+        const inRangeOfPoi = closestPoi.distance < PROXIMITY_THRESHOLD ? closestPoi : null;
         const newTriggerId = inRangeOfPoi ? inRangeOfPoi.id : null;
 
         if (lastTriggeredPoiId && lastTriggeredPoiId !== newTriggerId) {
             poiMarkers[lastTriggeredPoiId].closePopup();
         }
-
         if (newTriggerId && newTriggerId !== lastTriggeredPoiId) {
             poiMarkers[newTriggerId].openPopup();
-            
             lastTriggeredPoiId = newTriggerId;
-            const poiInfo = translations[currentLang].pois[newTriggerId];
-            updateGuideText(poiInfo.description, true);
-            speak(poiInfo.description);
+            updateGuideText(inRangeOfPoi.description, true);
+            speak(inRangeOfPoi.description);
         } else if (!newTriggerId && lastTriggeredPoiId) {
             lastTriggeredPoiId = null;
         }
     }
 
     function showError(error) {
-        const errorKey = {
-            [error.PERMISSION_DENIED]: "geolocationDenied",
-            [error.POSITION_UNAVAILABLE]: "geolocationUnavailable",
-            [error.TIMEOUT]: "geolocationTimeout"
-        }[error.code] || "geolocationUnknownError";
-        updateGuideText(translations[currentLang][errorKey]);
+        const errorMessages = {
+            [error.PERMISSION_DENIED]: "User denied the request for Geolocation.",
+            [error.POSITION_UNAVAILABLE]: "Location information is unavailable.",
+            [error.TIMEOUT]: "The request to get user location timed out."
+        };
+        updateGuideText(errorMessages[error.code] || "An unknown error occurred.");
     }
 
     // --- Event Listeners and Init ---
@@ -288,13 +227,9 @@ document.addEventListener('DOMContentLoaded', () => {
         isSimulationMode = simulationModeToggle.checked;
         if (isSimulationMode) {
             stopGpsTracking();
-            if (userMarker) {
-                userMarker.setOpacity(0.5);
-            }
+            if (userMarker) userMarker.setOpacity(0.5);
         } else {
-            if (userMarker) {
-                userMarker.setOpacity(1.0);
-            }
+            if (userMarker) userMarker.setOpacity(1.0);
             startGpsTracking();
         }
     }
@@ -306,45 +241,28 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     langSelector.addEventListener('change', (event) => {
-        setLanguage(event.target.value);
+        loadLanguageData(event.target.value);
     });
 
     simulationModeToggle.addEventListener('change', handleModeChange);
-
-    themeToggle.addEventListener('change', () => {
-        const newTheme = themeToggle.checked ? 'light' : 'dark';
-        applyTheme(newTheme);
-    });
-
+    themeToggle.addEventListener('change', () => applyTheme(themeToggle.checked ? 'light' : 'dark'));
     panelToggleBtn.addEventListener('click', () => {
         sidePanel.classList.toggle('collapsed');
-        if (sidePanel.classList.contains('collapsed')) {
-            panelToggleBtn.textContent = '☰';
-        } else {
-            panelToggleBtn.textContent = '→';
-        }
+        panelToggleBtn.textContent = sidePanel.classList.contains('collapsed') ? '☰' : '→';
     });
-
     poiList.addEventListener('click', (event) => {
         if (isSimulationMode && event.target.matches('li.list-group-item')) {
-            const poiId = event.target.dataset.poiId;
-            simulateVisitToPoi(poiId);
+            simulateVisitToPoi(event.target.dataset.poiId);
         }
     });
-
     playBtn.addEventListener('click', () => {
-        if (synth.paused) {
-            synth.resume();
-        } else if (lastTriggeredPoiId) {
-            const poiInfo = translations[currentLang].pois[lastTriggeredPoiId];
-            if (poiInfo) speak(poiInfo.description);
+        if (synth.paused) synth.resume();
+        else if (lastTriggeredPoiId) {
+            const poi = pois.find(p => p.id === lastTriggeredPoiId);
+            if (poi) speak(poi.description);
         }
     });
-
-    pauseBtn.addEventListener('click', () => {
-        if (synth.speaking) synth.pause();
-    });
-
+    pauseBtn.addEventListener('click', () => { if (synth.speaking) synth.pause(); });
     stopBtn.addEventListener('click', () => {
         if (synth.speaking) synth.cancel();
         if (lastTriggeredPoiId) {
@@ -355,38 +273,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function init() {
         try {
-            const response = await fetch('assets/pois.json');
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const poiData = await response.json();
-
-            pois = poiData.map(p => ({ id: p.id, lat: p.lat, lon: p.lon }));
-            poiData.forEach(p => {
-                translations.en.pois[p.id] = p.en;
-                translations.es.pois[p.id] = p.es;
-                translations.fr.pois[p.id] = p.fr;
-            });
-
+            const langResponse = await fetch('assets/languages.json');
+            if (!langResponse.ok) throw new Error('Could not load language configuration.');
+            availableLanguages = await langResponse.json();
+            
+            populateLanguageSelector();
+            
             map = L.map('map-container').setView([37.177, -3.588], 16);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(map);
             
-            updateGuideText(translations[currentLang].welcome);
-            setLanguage(currentLang);
-            renderPois();
-            renderPoiList();
-            
             const savedTheme = localStorage.getItem('alhambra-theme') || 'dark';
             applyTheme(savedTheme);
-
-            getLocation();
             handleModeChange();
+            
+            await loadLanguageData(currentLang); // Load default language data
+            
+            getLocation();
 
         } catch (error) {
-            console.error("Could not load POI data:", error);
-            updateGuideText("Could not load tour data. Please try again later.");
+            console.error("Initialization failed:", error);
+            updateGuideText("Could not initialize the application. Please try again later.");
         }
     }
 

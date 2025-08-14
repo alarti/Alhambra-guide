@@ -1,0 +1,44 @@
+[
+  {
+    "id": "poi-1",
+    "lat": 37.1773,
+    "lon": -3.5903,
+    "name": "Palacio de Carlos V",
+    "description": "Un imponente edificio renacentista que contrasta con la arquitectura nazarí circundante. Aunque nunca se completó para el emperador, su gran patio circular es una vista impresionante."
+  },
+  {
+    "id": "poi-2",
+    "lat": 37.1771,
+    "lon": -3.5893,
+    "name": "Patio de los Leones",
+    "description": "El corazón de los palacios nazaríes, famoso por su fuente central sostenida por doce leones de mármol. Un ejemplo icónico de la belleza y complejidad del arte y la ingeniería hidráulica nazarí."
+  },
+  {
+    "id": "poi-3",
+    "lat": 37.1786,
+    "lon": -3.5904,
+    "name": "Alcazaba",
+    "description": "La parte más antigua de la Alhambra, una formidable fortaleza militar con imponentes torres. Sube a la Torre de la Vela para disfrutar de las vistas panorámicas más espectaculares de Granada y Sierra Nevada."
+  },
+  {
+    "id": "poi-4",
+    "lat": 37.1742,
+    "lon": -3.5873,
+    "name": "Generalife",
+    "description": "El tranquilo palacio de verano y finca rural de los gobernantes nazaríes. Sus impresionantes jardines, patios y fuentes fueron diseñados para ser un refugio de paz y una representación del paraíso."
+  },
+  {
+    "id": "poi-5",
+    "lat": 37.1775,
+    "lon": -3.5886,
+    "name": "Palacio del Partal",
+    "description": "Uno de los palacios más antiguos que se conservan en la Alhambra, conocido por su icónico pórtico que se refleja en un gran estanque. Una zona serena que integra maravillosamente la arquitectura con la naturaleza."
+  },
+  {
+    "id": "poi-6",
+    "lat": 37.1770,
+    "lon": -3.5894,
+    "name": "Sala de los Abencerrajes",
+    "description": "Una sala legendaria dentro del Palacio de los Leones, famosa por su espectacular techo de mocárabes en forma de estrella. La acústica y el intrincado diseño son un testimonio de los maestros artesanos de la época."
+  }
+]
