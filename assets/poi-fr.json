@@ -1,176 +1,126 @@
 [
     {
       "id": "poi-22",
-      "lat": 37.1761,
-      "lon": -3.5927,
       "name": "Porte des Grenades et Cuesta de Gomérez",
       "description": "Montée classique depuis la Plaza Nueva à travers la Cuesta de Gomérez bordée d'arbres jusqu'à la monumentale Porte des Grenades, prélude à la forêt et à la Porte de la Justice. Conseil : Cette approche pittoresque et ombragée donne le ton et évite la circulation."
     },
     {
       "id": "poi-9",
-      "lat": 37.1754,
-      "lon": -3.5908,
       "name": "Forêt de l'Alhambra",
       "description": "Forêt historique plantée à l'époque de Charles Quint, avec des espèces importées des Amériques comme les marronniers d'Inde ; un sentier frais parmi les fontaines, les murs et les mémoriaux. Conseil : Visitez à l'aube pour entendre l'eau et le chant des oiseaux dans une zone sans circulation."
     },
     {
       "id": "poi-7",
-      "lat": 37.1767,
-      "lon": -3.5906,
       "name": "Porte de la Justice",
       "description": "Entrée monumentale avec un porche en coude, une main de Fatima et une clé dans la clé de voûte ; conçue pour les réceptions officielles et la défense, avec un passage incurvé résistant aux sièges. Conseil : Profitez de l'approche pittoresque depuis la Cuesta de Gomérez et la Forêt de l'Alhambra."
     },
     {
       "id": "poi-8",
-      "lat": 37.1759,
-      "lon": -3.591,
       "name": "Pilier de Charles Quint",
       "description": "Fontaine Renaissance de 1554 avec trois visages et plusieurs becs, pleine d'allégories aux rivières de Grenade, aux saisons et aux symboles impériaux. Conseil : Observez l'iconographie du côté sud à la lumière du matin."
     },
     {
       "id": "poi-1",
-      "lat": 37.1773,
-      "lon": -3.5903,
       "name": "Palais de Charles Quint",
       "description": "Palais impérial de la Renaissance avec une cour circulaire monumentale, commencé par Charles Quint sur un ancien palais nasride et achevé structurellement au XXe siècle. Aujourd'hui, il abrite des musées et contraste fortement avec l'art islamique environnant. Conseil : Entrez dans la cour à l'aube ou en fin d'après-midi pour apprécier l'acoustique et les proportions."
     },
     {
       "id": "poi-25",
-      "lat": 37.1774,
-      "lon": -3.5895,
       "name": "Cour des Myrtes (Comares)",
       "description": "Miroir d'eau entre des haies de myrtes reflétant la Tour de Comares, un exemple modèle de contrôle de la nappe d'eau et du microclimat autour du bassin. Conseil : Faites une pause le long du grand bassin pour capturer des reflets symétriques."
     },
     {
       "id": "poi-2",
-      "lat": 37.1771,
-      "lon": -3.5893,
       "name": "Cour des Lions",
       "description": "Le cœur des palais nasrides, célèbre pour sa fontaine centrale soutenue par douze lions de marbre et son système hydraulique complexe restauré, un symbole de l'élégance et de la sophistication technique andalouse. Conseil : Observez la surface immobile de l'eau autour du bassin, un effet initialement recherché par les ingénieurs nasrides."
     },
     {
       "id": "poi-6",
-      "lat": 37.177,
-      "lon": -3.5894,
       "name": "Salle des Abencérages",
       "description": "Une salle légendaire dans le Palais des Lions avec une coupole de muqarnas en forme d'étoile et une acoustique distinctive, un chef-d'œuvre de l'artisanat nasride. Conseil : Parlez doucement sous le point central de la coupole pour apprécier la résonance."
     },
     {
       "id": "poi-16",
-      "lat": 37.1772,
-      "lon": -3.5896,
       "name": "Bains Royaux (Hammam Nasride)",
       "description": "Complexe de bains avec des salles froide, tiède et chaude, une chaudière en cuivre, des sols radiants via des canaux de vapeur et des lucarnes en forme d'étoile avec des ouvertures réglables. Conseil : Remarquez les lucarnes étoilées et les traces du chauffage par le sol."
     },
     {
       "id": "poi-17",
-      "lat": 37.1772,
-      "lon": -3.5892,
       "name": "Canaux d'Eau de la Cour des Lions",
       "description": "Réseau de canaux peu profonds sur quatre axes rayonnant depuis la fontaine ; le bassin central contenait autrefois un cylindre hydraulique avec des ouvertures calibrées pour maintenir une nappe stable et activer des jets. Conseil : Suivez les quatre axes pour comprendre la conception symbolique et hydraulique du patio."
     },
     {
       "id": "poi-20",
-      "lat": 37.1779,
-      "lon": -3.5899,
       "name": "Jardins et Sentiers du Partal",
       "description": "Avenues de haies de myrte, points de vue et petits bassins reliant le Partal aux palais ; canaux d'eau utilisés pour rafraîchir le microclimat. Conseil : Suivez le cours de l'eau pour comprendre comment elle rafraîchit et guide la promenade."
     },
     {
       "id": "poi-5",
-      "lat": 37.1775,
-      "lon": -3.5886,
       "name": "Palais du Partal",
       "description": "Complexe palatial avec un portique se reflétant dans un grand bassin, l'un des plus anciens conservés à l'Alhambra, où l'architecture et le paysage fusionnent en sérénité. Conseil : Prenez des photos avec des reflets au coucher du soleil pour trouver moins de monde."
     },
     {
       "id": "poi-24",
-      "lat": 37.1777,
-      "lon": -3.5898,
       "name": "Musée de l'Alhambra (dans le Palais de Charles Quint)",
       "description": "Collection d'artefacts nasrides et de pièces originales telles que le cylindre hydraulique de la Fontaine des Lions, l'épigraphie, les céramiques et les plâtres. Conseil : Entrez si vous avez le temps entre les palais et l'Alcazaba."
     },
     {
       "id": "poi-15",
-      "lat": 37.1769,
-      "lon": -3.589,
       "name": "Médina de l'Alhambra",
       "description": "Zone fouillée entre l'Alcazaba et le Generalife qui abritait des résidences nobles, des ateliers d'artisans, des marchés et des bains publics : la ville palatine en activité. Conseil : Lisez les panneaux sur les métiers et le tracé des ruelles pour imaginer la vie quotidienne."
     },
     {
       "id": "poi-3",
-      "lat": 37.1786,
-      "lon": -3.5904,
       "name": "Alcazaba",
       "description": "Le secteur le plus ancien, une citadelle militaire avec des tours de guet et des vues sur Grenade et la Sierra Nevada ; il conserve des places, des vestiges de maisons, des citernes, des hammams et des jardins le long des remparts. Conseil : Montez tôt le matin pour éviter les files d'attente et les vents forts à la Torre de la Vela."
     },
     {
       "id": "poi-13",
-      "lat": 37.1768,
-      "lon": -3.5901,
       "name": "Porte des Armes",
       "description": "Accès militaire d'origine sur le versant du Darro, lié à la Tour des Armes ; antérieur aux portes monumentales ultérieures. Conseil : Notez le lien stratégique entre la porte et la route fluviale inférieure."
     },
     {
       "id": "poi-18",
-      "lat": 37.1768,
-      "lon": -3.5922,
       "name": "Porte des Sept Sols (Bab al-Gudur)",
       "description": "Porte sur le mur sud avec des bastions tardifs ; partie de la route sous les murs entre les tours et les bastions chrétiens. Conseil : Marchez le long du sentier extérieur sud pour voir la séquence des tours et la Tour de l'Eau à l'entrée du canal."
     },
     {
       "id": "poi-14",
-      "lat": 37.1763,
-      "lon": -3.5901,
       "name": "Église de Santa María de la Alhambra",
       "description": "Église du XVIe siècle construite sur le site de l'ancienne mosquée de l'Alhambra, avec des intérieurs baroques et des vestiges de bains à proximité. Conseil : Cherchez les ruines d'un hammam adjacent pour comprendre le circuit de l'eau."
     },
     {
       "id": "poi-10",
-      "lat": 37.1779,
-      "lon": -3.5869,
       "name": "Tour de l'Eau (Entrée de l'Aqueduc)",
       "description": "Point où le Canal Royal entre dans l'Alhambra via un aqueduc oriental à côté de la tour, distribuant l'eau au complexe. Conseil : Localisez l'aqueduc pour comprendre la hauteur d'arrivée du canal."
     },
     {
       "id": "poi-11",
-      "lat": 37.1802,
-      "lon": -3.5838,
       "name": "Canal Royal (Section Extérieure)",
       "description": "Canal principal qui détourne l'eau du fleuve Darro à environ 6,1 km en amont, la transportant le long des pentes, des tunnels et des aqueducs avec une pente minimale jusqu'à l'Alhambra et le Generalife. Conseil : Envisagez une sortie latérale pour voir les tronçons extérieurs si le temps et la logistique le permettent."
     },
     {
       "id": "poi-12",
-      "lat": 37.1789,
-      "lon": -3.5861,
       "name": "Réservoirs du Generalife",
       "description": "Grande citerne médiévale (~400 m³) utilisée pour pressuriser et irriguer les terrasses supérieures ; alimentée par une galerie souterraine, un puits de 17,4 m et une noria à traction animale sous une tour en pisé. Conseil : Remarquez la disposition qui gagne en altitude pour l'irrigation."
     },
     {
       "id": "poi-23",
-      "lat": 37.1793,
-      "lon": -3.5866,
       "name": "Promenade des lauriers-roses (environs du Generalife)",
       "description": "Sentier lié à des galeries de captage souterraines alimentant les réservoirs et les dérivations du Canal du Tercio à des niveaux supérieurs. Conseil : Un segment plus calme et interprétatif pour ceux qui s'intéressent aux ouvrages hydrauliques historiques."
     },
     {
       "id": "poi-4",
-      "lat": 37.1742,
-      "lon": -3.5873,
       "name": "Generalife",
       "description": "La résidence de loisirs et les vergers des sultans nasrides, conçus comme un paradis terrestre avec des cours, des acequias, des bassins, des cyprès et le parfum du myrte et de la fleur d'oranger, irrigués par le Canal Royal. Conseil : Parcourez les terrasses supérieures pour voir le tracé des acequias historiques."
     },
     {
       "id": "poi-21",
-      "lat": 37.1783,
-      "lon": -3.5887,
       "name": "Mirador de la Sultane (Generalife Supérieur)",
       "description": "Terrasses hautes avec des vues directes sur les palais nasrides et des traces de canaux secondaires ; une lecture privilégiée du complexe. Conseil : Belvédère final idéal pour apprécier la composition d'ensemble."
     },
     {
       "id": "poi-19",
-      "lat": 37.1752,
-      "lon": -3.5906,
       "name": "Monument à Ángel Ganivet",
       "description": "Coin de la Forêt de l'Alhambra dédié à l'écrivain et diplomate né à Grenade ; un endroit calme pour écouter l'eau parmi les marronniers et les tilleuls. Conseil : Une pause paisible dans la descente vers la Plaza Nueva."
     }

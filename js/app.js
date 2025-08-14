@@ -19,12 +19,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const guideText = document.getElementById('guide-text-overlay').querySelector('p');
     const simulationModeToggle = document.getElementById('simulation-mode-toggle');
     const themeToggle = document.getElementById('theme-toggle');
+    const editModeToggle = document.getElementById('edit-mode-toggle');
     const sidePanel = document.getElementById('side-panel');
     const panelToggleBtn = document.getElementById('panel-toggle-btn');
     const poiList = document.getElementById('poi-list');
     const aboutBtn = document.getElementById('about-btn');
     const aboutModal = document.getElementById('about-modal');
     const modalCloseBtn = aboutModal.querySelector('.modal-close-btn');
+    const exportBtn = document.getElementById('export-btn');
 
     // --- State and Config ---
     const synth = window.speechSynthesis;
@@ -33,12 +35,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const PROXIMITY_THRESHOLD = 20; // meters
     let currentLang = 'en';
     let isSimulationMode = simulationModeToggle.checked;
+    let isEditMode = editModeToggle.checked;
     let map;
     let userMarker;
     let geolocationId = null;
     let typewriterInterval = null;
     const poiMarkers = {};
     let pois = [];
+    let poiBaseData = [];
     let availableLanguages = {};
     const tourRoute = [
         "poi-22", "poi-9", "poi-7", "poi-8", "poi-1", "poi-24", "poi-15", "poi-14", "poi-13", "poi-3",
@@ -106,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 li.textContent = poi.name;
                 li.dataset.poiId = poi.id;
                 if (visitedPois.has(poiId)) {
-                    li.classList.add('visited'); // Custom class for styling
+                    li.classList.add('visited');
                 }
                 poiList.appendChild(li);
             }
@@ -116,14 +120,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function drawTourRoute() {
         routePolylines.forEach(line => line.remove());
         routePolylines = [];
-
         for (let i = 0; i < tourRoute.length - 1; i++) {
             const startPoi = pois.find(p => p.id === tourRoute[i]);
             const endPoi = pois.find(p => p.id === tourRoute[i + 1]);
-
             if (startPoi && endPoi) {
                 const isVisited = visitedPois.has(endPoi.id);
-                const color = isVisited ? '#28a745' : '#3388ff'; // Green if visited, else blue
+                const color = isVisited ? '#28a745' : '#3388ff';
                 const line = L.polyline([[startPoi.lat, startPoi.lon], [endPoi.lat, endPoi.lon]], {
                     color: color,
                     weight: 3,
@@ -140,11 +142,35 @@ document.addEventListener('DOMContentLoaded', () => {
             delete poiMarkers[markerId];
         }
         pois.forEach(poi => {
-            const marker = L.marker([poi.lat, poi.lon]).addTo(map)
-                .bindPopup(poi.name);
+            const marker = L.marker([poi.lat, poi.lon], {
+                draggable: isEditMode
+            }).addTo(map).bindPopup(poi.name);
+            
             marker.on('click', () => {
-                if (isSimulationMode) simulateVisitToPoi(poi.id);
+                if (isSimulationMode && !isEditMode) simulateVisitToPoi(poi.id);
             });
+
+            marker.on('dragend', (event) => {
+                const marker = event.target;
+                const position = marker.getLatLng();
+                const poiId = poi.id;
+
+                const basePoi = poiBaseData.find(p => p.id === poiId);
+                if (basePoi) {
+                    basePoi.lat = position.lat;
+                    basePoi.lon = position.lng;
+                }
+                
+                const mergedPoi = pois.find(p => p.id === poiId);
+                if (mergedPoi) {
+                    mergedPoi.lat = position.lat;
+                    mergedPoi.lon = position.lng;
+                }
+
+                drawTourRoute();
+                console.log(`Updated ${poi.name} to ${position.lat}, ${position.lng}`);
+            });
+
             poiMarkers[poi.id] = marker;
         });
     }
@@ -154,8 +180,13 @@ document.addEventListener('DOMContentLoaded', () => {
             updateGuideText(`Loading ${availableLanguages[langCode]} guide...`);
             const response = await fetch(`assets/poi-${langCode}.json`);
             if (!response.ok) throw new Error(`Could not load data for language: ${langCode}`);
-            pois = await response.json();
+            const langData = await response.json();
             
+            pois = poiBaseData.map(basePoi => {
+                const langPoi = langData.find(p => p.id === basePoi.id);
+                return { ...basePoi, ...langPoi };
+            });
+
             currentLang = langCode;
             const langMap = { en: 'en-US', es: 'es-ES', fr: 'fr-FR', de: 'de-DE', zh: 'zh-CN' };
             utterance.lang = langMap[langCode] || 'en-US';
@@ -254,9 +285,9 @@ document.addEventListener('DOMContentLoaded', () => {
             poiMarkers[newTriggerId].openPopup();
             lastTriggeredPoiId = newTriggerId;
             
-            visitedPois.add(newTriggerId); // Mark POI as visited
-            drawTourRoute(); // Redraw route to update colors
-            renderPoiList(); // Redraw list to update styles
+            visitedPois.add(newTriggerId);
+            drawTourRoute();
+            renderPoiList();
 
             const intros = introPhrases[currentLang] || introPhrases.en;
             const randomIntro = intros[Math.floor(Math.random() * intros.length)];
@@ -278,6 +309,19 @@ document.addEventListener('DOMContentLoaded', () => {
         updateGuideText(errorMessages[error.code] || "An unknown error occurred.");
     }
 
+    function downloadJson(data, filename) {
+        const jsonStr = JSON.stringify(data, null, 2);
+        const blob = new Blob([jsonStr], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+
     // --- Event Listeners and Init ---
 
     function handleModeChange() {
@@ -291,6 +335,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
+    function handleEditModeChange() {
+        isEditMode = editModeToggle.checked;
+        renderPois(); // Re-render markers with new draggable state
+    }
+
     function applyTheme(theme) {
         document.body.dataset.theme = theme;
         localStorage.setItem('alhambra-theme', theme);
@@ -303,6 +352,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     simulationModeToggle.addEventListener('change', handleModeChange);
     themeToggle.addEventListener('change', () => applyTheme(themeToggle.checked ? 'light' : 'dark'));
+    editModeToggle.addEventListener('change', handleEditModeChange);
+
     panelToggleBtn.addEventListener('click', () => {
         sidePanel.classList.toggle('collapsed');
         panelToggleBtn.textContent = sidePanel.classList.contains('collapsed') ? '☰' : '→';
@@ -319,6 +370,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (event.target === aboutModal) {
             aboutModal.classList.add('hidden');
         }
+    });
+
+    exportBtn.addEventListener('click', () => {
+        downloadJson(poiBaseData, 'poi-base-updated.json');
     });
 
     playBtn.addEventListener('click', () => {
@@ -339,9 +394,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function init() {
         try {
-            const langResponse = await fetch('assets/languages.json');
+            const [langResponse, basePoiResponse] = await Promise.all([
+                fetch('assets/languages.json'),
+                fetch('assets/poi-base.json')
+            ]);
+
             if (!langResponse.ok) throw new Error('Could not load language configuration.');
+            if (!basePoiResponse.ok) throw new Error('Could not load base POI data.');
+
             availableLanguages = await langResponse.json();
+            poiBaseData = await basePoiResponse.json();
             
             populateLanguageSelector();
             
@@ -353,6 +415,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const savedTheme = localStorage.getItem('alhambra-theme') || 'dark';
             applyTheme(savedTheme);
             handleModeChange();
+            handleEditModeChange();
             
             await loadLanguageData(currentLang);
             
