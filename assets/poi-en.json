@@ -1,6 +1,4 @@
-{
-  "area": "Alhambra and Generalife, Granada",
-  "pois": [
+[
     {
       "id": "poi-22",
       "lat": 37.1761,
@@ -226,51 +224,4 @@
         "description": "Corner of the Alhambra Forest dedicated to the Granada-born writer and diplomat; a quiet spot to hear the water among chestnut and lime trees. Tip: A peaceful pause on the descent back toward Plaza Nueva."
       }
     }
-  ],
-  "routes": [
-    {
-      "id": "route-classic",
-      "name": "Classic Historic Ascent and Palaces",
-      "steps": [
-        "Plaza Nueva → Cuesta de Gomérez → Gate of the Pomegranates → Alhambra Forest",
-        "Pillar of Charles V → Gate of Justice",
-        "Palace of Charles V → Nasrid Palaces (Myrtles, Comares, Lions)",
-        "Royal Baths and water channels of the Court of the Lions",
-        "Partal and Partal Gardens → Medina",
-        "Alcazaba and Torre de la Vela",
-        "Generalife complex and upper viewpoints"
-      ],
-      "focus": "Palatine architecture, medieval approaches, Renaissance additions"
-    },
-    {
-      "id": "route-water",
-      "name": "Water and Engineering Route",
-      "steps": [
-        "Water Tower and entry aqueduct",
-        "Royal Canal (visible outer section)",
-        "Generalife Reservoirs and well with noria",
-        "Water Stairway and Patio of the Acequia (Generalife)",
-        "Water channels of the Court of the Lions and its hydraulics"
-      ],
-      "focus": "Capture, elevation, storage, distribution, and climate control"
-    }
-  ],
-  "themes": {
-    "water": {
-      "origin": "Diversion of the Darro River ~6.1 km upstream at higher elevation via dam and master canal (Royal Canal).",
-      "distribution": "Aqueduct by the Water Tower, networks to courtyards, fountains, orchards, and baths; surface channels and rock-cut galleries.",
-      "pressure": "Elevated storage in reservoirs (~400 m³) and use of norias to gain height; steady slope for constant flow.",
-      "climate": "Evaporation from sheets and jets cooling rooms and walkways."
-    },
-    "paths": {
-      "historic_ascent": "Plaza Nueva → Cuesta de Gomérez → Gate of the Pomegranates → Forest → Gate of Justice.",
-      "southwest_perimeter": "Along the walls: Water Tower (canal entry), Gate of the Seven Floors and bastions."
-    },
-    "curiosities": [
-      "The Fountain of the Lions historically operated with a perforated cylinder; a replica reinstated in 2012 aims to reproduce its original behavior.",
-      "The bell of the Torre de la Vela marked time and milestones after the Christian conquest.",
-      "The Alhambra Forest includes species introduced in the time of Charles V, such as horse chestnuts.",
-      "The royal baths had radiant floors and steam regulation through star-shaped skylights."
-    ]
-  }
-}
+  ]
