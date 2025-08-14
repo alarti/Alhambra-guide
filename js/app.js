@@ -88,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
             guideText.parentElement.scrollTop = 0;
         }
     }
-
+    
     function populateLanguageSelector() {
         langSelector.innerHTML = '';
         for (const [code, name] of Object.entries(availableLanguages)) {
@@ -145,7 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const marker = L.marker([poi.lat, poi.lon], {
                 draggable: isEditMode
             }).addTo(map).bindPopup(poi.name);
-
+            
             marker.on('click', () => {
                 if (isSimulationMode && !isEditMode) simulateVisitToPoi(poi.id);
             });
@@ -160,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     basePoi.lat = position.lat;
                     basePoi.lon = position.lng;
                 }
-
+                
                 const mergedPoi = pois.find(p => p.id === poiId);
                 if (mergedPoi) {
                     mergedPoi.lat = position.lat;
@@ -181,7 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch(`assets/poi-${langCode}.json`);
             if (!response.ok) throw new Error(`Could not load data for language: ${langCode}`);
             const langData = await response.json();
-
+            
             pois = poiBaseData.map(basePoi => {
                 const langPoi = langData.find(p => p.id === basePoi.id);
                 return { ...basePoi, ...langPoi };
@@ -209,7 +209,7 @@ document.addEventListener('DOMContentLoaded', () => {
         map.flyTo([lat, lon], 18);
         checkProximity(lat, lon);
     }
-
+    
     function speak(text) {
         if (synth.speaking) synth.cancel();
         utterance.text = text;
@@ -284,7 +284,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (newTriggerId && newTriggerId !== lastTriggeredPoiId) {
             poiMarkers[newTriggerId].openPopup();
             lastTriggeredPoiId = newTriggerId;
-
+            
             visitedPois.add(newTriggerId);
             drawTourRoute();
             renderPoiList();
@@ -292,7 +292,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const intros = introPhrases[currentLang] || introPhrases.en;
             const randomIntro = intros[Math.floor(Math.random() * intros.length)];
             const fullDescription = `${randomIntro} ${inRangeOfPoi.name}. ${inRangeOfPoi.description}`;
-
+            
             updateGuideText(fullDescription, true);
             speak(fullDescription);
         } else if (!newTriggerId && lastTriggeredPoiId) {
@@ -334,7 +334,7 @@ document.addEventListener('DOMContentLoaded', () => {
             startGpsTracking();
         }
     }
-
+    
     function handleEditModeChange() {
         isEditMode = editModeToggle.checked;
         renderPois(); // Re-render markers with new draggable state
@@ -404,23 +404,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
             availableLanguages = await langResponse.json();
             poiBaseData = await basePoiResponse.json();
-
+            
             populateLanguageSelector();
-
+            
             map = L.map('map-container').setView([37.177, -3.588], 17);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(map);
-
+            
             const savedTheme = localStorage.getItem('alhambra-theme') || 'dark';
             applyTheme(savedTheme);
             handleModeChange();
             handleEditModeChange();
-
+            
             await loadLanguageData(currentLang);
-
+            
             getLocation();
-
+            
             updateGuideText("Welcome! Select a POI from the list or use your GPS in live mode.");
 
         } catch (error) {
