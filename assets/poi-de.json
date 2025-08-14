@@ -1,44 +1,177 @@
 [
-  {
-    "id": "poi-1",
-    "lat": 37.1773,
-    "lon": -3.5903,
-    "name": "Palast von Karl V.",
-    "description": "Ein massives Renaissance-Gebäude, das in starkem Kontrast zur umgebenden maurischen Architektur steht. Obwohl es für den Kaiser nie fertiggestellt wurde, ist sein großer runder Innenhof ein atemberaubender Anblick."
-  },
-  {
-    "id": "poi-2",
-    "lat": 37.1771,
-    "lon": -3.5893,
-    "name": "Löwenhof",
-    "description": "Das Herz der Nasridenpaläste, berühmt für seinen zentralen Brunnen, der von zwölf Marmorlöwen getragen wird. Ein ikonisches Beispiel für die Schönheit und Komplexität der maurischen Kunst und Wasserbautechnik."
-  },
-  {
-    "id": "poi-3",
-    "lat": 37.1786,
-    "lon": -3.5904,
-    "name": "Alcazaba",
-    "description": "Der älteste Teil der Alhambra, eine beeindruckende Militärfestung mit imposanten Türmen. Besteigen Sie die Torre de la Vela für die spektakulärsten Panoramablicke auf Granada und die Sierra Nevada."
-  },
-  {
-    "id": "poi-4",
-    "lat": 37.1742,
-    "lon": -3.5873,
-    "name": "Generalife",
-    "description": "Der ruhige Sommerpalast und Landsitz der Nasridenherrscher. Seine atemberaubenden Gärten, Innenhöfe und Wasserspiele wurden als friedlicher Rückzugsort und als Darstellung des Paradieses konzipiert."
-  },
-  {
-    "id": "poi-5",
-    "lat": 37.1775,
-    "lon": -3.5886,
-    "name": "Partal-Palast",
-    "description": "Einer der ältesten erhaltenen Paläste in der Alhambra, bekannt für seinen ikonischen Portikus, der sich in einem großen Becken spiegelt. Ein ruhiger Bereich, der Architektur und Natur wunderbar integriert."
-  },
-  {
-    "id": "poi-6",
-    "lat": 37.1770,
-    "lon": -3.5894,
-    "name": "Saal der Abencerrajes",
-    "description": "Ein legendärer Saal im Löwenpalast, berühmt für seine spektakuläre sternförmige Muqarnas-Decke. Die Akustik und das komplizierte Design sind ein Zeugnis der meisterhaften Handwerker der Epoche."
-  }
+    {
+      "id": "poi-22",
+      "lat": 37.1761,
+      "lon": -3.5927,
+      "name": "Tor der Granatäpfel und Cuesta de Gomérez",
+      "description": "Klassischer Aufstieg von der Plaza Nueva durch die von Bäumen gesäumte Cuesta de Gomérez zum monumentalen Tor der Granatäpfel, dem Auftakt zum Wald und dem Tor der Gerechtigkeit. Tipp: Dieser malerische, schattige Weg gibt den Ton an und vermeidet den Verkehr."
+    },
+    {
+      "id": "poi-9",
+      "lat": 37.1754,
+      "lon": -3.5908,
+      "name": "Alhambra-Wald",
+      "description": "Historischer Wald, der zur Zeit Karls V. gepflanzt wurde, mit aus Amerika gebrachten Arten wie Rosskastanien; ein kühler Weg zwischen Brunnen, Mauern und Gedenkstätten. Tipp: Besuchen Sie ihn im Morgengrauen, um Wasser und Vogelgezwitscher in einer verkehrsfreien Zone zu hören."
+    },
+    {
+      "id": "poi-7",
+      "lat": 37.1767,
+      "lon": -3.5906,
+      "name": "Tor der Gerechtigkeit",
+      "description": "Monumentaler Eingang mit geknicktem Torbogen, einer Hand der Fatima und einem Schlüssel im Schlussstein; konzipiert für offizielle Empfänge und Verteidigung, mit einem gekrümmten, belagerungsresistenten Durchgang. Tipp: Genießen Sie den malerischen Zugang von der Cuesta de Gomérez und dem Alhambra-Wald."
+    },
+    {
+      "id": "poi-8",
+      "lat": 37.1759,
+      "lon": -3.591,
+      "name": "Säule Karls V.",
+      "description": "Renaissance-Brunnen von 1554 mit drei Gesichtern und mehreren Ausgüssen, voller Allegorien auf die Flüsse Granadas, die Jahreszeiten und kaiserliche Symbole. Tipp: Betrachten Sie die Ikonographie von der Südseite im Morgenlicht."
+    },
+    {
+      "id": "poi-1",
+      "lat": 37.1773,
+      "lon": -3.5903,
+      "name": "Palast von Karl V.",
+      "description": "Kaiserlicher Renaissance-Palast mit einem monumentalen runden Innenhof, von Karl V. auf einem ehemaligen Nasridenpalast begonnen und im 20. Jahrhundert baulich vollendet. Heute beherbergt er Museen und steht in scharfem Kontrast zur umgebenden islamischen Kunst. Tipp: Betreten Sie den Innenhof im Morgengrauen oder am späten Nachmittag, um die Akustik und die Proportionen zu schätzen."
+    },
+    {
+      "id": "poi-25",
+      "lat": 37.1774,
+      "lon": -3.5895,
+      "name": "Myrtenhof (Comares)",
+      "description": "Wasserspiegel zwischen Myrtenhecken, der den Comares-Turm reflektiert, ein vorbildliches Beispiel für die Kontrolle der Wasseroberfläche und das Mikroklima um den Teich. Tipp: Halten Sie am langen Becken inne, um symmetrische Reflexionen einzufangen."
+    },
+    {
+      "id": "poi-2",
+      "lat": 37.1771,
+      "lon": -3.5893,
+      "name": "Löwenhof",
+      "description": "Das Herz der Nasridenpaläste, berühmt für seinen zentralen Brunnen, der von zwölf Marmorlöwen getragen wird, und sein komplexes, restauriertes Hydrauliksystem, ein Symbol andalusischer Eleganz und technischer Raffinesse. Tipp: Beobachten Sie die stille Wasseroberfläche um das Becken – ein Effekt, der ursprünglich von den Nasriden-Ingenieuren beabsichtigt war."
+    },
+    {
+      "id": "poi-6",
+      "lat": 37.177,
+      "lon": -3.5894,
+      "name": "Saal der Abencerrajes",
+      "description": "Ein legendärer Raum im Löwenpalast mit einer sternförmigen Muqarnas-Kuppel und unverwechselbarer Akustik, ein Meisterwerk der Nasriden-Handwerkskunst. Tipp: Sprechen Sie leise unter dem zentralen Punkt der Kuppel, um die Resonanz zu schätzen."
+    },
+    {
+      "id": "poi-16",
+      "lat": 37.1772,
+      "lon": -3.5896,
+      "name": "Königliche Bäder (Nasriden-Hammam)",
+      "description": "Badekomplex mit kalten, warmen und heißen Räumen, einem Kupferkessel, Fußbodenheizung über Dampfkanäle und sternförmigen Oberlichtern mit verstellbaren Öffnungen. Tipp: Achten Sie auf die sternförmigen Oberlichter und die Spuren der Fußbodenheizung."
+    },
+    {
+      "id": "poi-17",
+      "lat": 37.1772,
+      "lon": -3.5892,
+      "name": "Wasserkanäle des Löwenhofs",
+      "description": "Netzwerk von flachen Kanälen in vier Achsen, die vom Brunnen ausgehen; das zentrale Becken enthielt einst einen hydraulischen Zylinder mit kalibrierten Öffnungen, um eine stabile Oberfläche zu halten und Düsen zu aktivieren. Tipp: Verfolgen Sie die vier Achsen, um das symbolische und hydraulische Design des Hofes zu verstehen."
+    },
+    {
+      "id": "poi-20",
+      "lat": 37.1779,
+      "lon": -3.5899,
+      "name": "Partal-Gärten und -Wege",
+      "description": "Alleen aus Myrtenhecken, Aussichtspunkte und kleine Teiche, die das Partal mit den Palästen verbinden; Wasserkanäle, die zur Kühlung des Mikroklimas verwendet werden. Tipp: Folgen Sie dem Wasserlauf, um zu verstehen, wie er kühlt und den Spaziergang leitet."
+    },
+    {
+      "id": "poi-5",
+      "lat": 37.1775,
+      "lon": -3.5886,
+      "name": "Partal-Palast",
+      "description": "Palastkomplex mit einem Portikus, der sich in einem großen Teich spiegelt, einer der ältesten erhaltenen in der Alhambra, wo Architektur und Landschaft in Gelassenheit verschmelzen. Tipp: Machen Sie bei Sonnenuntergang Fotos mit Spiegelungen, um weniger Menschenmassen anzutreffen."
+    },
+    {
+      "id": "poi-24",
+      "lat": 37.1777,
+      "lon": -3.5898,
+      "name": "Alhambra-Museum (im Palast Karls V.)",
+      "description": "Sammlung von Nasriden-Artefakten und Originalstücken wie dem hydraulischen Zylinder des Löwenbrunnens, Epigraphik, Keramik und Stuckarbeiten. Tipp: Schauen Sie vorbei, wenn Sie zwischen den Palästen und der Alcazaba Zeit haben."
+    },
+    {
+      "id": "poi-15",
+      "lat": 37.1769,
+      "lon": -3.589,
+      "name": "Alhambra-Medina",
+      "description": "Ausgegrabenes Gebiet zwischen der Alcazaba und dem Generalife, das Adelsresidenzen, Handwerkerwerkstätten, Märkte und öffentliche Bäder beherbergte: die funktionierende Palaststadt. Tipp: Lesen Sie die Tafeln über die Berufe und Gassenlayouts, um sich das tägliche Leben vorzustellen."
+    },
+    {
+      "id": "poi-3",
+      "lat": 37.1786,
+      "lon": -3.5904,
+      "name": "Alcazaba",
+      "description": "Der älteste Sektor, eine Militärzitadelle mit Wachtürmen und Blick auf Granada und die Sierra Nevada; sie bewahrt Plätze, Überreste von Häusern, Zisternen, Hammams und Gärten entlang der Stadtmauern. Tipp: Steigen Sie früh am Morgen hinauf, um Warteschlangen und starke Winde am Torre de la Vela zu vermeiden."
+    },
+    {
+      "id": "poi-13",
+      "lat": 37.1768,
+      "lon": -3.5901,
+      "name": "Tor der Waffen",
+      "description": "Ursprünglicher militärischer Zugang am Darro-Hang, verbunden mit dem Turm der Waffen; älter als spätere monumentale Tore. Tipp: Beachten Sie die strategische Verbindung zwischen dem Tor und der unteren Flussroute."
+    },
+    {
+      "id": "poi-18",
+      "lat": 37.1768,
+      "lon": -3.5922,
+      "name": "Tor der Sieben Böden (Bab al-Gudur)",
+      "description": "Tor an der Südmauer mit späten Bastionen; Teil der Route unter den Mauern zwischen Türmen und christlichen Bastionen. Tipp: Gehen Sie den äußeren südlichen Weg entlang, um die Abfolge der Türme und den Wasserturm am Kanaleingang zu sehen."
+    },
+    {
+      "id": "poi-14",
+      "lat": 37.1763,
+      "lon": -3.5901,
+      "name": "Kirche Santa María de la Alhambra",
+      "description": "Kirche aus dem 16. Jahrhundert, erbaut auf dem Gelände der ehemaligen Moschee der Alhambra, mit barocken Innenräumen und Überresten nahegelegener Bäder. Tipp: Suchen Sie nach den Ruinen eines angrenzenden Hammams, um den Wasserkreislauf zu verstehen."
+    },
+    {
+      "id": "poi-10",
+      "lat": 37.1779,
+      "lon": -3.5869,
+      "name": "Wasserturm (Aquädukteingang)",
+      "description": "Punkt, an dem der Königskanal über ein östliches Aquädukt neben dem Turm in die Alhambra gelangt und den Komplex mit Wasser versorgt. Tipp: Suchen Sie das Aquädukt, um die Ankunftshöhe des Kanals zu verstehen."
+    },
+    {
+      "id": "poi-11",
+      "lat": 37.1802,
+      "lon": -3.5838,
+      "name": "Königskanal (Äußerer Abschnitt)",
+      "description": "Hauptkanal, der Wasser aus dem Fluss Darro etwa 6,1 km flussaufwärts ableitet und es mit minimalem Gefälle entlang von Hängen, Tunneln und Aquädukten zur Alhambra und zum Generalife führt. Tipp: Erwägen Sie einen Abstecher, um äußere Abschnitte zu besichtigen, wenn Zeit und Logistik es zulassen."
+    },
+    {
+      "id": "poi-12",
+      "lat": 37.1789,
+      "lon": -3.5861,
+      "name": "Generalife-Reservoirs",
+      "description": "Große mittelalterliche Zisterne (~400 m³), die zur Druckbeaufschlagung und Bewässerung höherer Terrassen verwendet wurde; versorgt durch eine unterirdische Galerie, einen 17,4 m tiefen Brunnen und eine von Tieren angetriebene Noria unter einem Stampflehm-Turm. Tipp: Achten Sie auf das Layout, das zur Bewässerung an Höhe gewinnt."
+    },
+    {
+      "id": "poi-23",
+      "lat": 37.1793,
+      "lon": -3.5866,
+      "name": "Oleanderweg (Umgebung des Generalife)",
+      "description": "Weg, der mit unterirdischen Sammelgalerien verbunden ist, die die Reservoirs und Ableitungen des Tercio-Kanals zu höheren Ebenen versorgen. Tipp: Ein ruhigerer, interpretativer Abschnitt für Interessierte an historischen Wasserwerken."
+    },
+    {
+      "id": "poi-4",
+      "lat": 37.1742,
+      "lon": -3.5873,
+      "name": "Generalife",
+      "description": "Die Erholungsresidenz und Obstgärten der Nasriden-Sultane, konzipiert als irdisches Paradies mit Innenhöfen, Acequias, Teichen, Zypressen und dem Duft von Myrte und Orangenblüten, bewässert durch den Königskanal. Tipp: Gehen Sie die oberen Terrassen entlang, um den Verlauf der historischen Acequias zu sehen."
+    },
+    {
+      "id": "poi-21",
+      "lat": 37.1783,
+      "lon": -3.5887,
+      "name": "Aussichtspunkt der Sultanin (Oberer Generalife)",
+      "description": "Hohe Terrassen mit direktem Blick auf die Nasridenpaläste und Spuren von sekundären Kanälen; eine privilegierte Lektüre des Komplexes. Tipp: Idealer letzter Aussichtspunkt, um die Gesamtkomposition zu schätzen."
+    },
+    {
+      "id": "poi-19",
+      "lat": 37.1752,
+      "lon": -3.5906,
+      "name": "Denkmal für Ángel Ganivet",
+      "description": "Ecke des Alhambra-Waldes, gewidmet dem in Granada geborenen Schriftsteller und Diplomaten; ein ruhiger Ort, um das Wasser zwischen Kastanien- und Lindenbäumen zu hören. Tipp: Eine friedliche Pause auf dem Abstieg zurück zur Plaza Nueva."
+    }
 ]
