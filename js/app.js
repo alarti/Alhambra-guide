@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let utterance = new SpeechSynthesisUtterance();
     let lastTriggeredPoiId = null;
     const PROXIMITY_THRESHOLD = 20; // meters
-    let currentLang = 'en';
+    let currentLang = 'es';
     let isSimulationMode = simulationModeToggle.checked;
     let map;
     let userMarker;
