@@ -1,0 +1,104 @@
+[
+  {
+    "id": "poi-1",
+    "lat": 37.1773,
+    "lon": -3.5903,
+    "en": {
+      "name": "Palace of Charles V",
+      "description": "A massive Renaissance building that stands in stark contrast to the surrounding Moorish architecture. Though never completed for the emperor, its grand circular courtyard is a breathtaking sight."
+    },
+    "es": {
+      "name": "Palacio de Carlos V",
+      "description": "Un imponente edificio renacentista que contrasta con la arquitectura nazarí circundante. Aunque nunca se completó para el emperador, su gran patio circular es una vista impresionante."
+    },
+    "fr": {
+      "name": "Palais de Charles Quint",
+      "description": "Un imposant bâtiment de la Renaissance qui contraste fortement avec l'architecture maure environnante. Bien qu'il n'ait jamais été achevé pour l'empereur, sa grande cour circulaire est un spectacle à couper le souffle."
+    }
+  },
+  {
+    "id": "poi-2",
+    "lat": 37.1771,
+    "lon": -3.5893,
+    "en": {
+      "name": "Court of the Lions",
+      "description": "The heart of the Nasrid palaces, famous for its central fountain supported by twelve marble lions. An iconic example of the beauty and complexity of Moorish art and hydraulic engineering."
+    },
+    "es": {
+      "name": "Patio de los Leones",
+      "description": "El corazón de los palacios nazaríes, famoso por su fuente central sostenida por doce leones de mármol. Un ejemplo icónico de la belleza y complejidad del arte y la ingeniería hidráulica nazarí."
+    },
+    "fr": {
+      "name": "Cour des Lions",
+      "description": "Le cœur des palais nasrides, célèbre pour sa fontaine centrale soutenue par douze lions de marbre. Un exemple emblématique de la beauté et de la complexité de l'art et de l'ingénierie hydraulique nasrides."
+    }
+  },
+  {
+    "id": "poi-3",
+    "lat": 37.1786,
+    "lon": -3.5904,
+    "en": {
+      "name": "Alcazaba",
+      "description": "The oldest part of the Alhambra, a formidable military fortress with imposing towers. Climb the Torre de la Vela for the most spectacular panoramic views of Granada and the Sierra Nevada."
+    },
+    "es": {
+      "name": "Alcazaba",
+      "description": "La parte más antigua de la Alhambra, una formidable fortaleza militar con imponentes torres. Sube a la Torre de la Vela para disfrutar de las vistas panorámicas más espectaculares de Granada y Sierra Nevada."
+    },
+    "fr": {
+      "name": "Alcazaba",
+      "description": "La partie la plus ancienne de l'Alhambra, une formidable forteresse militaire aux tours imposantes. Montez à la Torre de la Vela pour les vues panoramiques les plus spectaculaires sur Grenade et la Sierra Nevada."
+    }
+  },
+  {
+    "id": "poi-4",
+    "lat": 37.1742,
+    "lon": -3.5873,
+    "en": {
+      "name": "Generalife",
+      "description": "The tranquil summer palace and country estate of the Nasrid rulers. Its stunning gardens, patios, and water features were designed to be a peaceful retreat and a representation of paradise."
+    },
+    "es": {
+      "name": "Generalife",
+      "description": "El tranquilo palacio de verano y finca rural de los gobernantes nazaríes. Sus impresionantes jardines, patios y fuentes fueron diseñados para ser un refugio de paz y una representación del paraíso."
+    },
+    "fr": {
+      "name": "Generalife",
+      "description": "Le paisible palais d'été et domaine de campagne des souverains nasrides. Ses superbes jardins, patios et jeux d'eau ont été conçus pour être une retraite paisible et une représentation du paradis."
+    }
+  },
+  {
+    "id": "poi-5",
+    "lat": 37.1775,
+    "lon": -3.5886,
+    "en": {
+      "name": "Partal Palace",
+      "description": "One of the oldest remaining palaces in the Alhambra, known for its iconic portico reflecting in a large pool. A serene area that beautifully integrates architecture with nature."
+    },
+    "es": {
+      "name": "Palacio del Partal",
+      "description": "Uno de los palacios más antiguos que se conservan en la Alhambra, conocido por su icónico pórtico que se refleja en un gran estanque. Una zona serena que integra maravillosamente la arquitectura con la naturaleza."
+    },
+    "fr": {
+      "name": "Palais du Partal",
+      "description": "L'un des plus anciens palais subsistants de l'Alhambra, connu pour son portique emblématique se reflétant dans un grand bassin. Un lieu serein qui intègre magnifiquement l'architecture à la nature."
+    }
+  },
+  {
+    "id": "poi-6",
+    "lat": 37.1770,
+    "lon": -3.5894,
+    "en": {
+      "name": "Hall of the Abencerrajes",
+      "description": "A legendary hall within the Palace of the Lions, renowned for its spectacular star-shaped muqarnas ceiling. The acoustics and intricate design are a testament to the master craftsmen of the era."
+    },
+    "es": {
+      "name": "Sala de los Abencerrajes",
+      "description": "Una sala legendaria dentro del Palacio de los Leones, famosa por su espectacular techo de mocárabes en forma de estrella. La acústica y el intrincado diseño son un testimonio de los maestros artesanos de la época."
+    },
+    "fr": {
+      "name": "Salle des Abencérages",
+      "description": "Une salle légendaire au sein du Palais des Lions, réputée pour son spectaculaire plafond de muqarnas en forme d'étoile. L'acoustique et la conception complexe témoignent des maîtres artisans de l'époque."
+    }
+  }
+]
