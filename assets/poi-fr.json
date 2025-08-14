@@ -1,0 +1,44 @@
+[
+  {
+    "id": "poi-1",
+    "lat": 37.1773,
+    "lon": -3.5903,
+    "name": "Palais de Charles Quint",
+    "description": "Un imposant bâtiment de la Renaissance qui contraste fortement avec l'architecture maure environnante. Bien qu'il n'ait jamais été achevé pour l'empereur, sa grande cour circulaire est un spectacle à couper le souffle."
+  },
+  {
+    "id": "poi-2",
+    "lat": 37.1771,
+    "lon": -3.5893,
+    "name": "Cour des Lions",
+    "description": "Le cœur des palais nasrides, célèbre pour sa fontaine centrale soutenue par douze lions de marbre. Un exemple emblématique de la beauté et de la complexité de l'art et de l'ingénierie hydraulique nasrides."
+  },
+  {
+    "id": "poi-3",
+    "lat": 37.1786,
+    "lon": -3.5904,
+    "name": "Alcazaba",
+    "description": "La partie la plus ancienne de l'Alhambra, une formidable forteresse militaire aux tours imposantes. Montez à la Torre de la Vela pour les vues panoramiques les plus spectaculaires sur Grenade et la Sierra Nevada."
+  },
+  {
+    "id": "poi-4",
+    "lat": 37.1742,
+    "lon": -3.5873,
+    "name": "Generalife",
+    "description": "Le paisible palais d'été et domaine de campagne des souverains nasrides. Ses superbes jardins, patios et jeux d'eau ont été conçus pour être une retraite paisible et une représentation du paradis."
+  },
+  {
+    "id": "poi-5",
+    "lat": 37.1775,
+    "lon": -3.5886,
+    "name": "Palais du Partal",
+    "description": "L'un des plus anciens palais subsistants de l'Alhambra, connu pour son portique emblématique se reflétant dans un grand bassin. Un lieu serein qui intègre magnifiquement l'architecture à la nature."
+  },
+  {
+    "id": "poi-6",
+    "lat": 37.1770,
+    "lon": -3.5894,
+    "name": "Salle des Abencérages",
+    "description": "Une salle légendaire au sein du Palais des Lions, réputée pour son spectaculaire plafond de muqarnas en forme d'étoile. L'acoustique et la conception complexe témoignent des maîtres artisans de l'époque."
+  }
+]

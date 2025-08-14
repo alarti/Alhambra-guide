@@ -1,97 +1,156 @@
 /* Author: Alberto Arce, Arcasoft */
 
-#language-selector-container {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    z-index: 20;
-    background-color: white;
-    padding: 5px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+/* --- Theming using CSS Variables --- */
+:root {
+    --bg-color: #121212;
+    --panel-bg-color: rgba(26, 26, 26, 0.9);
+    --panel-border-color: #333;
+    --text-color-primary: #e0e0e0;
+    --text-color-secondary: #bbb;
+    --text-color-heading: #ffffff;
+    --hr-color: #444;
+    --form-bg-color: #333;
+    --form-border-color: #555;
+    --form-focus-bg-color: #444;
+    --form-focus-border-color: #888;
 }
 
-#language-selector {
-    font-size: 14px;
-    border: 1px solid #ccc;
+[data-theme='light'] {
+    --bg-color: #f8f9fa;
+    --panel-bg-color: rgba(255, 255, 255, 0.9);
+    --panel-border-color: #ddd;
+    --text-color-primary: #212529;
+    --text-color-secondary: #6c757d;
+    --text-color-heading: #000000;
+    --hr-color: #ddd;
+    --form-bg-color: #fff;
+    --form-border-color: #ced4da;
+    --form-focus-bg-color: #fff;
+    --form-focus-border-color: #86b7fe;
 }
 
-body {
-    font-family: sans-serif;
-    text-align: center;
+/* --- Base & Layout --- */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color-primary);
+    transition: background-color 0.3s, color 0.3s;
 }
 
 #map-container {
-    width: 80%;
-    max-width: 800px;
-    height: auto;
-    border: 1px solid #ccc;
-    margin: 20px auto;
-    position: relative;
-    overflow: hidden; /* Hide parts of the map that overflow the container */
-}
-
-#alhambra-map {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
-    height: auto;
-    display: block;
+    height: 100%;
+    z-index: 0;
 }
 
-#user-marker {
-    position: absolute;
-    width: 15px;
-    height: 15px;
-    background-color: blue;
-    border-radius: 50%;
-    border: 2px solid white;
-    box-shadow: 0 0 5px rgba(0,0,0,0.5);
-    transform: translate(-50%, -50%); /* Center the marker */
-    display: none; /* Hidden until position is known */
-    z-index: 10;
+/* --- Side Panel --- */
+#side-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 320px;
+    height: 100%;
+    background-color: var(--panel-bg-color);
+    backdrop-filter: blur(10px);
+    border-left: 1px solid var(--panel-border-color);
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
+    transform: translateX(0);
+    transition: transform 0.3s, background-color 0.3s;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
 }
 
-.poi-marker {
+#side-panel.collapsed {
+    transform: translateX(320px);
+}
+
+.panel-content {
+    padding: 20px;
+    overflow-y: auto;
+    color: var(--text-color-primary);
+}
+
+#panel-toggle-btn {
     position: absolute;
-    width: 20px;
-    height: 20px;
-    background-color: red;
-    border-radius: 50%;
-    border: 2px solid white;
-    box-shadow: 0 0 5px rgba(0,0,0,0.5);
-    transform: translate(-50%, -50%);
-    z-index: 9;
+    top: 50%;
+    left: -40px;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 60px;
+    background-color: var(--panel-bg-color);
+    border: 1px solid var(--panel-border-color);
+    border-right: none;
+    color: var(--text-color-primary);
     cursor: pointer;
+    font-size: 20px;
+    border-radius: 8px 0 0 8px;
+    z-index: -1;
+    transition: background-color 0.3s;
 }
 
-.poi-marker .poi-label {
-    position: absolute;
-    bottom: 25px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: white;
-    padding: 2px 5px;
-    border-radius: 3px;
-    font-size: 12px;
-    white-space: nowrap;
-    display: none; /* Hidden by default, shown on hover */
+/* --- UI Elements Styling --- */
+.panel-content h1 {
+    font-size: 1.5rem;
+    color: var(--text-color-heading);
 }
 
-.poi-marker:hover .poi-label, .poi-marker.active .poi-label {
-    display: block;
+.form-label {
+    color: var(--text-color-secondary);
 }
 
-.poi-marker.active {
-    background-color: #ffeb3b; /* Yellow */
-    transform: translate(-50%, -50%) scale(1.2);
-    z-index: 11;
+.form-select, .form-check-input {
+    background-color: var(--form-bg-color);
+    color: var(--text-color-primary);
+    border-color: var(--form-border-color);
 }
 
-#guide-text {
-    margin: 20px;
+.form-select:focus, .form-check-input:focus {
+    background-color: var(--form-focus-bg-color);
+    color: var(--text-color-primary);
+    border-color: var(--form-focus-border-color);
+    box-shadow: none;
 }
 
-#controls button {
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
+.form-check-input:checked {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+hr {
+    border-color: var(--hr-color);
+}
+
+/* --- Guide Text Overlay --- */
+#guide-text-overlay {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    width: 33%;
+    max-width: 450px;
+    max-height: 9rem; /* Approx 5 lines of text */
+    overflow-y: auto;
+    padding: 1rem;
+    background-color: var(--panel-bg-color);
+    backdrop-filter: blur(10px);
+    color: var(--text-color-primary);
+    border-radius: 8px;
+    border: 1px solid var(--panel-border-color);
+    z-index: 999;
+    pointer-events: auto; /* Allow scrolling */
+    transition: background-color 0.3s, color 0.3s;
+}
+
+#guide-text-overlay p {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.6;
 }
