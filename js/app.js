@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Service Worker Registration ---
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-            navigator.serviceWorker.register('/sw.js').then(registration => {
+            navigator.serviceWorker.register('sw.js').then(registration => {
                 console.log('SW registered: ', registration);
             }).catch(registrationError => {
                 console.log('SW registration failed: ', registrationError);
@@ -16,142 +16,218 @@ document.addEventListener('DOMContentLoaded', () => {
     const playBtn = document.getElementById('play-btn');
     const pauseBtn = document.getElementById('pause-btn');
     const stopBtn = document.getElementById('stop-btn');
-    const guideText = document.getElementById('guide-text').querySelector('p');
-    const mapContainer = document.getElementById('map-container');
-    const map = document.getElementById('alhambra-map');
-    const userMarker = document.createElement('div');
-    userMarker.id = 'user-marker';
-    mapContainer.appendChild(userMarker);
+    const guideText = document.getElementById('guide-text-overlay').querySelector('p');
+    const simulationModeToggle = document.getElementById('simulation-mode-toggle');
+    const themeToggle = document.getElementById('theme-toggle');
+    const sidePanel = document.getElementById('side-panel');
+    const panelToggleBtn = document.getElementById('panel-toggle-btn');
+    const poiList = document.getElementById('poi-list');
+    const aboutBtn = document.getElementById('about-btn');
+    const aboutModal = document.getElementById('about-modal');
+    const modalCloseBtn = aboutModal.querySelector('.modal-close-btn');
 
     // --- State and Config ---
     const synth = window.speechSynthesis;
     let utterance = new SpeechSynthesisUtterance();
     let lastTriggeredPoiId = null;
     const PROXIMITY_THRESHOLD = 20; // meters
-    let currentLang = 'en'; // Default language
-
-    // --- Points of Interest (static data) ---
-    const pois = [
-        { id: 'poi-1', lat: 37.1768, lon: -3.5885 },
-        { id: 'poi-2', lat: 37.1775, lon: -3.5880 },
-        { id: 'poi-3', lat: 37.1760, lon: -3.5895 },
-        { id: 'poi-4', lat: 37.1785, lon: -3.5860 }
+    let currentLang = 'en';
+    let isSimulationMode = simulationModeToggle.checked;
+    let map;
+    let userMarker;
+    let geolocationId = null;
+    let typewriterInterval = null;
+    const poiMarkers = {};
+    let pois = [];
+    let availableLanguages = {};
+    const tourRoute = [
+        "poi-22", "poi-9", "poi-7", "poi-8", "poi-1", "poi-24", "poi-15", "poi-14", "poi-13", "poi-3",
+        "poi-25", "poi-16", "poi-2", "poi-6", "poi-17", "poi-5", "poi-20", "poi-21", "poi-10", "poi-12",
+        "poi-23", "poi-4", "poi-18", "poi-19"
     ];
+    let routePolylines = [];
+    let visitedPois = new Set();
 
-    // --- Translations ---
-    const translations = {
-        en: {
-            title: "Alhambra Voice Guide", welcome: "Welcome to the Alhambra! Your tour will begin shortly.", play: "Play", pause: "Pause", stop: "Stop",
-            geolocationNotSupported: "Geolocation is not supported by this browser.", geolocationDenied: "User denied the request for Geolocation.",
-            geolocationUnavailable: "Location information is unavailable.", geolocationTimeout: "The request to get user location timed out.",
-            geolocationUnknownError: "An unknown error occurred.", yourPosition: "Your position: Latitude: {lat}, Longitude: {lon}", nearPoi: "You are near {poiName}.",
-            pois: {
-                'poi-1': { name: 'Palace of Charles V', description: "The Palace of Charles V is a Renaissance building in Granada, southern Spain, located on the top of the hill of the Assabica, inside the Nasrid fortification of the Alhambra." },
-                'poi-2': { name: 'Court of the Lions', description: "The Court of the Lions is the main courtyard of the Nasrid dynasty Palace of the Lions, in the heart of the Alhambra." },
-                'poi-3': { name: 'Alcazaba', description: "The Alcazaba is the oldest part of the Alhambra, a fortress that was used as a military precinct." },
-                'poi-4': { name: 'Generalife', description: "The Generalife was the summer palace and country estate of the Nasrid rulers of the Emirate of Granada in Al-Andalus." }
-            }
-        },
-        es: {
-            title: "Audioguía de la Alhambra", welcome: "¡Bienvenido a la Alhambra! Su recorrido comenzará en breve.", play: "Reproducir", pause: "Pausar", stop: "Detener",
-            geolocationNotSupported: "La geolocalización no es compatible con este navegador.", geolocationDenied: "El usuario denegó la solicitud de geolocalización.",
-            geolocationUnavailable: "La información de ubicación no está disponible.", geolocationTimeout: "La solicitud para obtener la ubicación del usuario ha caducado.",
-            geolocationUnknownError: "Ocurrió un error desconocido.", yourPosition: "Tu posición: Latitud: {lat}, Longitud: {lon}", nearPoi: "Estás cerca de {poiName}.",
-            pois: {
-                'poi-1': { name: 'Palacio de Carlos V', description: "El Palacio de Carlos V es un edificio renacentista en Granada, sur de España, situado en la cima de la colina de la Assabica, dentro de la fortificación nazarí de la Alhambra." },
-                'poi-2': { name: 'Patio de los Leones', description: "El Patio de los Leones es el patio principal del palacio de la dinastía nazarí de los Leones, en el corazón de la Alhambra." },
-                'poi-3': { name: 'Alcazaba', description: "La Alcazaba es la parte más antigua de la Alhambra, una fortaleza que se utilizó como recinto militar." },
-                'poi-4': { name: 'Generalife', description: "El Generalife fue el palacio de verano y finca rural de los gobernantes nazaríes del Emirato de Granada en Al-Ándalus." }
-            }
-        },
-        fr: {
-            title: "Audioguide de l'Alhambra", welcome: "Bienvenue à l'Alhambra ! Votre visite commencera sous peu.", play: "Jouer", pause: "Pause", stop: "Arrêter",
-            geolocationNotSupported: "La géolocalisation n'est pas prise en charge par ce navigateur.", geolocationDenied: "L'utilisateur a refusé la demande de géolocalisation.",
-            geolocationUnavailable: "Les informations de localisation ne sont pas disponibles.", geolocationTimeout: "La demande de localisation de l'utilisateur a expiré.",
-            geolocationUnknownError: "Une erreur inconnue est survenue.", yourPosition: "Votre position : Latitude : {lat}, Longitude : {lon}", nearPoi: "Vous êtes près de {poiName}.",
-            pois: {
-                'poi-1': { name: 'Palais de Charles Quint', description: "Le palais de Charles Quint est un édifice de la Renaissance à Grenade, dans le sud de l'Espagne, situé au sommet de la colline de l'Assabica, à l'intérieur de la fortification nasride de l'Alhambra." },
-                'poi-2': { name: 'Cour des Lions', description: "La Cour des Lions est la cour principale du palais de la dynastie nasride des Lions, au cœur de l'Alhambra." },
-                'poi-3': { name: 'Alcazaba', description: "L'Alcazaba est la partie la plus ancienne de l'Alhambra, une forteresse qui servait d'enceinte militaire." },
-                'poi-4': { name: 'Generalife', description: "Le Generalife était le palais d'été et le domaine de campagne des souverains nasrides de l'émirat de Grenade en Al-Andalus." }
-            }
-        }
+    const introPhrases = {
+        en: ["You have arrived at", "You are now at", "This is"],
+        es: ["Has llegado a", "Te encuentras en", "Esto es"],
+        fr: ["Vous êtes arrivé à", "Vous êtes maintenant à", "Voici"],
+        de: ["Sie sind angekommen bei", "Sie befinden sich jetzt bei", "Das ist"],
+        zh: ["您已到达", "您现在在", "这里是"]
     };
 
     // --- Functions ---
 
-    function setLanguage(lang) {
-        currentLang = lang;
-        const langMap = { en: 'en-US', es: 'es-ES', fr: 'fr-FR' };
-        utterance.lang = langMap[lang] || 'en-US';
+    function typewriterEffect(element, text, speed = 30) {
+        if (typewriterInterval) clearInterval(typewriterInterval);
+        let i = 0;
+        element.textContent = "";
+        typewriterInterval = setInterval(() => {
+            if (i < text.length) {
+                element.textContent += text.charAt(i);
+                i++;
+            } else {
+                clearInterval(typewriterInterval);
+                typewriterInterval = null;
+            }
+        }, speed);
+    }
 
-        document.querySelectorAll('[data-key]').forEach(elem => {
-            const key = elem.getAttribute('data-key');
-            if (translations[lang] && translations[lang][key]) {
-                elem.textContent = translations[lang][key];
+    function updateGuideText(text, useTypewriter = false) {
+        if (useTypewriter) {
+            typewriterEffect(guideText, text);
+        } else {
+            if (typewriterInterval) clearInterval(typewriterInterval);
+            guideText.textContent = text;
+        }
+        if (guideText.parentElement.scrollHeight > guideText.parentElement.clientHeight) {
+            guideText.parentElement.scrollTop = 0;
+        }
+    }
+
+    function populateLanguageSelector() {
+        langSelector.innerHTML = '';
+        for (const [code, name] of Object.entries(availableLanguages)) {
+            const option = document.createElement('option');
+            option.value = code;
+            option.textContent = name;
+            if (code === currentLang) option.selected = true;
+            langSelector.appendChild(option);
+        }
+    }
+
+    function renderPoiList() {
+        poiList.innerHTML = '';
+        tourRoute.forEach(poiId => {
+            const poi = pois.find(p => p.id === poiId);
+            if (poi) {
+                const li = document.createElement('li');
+                li.className = 'list-group-item list-group-item-action';
+                li.textContent = poi.name;
+                li.dataset.poiId = poi.id;
+                if (visitedPois.has(poiId)) {
+                    li.classList.add('visited'); // Custom class for styling
+                }
+                poiList.appendChild(li);
             }
         });
+    }
 
-        // Update POI labels on the map
-        document.querySelectorAll('.poi-marker').forEach(marker => {
-            const poiId = marker.dataset.poiId;
-            const poiLabel = marker.querySelector('.poi-label');
-            if (poiId && poiLabel && translations[lang].pois[poiId]) {
-                poiLabel.textContent = translations[lang].pois[poiId].name;
+    function drawTourRoute() {
+        routePolylines.forEach(line => line.remove());
+        routePolylines = [];
+
+        for (let i = 0; i < tourRoute.length - 1; i++) {
+            const startPoi = pois.find(p => p.id === tourRoute[i]);
+            const endPoi = pois.find(p => p.id === tourRoute[i + 1]);
+
+            if (startPoi && endPoi) {
+                const isVisited = visitedPois.has(endPoi.id);
+                const color = isVisited ? '#28a745' : '#3388ff'; // Green if visited, else blue
+                const line = L.polyline([[startPoi.lat, startPoi.lon], [endPoi.lat, endPoi.lon]], {
+                    color: color,
+                    weight: 3,
+                    opacity: 0.7
+                }).addTo(map);
+                routePolylines.push(line);
             }
-        });
+        }
     }
 
     function renderPois() {
+        for (const markerId in poiMarkers) {
+            poiMarkers[markerId].remove();
+            delete poiMarkers[markerId];
+        }
         pois.forEach(poi => {
-            const { x, y } = mapGpsToSvgCoords(poi.lat, poi.lon);
-            const poiMarker = document.createElement('div');
-            poiMarker.className = 'poi-marker';
-            poiMarker.style.left = `${x}px`;
-            poiMarker.style.top = `${y}px`;
-            poiMarker.dataset.poiId = poi.id;
-            const poiLabel = document.createElement('span');
-            poiLabel.className = 'poi-label';
-            poiLabel.textContent = translations[currentLang].pois[poi.id].name;
-            poiMarker.appendChild(poiLabel);
-            mapContainer.appendChild(poiMarker);
+            const marker = L.marker([poi.lat, poi.lon]).addTo(map)
+                .bindPopup(poi.name);
+            marker.on('click', () => {
+                if (isSimulationMode) simulateVisitToPoi(poi.id);
+            });
+            poiMarkers[poi.id] = marker;
         });
     }
 
-    function speak(text) {
-        if (synth.speaking) {
-            synth.cancel();
+    async function loadLanguageData(langCode) {
+        try {
+            updateGuideText(`Loading ${availableLanguages[langCode]} guide...`);
+            const response = await fetch(`assets/poi-${langCode}.json`);
+            if (!response.ok) throw new Error(`Could not load data for language: ${langCode}`);
+            pois = await response.json();
+
+            currentLang = langCode;
+            const langMap = { en: 'en-US', es: 'es-ES', fr: 'fr-FR', de: 'de-DE', zh: 'zh-CN' };
+            utterance.lang = langMap[langCode] || 'en-US';
+
+            renderPois();
+            renderPoiList();
+            drawTourRoute();
+        } catch (error) {
+            console.error("Error loading language data:", error);
+            updateGuideText(`Failed to load guide for ${availableLanguages[langCode]}.`);
         }
+    }
+
+    function simulateVisitToPoi(poiId) {
+        const poi = pois.find(p => p.id === poiId);
+        if (!poi) return;
+        const { lat, lon } = poi;
+        if (!userMarker) createUserMarker(lat, lon);
+        else userMarker.setLatLng([lat, lon]);
+        map.flyTo([lat, lon], 18);
+        checkProximity(lat, lon);
+    }
+
+    function speak(text) {
+        if (synth.speaking) synth.cancel();
         utterance.text = text;
         synth.speak(utterance);
     }
 
-    function getLocation() {
+    function startGpsTracking() {
+        if (geolocationId) navigator.geolocation.clearWatch(geolocationId);
         if (navigator.geolocation) {
-            navigator.geolocation.watchPosition(showPosition, showError, { enableHighAccuracy: true });
+            geolocationId = navigator.geolocation.watchPosition(showPosition, showError, { enableHighAccuracy: true });
         } else {
-            guideText.textContent = translations[currentLang].geolocationNotSupported;
+            updateGuideText("Geolocation is not supported by this browser.");
         }
     }
 
-    function showPosition(position) {
-        const lat = position.coords.latitude;
-        const lon = position.coords.longitude;
-        const { x, y } = mapGpsToSvgCoords(lat, lon);
-        userMarker.style.left = `${x}px`;
-        userMarker.style.top = `${y}px`;
-        userMarker.style.display = 'block';
+    function stopGpsTracking() {
+        if (geolocationId) {
+            navigator.geolocation.clearWatch(geolocationId);
+            geolocationId = null;
+        }
+    }
 
+    function getLocation() {
+        if (!isSimulationMode) startGpsTracking();
+    }
+
+    function createUserMarker(lat, lon) {
+        const userIcon = L.divIcon({
+            html: '<div style="background-color: blue; width: 15px; height: 15px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 5px rgba(0,0,0,0.5);"></div>',
+            className: '',
+            iconSize: [15, 15],
+            iconAnchor: [9, 9]
+        });
+        userMarker = L.marker([lat, lon], { icon: userIcon }).addTo(map);
+        if (isSimulationMode) userMarker.setOpacity(0.5);
+    }
+
+    function showPosition(position) {
+        const { latitude: lat, longitude: lon } = position.coords;
+        if (!userMarker) createUserMarker(lat, lon);
+        else userMarker.setLatLng([lat, lon]);
         if (!synth.speaking) {
-            guideText.textContent = translations[currentLang].yourPosition
-                .replace('{lat}', lat.toFixed(4))
-                .replace('{lon}', lon.toFixed(4));
+            updateGuideText(`Your position: Latitude: ${lat.toFixed(4)}, Longitude: ${lon.toFixed(4)}`);
         }
         checkProximity(lat, lon);
     }
 
     function getDistance(lat1, lon1, lat2, lon2) {
-        const R = 6371e3; // metres
+        const R = 6371e3;
         const φ1 = lat1 * Math.PI/180; const φ2 = lat2 * Math.PI/180;
         const Δφ = (lat2-lat1) * Math.PI/180; const Δλ = (lon2-lon1) * Math.PI/180;
         const a = Math.sin(Δφ/2) * Math.sin(Δφ/2) + Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ/2) * Math.sin(Δλ/2);
@@ -160,78 +236,135 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function checkProximity(lat, lon) {
-        let inRangeOfPoi = null;
-        for (const poi of pois) {
+        if (!pois || pois.length === 0) return;
+
+        let closestPoi = pois.reduce((closest, poi) => {
             const distance = getDistance(lat, lon, poi.lat, poi.lon);
-            if (distance < PROXIMITY_THRESHOLD) {
-                inRangeOfPoi = poi;
-                break;
-            }
+            if (distance < closest.distance) return { ...poi, distance };
+            return closest;
+        }, { distance: Infinity });
+
+        const inRangeOfPoi = closestPoi.distance < PROXIMITY_THRESHOLD ? closestPoi : null;
+        const newTriggerId = inRangeOfPoi ? inRangeOfPoi.id : null;
+
+        if (lastTriggeredPoiId && lastTriggeredPoiId !== newTriggerId) {
+            poiMarkers[lastTriggeredPoiId].closePopup();
         }
+        if (newTriggerId && newTriggerId !== lastTriggeredPoiId) {
+            poiMarkers[newTriggerId].openPopup();
+            lastTriggeredPoiId = newTriggerId;
 
-        document.querySelectorAll('.poi-marker.active').forEach(m => m.classList.remove('active'));
+            visitedPois.add(newTriggerId); // Mark POI as visited
+            drawTourRoute(); // Redraw route to update colors
+            renderPoiList(); // Redraw list to update styles
 
-        if (inRangeOfPoi) {
-            document.querySelector(`[data-poi-id="${inRangeOfPoi.id}"]`).classList.add('active');
-            if (lastTriggeredPoiId !== inRangeOfPoi.id) {
-                lastTriggeredPoiId = inRangeOfPoi.id;
-                const poiInfo = translations[currentLang].pois[inRangeOfPoi.id];
-                guideText.textContent = translations[currentLang].nearPoi.replace('{poiName}', poiInfo.name);
-                speak(poiInfo.description);
-            }
+            const intros = introPhrases[currentLang] || introPhrases.en;
+            const randomIntro = intros[Math.floor(Math.random() * intros.length)];
+            const fullDescription = `${randomIntro} ${inRangeOfPoi.name}. ${inRangeOfPoi.description}`;
+
+            updateGuideText(fullDescription, true);
+            speak(fullDescription);
+        } else if (!newTriggerId && lastTriggeredPoiId) {
+            lastTriggeredPoiId = null;
         }
-    }
-
-    function mapGpsToSvgCoords(lat, lon) {
-        const mapBounds = { latMin: 37.1750, lonMin: -3.5900, latMax: 37.1800, lonMax: -3.5840 };
-        const mapRect = map.getBoundingClientRect();
-        if (mapRect.width === 0) return { x: 0, y: 0 };
-        const yPercent = (lat - mapBounds.latMin) / (mapBounds.latMax - mapBounds.latMin);
-        const xPercent = (lon - mapBounds.lonMin) / (mapBounds.lonMax - mapBounds.lonMin);
-        return { x: xPercent * mapRect.width, y: (1 - yPercent) * mapRect.height };
     }
 
     function showError(error) {
-        const errorKey = {
-            [error.PERMISSION_DENIED]: "geolocationDenied",
-            [error.POSITION_UNAVAILABLE]: "geolocationUnavailable",
-            [error.TIMEOUT]: "geolocationTimeout"
-        }[error.code] || "geolocationUnknownError";
-        guideText.textContent = translations[currentLang][errorKey];
+        const errorMessages = {
+            [error.PERMISSION_DENIED]: "User denied the request for Geolocation.",
+            [error.POSITION_UNAVAILABLE]: "Location information is unavailable.",
+            [error.TIMEOUT]: "The request to get user location timed out."
+        };
+        updateGuideText(errorMessages[error.code] || "An unknown error occurred.");
     }
 
     // --- Event Listeners and Init ---
 
+    function handleModeChange() {
+        isSimulationMode = simulationModeToggle.checked;
+        if (isSimulationMode) {
+            stopGpsTracking();
+            if (userMarker) userMarker.setOpacity(0.5);
+        } else {
+            if (userMarker) userMarker.setOpacity(1.0);
+            startGpsTracking();
+        }
+    }
+
+    function applyTheme(theme) {
+        document.body.dataset.theme = theme;
+        localStorage.setItem('alhambra-theme', theme);
+        themeToggle.checked = theme === 'light';
+    }
+
     langSelector.addEventListener('change', (event) => {
-        setLanguage(event.target.value);
+        loadLanguageData(event.target.value);
     });
 
-    playBtn.addEventListener('click', () => {
-        if (synth.paused) {
-            synth.resume();
-        } else if (lastTriggeredPoiId) {
-            const poiInfo = translations[currentLang].pois[lastTriggeredPoiId];
-            if (poiInfo) speak(poiInfo.description);
+    simulationModeToggle.addEventListener('change', handleModeChange);
+    themeToggle.addEventListener('change', () => applyTheme(themeToggle.checked ? 'light' : 'dark'));
+    panelToggleBtn.addEventListener('click', () => {
+        sidePanel.classList.toggle('collapsed');
+        panelToggleBtn.textContent = sidePanel.classList.contains('collapsed') ? '☰' : '→';
+    });
+    poiList.addEventListener('click', (event) => {
+        if (isSimulationMode && event.target.matches('li.list-group-item')) {
+            simulateVisitToPoi(event.target.dataset.poiId);
         }
     });
 
-    pauseBtn.addEventListener('click', () => {
-        if (synth.speaking) synth.pause();
+    aboutBtn.addEventListener('click', () => aboutModal.classList.remove('hidden'));
+    modalCloseBtn.addEventListener('click', () => aboutModal.classList.add('hidden'));
+    aboutModal.addEventListener('click', (event) => {
+        if (event.target === aboutModal) {
+            aboutModal.classList.add('hidden');
+        }
     });
 
+    playBtn.addEventListener('click', () => {
+        if (synth.paused) synth.resume();
+        else if (lastTriggeredPoiId) {
+            const poi = pois.find(p => p.id === lastTriggeredPoiId);
+            if (poi) speak(poi.description);
+        }
+    });
+    pauseBtn.addEventListener('click', () => { if (synth.speaking) synth.pause(); });
     stopBtn.addEventListener('click', () => {
         if (synth.speaking) synth.cancel();
-        lastTriggeredPoiId = null;
+        if (lastTriggeredPoiId) {
+            poiMarkers[lastTriggeredPoiId].closePopup();
+            lastTriggeredPoiId = null;
+        }
     });
 
-    function init() {
-        renderPois();
-        setLanguage(currentLang); // Set initial language for UI
-        getLocation();
+    async function init() {
+        try {
+            const langResponse = await fetch('assets/languages.json');
+            if (!langResponse.ok) throw new Error('Could not load language configuration.');
+            availableLanguages = await langResponse.json();
+
+            populateLanguageSelector();
+
+            map = L.map('map-container').setView([37.177, -3.588], 17);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            const savedTheme = localStorage.getItem('alhambra-theme') || 'dark';
+            applyTheme(savedTheme);
+            handleModeChange();
+
+            await loadLanguageData(currentLang);
+
+            getLocation();
+
+            updateGuideText("Welcome! Select a POI from the list or use your GPS in live mode.");
+
+        } catch (error) {
+            console.error("Initialization failed:", error);
+            updateGuideText("Could not initialize the application. Please try again later.");
+        }
     }
 
-    map.addEventListener('load', init);
-    if (map.complete) {
-        init();
-    }
+    init();
 });
