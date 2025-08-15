@@ -2,7 +2,7 @@
   "name": "Alhambra Voice Guide",
   "short_name": "Alhambra Guide",
   "description": "An offline GPS voice guide for the Alhambra in Granada. Author: Alberto Arce, Arcasoft.",
-  "start_url": "/index.html",
+  "start_url": "index.html",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#8B0000",
