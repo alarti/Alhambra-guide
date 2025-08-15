@@ -28,8 +28,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalCloseBtn = aboutModal.querySelector('.modal-close-btn');
     const saveGuideBtn = document.getElementById('save-guide-btn');
     const addPoiBtn = document.getElementById('add-poi-btn');
-    const locationSearchInput = document.getElementById('location-search');
-    const locationSearchBtn = document.getElementById('location-search-btn');
     const saveModal = document.getElementById('save-modal');
     const saveModalCloseBtn = saveModal.querySelector('.modal-close-btn');
     const guideJsonOutput = document.getElementById('guide-json-output');
@@ -66,31 +64,6 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // --- Functions ---
-
-    async function searchLocation() {
-        const query = locationSearchInput.value;
-        if (!query) return;
-
-        updateGuideText("Searching...");
-        const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=1`;
-
-        try {
-            const response = await fetch(url);
-            if (!response.ok) throw new Error('Network response was not ok.');
-            const data = await response.json();
-
-            if (data.length > 0) {
-                const { lat, lon } = data[0];
-                map.setView([lat, lon], 13);
-                updateGuideText("Location found. Click 'Add New POI' to start adding points.");
-            } else {
-                updateGuideText(`Location not found for "${query}".`);
-            }
-        } catch (error) {
-            console.error("Geocoder error:", error);
-            updateGuideText("Failed to search for location.");
-        }
-    }
 
     function toggleAddPoiMode() {
         isAddingPoi = !isAddingPoi;
@@ -466,12 +439,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function setupEventListeners() {
         addPoiBtn.addEventListener('click', toggleAddPoiMode);
         map.on('click', onMapClick);
-        locationSearchBtn.addEventListener('click', searchLocation);
-        locationSearchInput.addEventListener('keyup', (event) => {
-            if (event.key === 'Enter') {
-                searchLocation();
-            }
-        });
         langSelector.addEventListener('change', (event) => {
             loadLanguageData(event.target.value);
         });
@@ -605,6 +572,12 @@ document.addEventListener('DOMContentLoaded', () => {
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(map);
+
+            const searchControl = new GeoSearch.GeoSearchControl({
+                provider: new GeoSearch.OpenStreetMapProvider(),
+                style: 'bar',
+            });
+            map.addControl(searchControl);
 
             setupEventListeners();
 
