@@ -25,7 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const aboutBtn = document.getElementById('about-btn');
     const aboutModal = document.getElementById('about-modal');
     const modalCloseBtn = aboutModal.querySelector('.modal-close-btn');
-    const exportBtn = document.getElementById('export-btn');
     const welcomeModal = document.getElementById('welcome-modal');
     const guideCatalogList = document.getElementById('guide-catalog-list');
     const createNewGuideBtn = document.getElementById('create-new-guide-btn');
@@ -623,11 +622,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
         guideCatalogList.innerHTML = '';
         guides.forEach(guide => {
-            const a = document.createElement('a');
-            a.className = 'list-group-item list-group-item-action';
-            a.href = guide.gistId === 'default' ? 'index.html' : `?gist=${guide.gistId}`;
-            a.innerHTML = `<strong>${guide.name}</strong><br><small>${guide.description}</small>`;
-            guideCatalogList.appendChild(a);
+            const card = document.createElement('div');
+            card.className = 'card mb-3';
+
+            const cardBody = document.createElement('div');
+            cardBody.className = 'card-body';
+
+            const title = document.createElement('h5');
+            title.className = 'card-title';
+            title.textContent = guide.name;
+
+            const description = document.createElement('p');
+            description.className = 'card-text';
+            description.textContent = guide.description;
+
+            const link = document.createElement('a');
+            link.href = `?gist=${guide.gistId}`;
+            link.className = 'btn btn-primary';
+            link.textContent = 'Load Guide';
+
+            cardBody.appendChild(title);
+            cardBody.appendChild(description);
+            cardBody.appendChild(link);
+            card.appendChild(cardBody);
+
+            guideCatalogList.appendChild(card);
         });
 
         createNewGuideBtn.onclick = async () => {
@@ -649,10 +668,8 @@ document.addEventListener('DOMContentLoaded', () => {
             pois = [];
             poiBaseData = [];
             tourRoute = [];
-        } else if (gistId) {
-            await loadGuideFromGist(gistId);
         } else {
-            await loadDefaultGuide();
+            await loadGuideFromGist(gistId);
         }
 
         populateLanguageSelector();
@@ -663,17 +680,6 @@ document.addEventListener('DOMContentLoaded', () => {
         getLocation();
         updateGuideText("Welcome! Select a POI from the list or use your GPS in live mode.");
         setMode(isBlankEditor ? 'edit' : 'view');
-    }
-
-    async function loadDefaultGuide() {
-        const [langResponse, basePoiResponse] = await Promise.all([
-            fetch('assets/languages.json'),
-            fetch('assets/poi-base.json')
-        ]);
-        if (!langResponse.ok || !basePoiResponse.ok) throw new Error('Could not load default guide data.');
-        availableLanguages = await langResponse.json();
-        poiBaseData = await basePoiResponse.json();
-        map.setView([37.177, -3.588], 17);
     }
 
     async function loadGuideFromGist(gistId) {
