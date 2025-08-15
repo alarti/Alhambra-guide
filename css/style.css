@@ -205,8 +205,12 @@ hr {
     border: 1px solid var(--panel-border-color);
     z-index: 999;
     pointer-events: auto;
-    transition: background-color 0.3s, color 0.3s, right 0.3s;
+    transition: background-color 0.3s, color 0.3s, left 0.3s ease-in-out;
     text-align: center;
+}
+
+#side-panel.collapsed ~ #guide-text-overlay {
+    left: 20px;
 }
 #guide-text-overlay p {
     margin: 0;
