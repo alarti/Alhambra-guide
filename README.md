@@ -1,37 +1,37 @@
-# Alhambra Voice Guide
+# Interactive Voice Guide Platform
 
-An advanced, offline-first Progressive Web App (PWA) that serves as an interactive, multilingual voice guide for the Alhambra palace and fortress complex in Granada, Spain. This app features a full guided tour route with progress tracking.
+This project is an advanced, offline-first Progressive Web App (PWA) that serves as a platform for creating, sharing, and experiencing interactive, multilingual voice guides for any location worldwide. What started as a guide for the Alhambra has evolved into a full-featured creation tool.
 
 ## Features
 
-*   **Guided Tour Route:** A predefined walking tour is drawn directly on the map, showing the suggested path through all 25 points of interest.
-*   **Route Progress Tracking:** As you visit each POI, the corresponding segment of the route on the map turns green, providing clear visual feedback on your progress through the tour.
-*   **Fully Interactive Map:** Displays a dynamic, zoomable map of the Alhambra grounds using Leaflet.js and OpenStreetMap.
-*   **Real-time GPS Tracking:** Uses the browser's Geolocation API to track your position in real-time and display it on the map with a marker.
-*   **Simulation Mode:** For users not physically at the Alhambra, a simulation mode allows for a virtual tour. In this mode, users can click on any Point of Interest (POI) on the map or in the side panel list to be taken to that location and hear the guide.
-*   **Proximity-Based Audio Guide:** When in live GPS mode, approaching a POI automatically triggers a spoken description of that location using the Web Speech API.
-*   **Dynamic Subtitle Overlay:** The spoken description is simultaneously displayed as text in a semi-transparent overlay on the map, with a typewriter effect for better engagement.
-*   **Dynamic Multi-Language Support:** The application is fully localized.
-    *   It dynamically loads language options from a configuration file.
-    *   All UI text, POI names, and descriptions are loaded from language-specific data files (`poi-en.json`, `poi-es.json`, etc.).
-    *   Currently supports English, Spanish, French, German, and Chinese.
-*   **Collapsible UI:** All controls are housed in a sleek, collapsible side panel to maximize map visibility.
-*   **Light & Dark Themes:** Includes a theme switcher to toggle between a light and dark user interface, with the user's preference saved locally.
-*   **Offline First (PWA):** The application is a Progressive Web App and is fully functional without an internet connection after the first visit, thanks to a Service Worker that caches all necessary assets. It can be installed on a mobile device's home screen for a native-like experience.
+### For Viewers
+*   **Interactive Map:** Displays a dynamic, zoomable map using Leaflet.js and OpenStreetMap.
+*   **Guided Tour Route:** A predefined walking tour is drawn on the map, showing the suggested path through all points of interest.
+*   **Real-time GPS Tracking:** Uses the browser's Geolocation API to track your position in real-time.
+*   **Proximity-Based Audio Guide:** Approaching a Point of Interest (POI) automatically triggers a spoken description of that location using the Web Speech API.
+*   **Dynamic Subtitle Overlay:** The spoken description is simultaneously displayed as text in a semi-transparent overlay.
+*   **Full Multi-Language Support:** Guides can contain multiple languages. Users can switch languages on the fly.
+*   **Offline First (PWA):** Fully functional without an internet connection after the first visit. Can be installed on a mobile device's home screen.
+
+### For Creators
+*   **Unified Interface:** Seamlessly switch between viewing and editing a guide with the click of a button.
+*   **Multi-Language Editor:** Create and edit POI names and descriptions in multiple languages.
+*   **Visual Editor:** Add new POIs by clicking directly on the map. Reposition existing POIs by dragging their markers.
+*   **Location Search:** Center the map anywhere in the world to start creating a new guide.
+*   **Gist Integration:** Save your complete guide data to a public, anonymous GitHub Gist. The platform provides you with a shareable URL to your new guide.
+
+## How to Use
+
+1.  **Run from a local web server.** Due to browser security policies (CORS, Service Workers), you must serve the files from a server.
+    *   If you have Python 3: `python -m http.server`
+    *   Navigate to `http://localhost:8000` in your browser.
+
+2.  **Using the App:**
+    *   Upon launch, a welcome screen will show a catalog of featured guides. You can choose one to view or click "Create a New Guide".
+    *   **To View a Guide:** Simply explore the map. If you allow GPS access, the guide will speak as you approach points of interest.
+    *   **To Edit a Guide:** Click "Edit This Guide". You will enter edit mode, where you can drag existing points, or use the "Add New POI" button to create new ones. You can also edit or delete POIs from the list in the side panel.
+    *   **To Save Your Guide:** In edit mode, click "Save Guide". Your guide will be uploaded to a GitHub Gist, and you will be provided with a new, shareable URL. You can add this URL to the `assets/guides.json` file to make it appear in the welcome catalog.
 
 ## Author
 
-This project was developed by **Alberto Arce** ([alarti](https://github.com/alarti)).
-
-## How to Run
-
-1.  Since this application uses features like Service Workers and Geolocation that require a secure context (HTTPS), you need to serve the files from a local web server.
-2.  If you have Python 3, you can run `python -m http.server` from the project's root directory.
-3.  Navigate to `http://localhost:8000` in your browser.
-
-## Testing
-
-*   **Live Mode:** Use your browser's developer tools (e.g., Chrome's Sensors tab) to simulate different GPS locations to trigger the proximity-based audio guides.
-*   **Simulation Mode:** Activate the "Simulation Mode" toggle in the side panel. Click on any POI marker on the map or any item in the POI list to simulate a visit.
-*   **Offline Mode:** Load the application once. Then, in your browser's developer tools, go to the Network tab and enable "Offline" mode. Refresh the page; the application should continue to work.
-*   **PWA Installation:** On a supported browser (like Chrome on Android or Safari on iOS), you should see an "Add to Home Screen" prompt or button, allowing you to install the app.
+This project was originally developed by **Alberto Arce** ([alarti](https://github.com/alarti)) and has been significantly expanded with new platform features.

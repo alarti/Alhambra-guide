@@ -253,3 +253,46 @@ hr {
     color: var(--text-color-secondary);
     cursor: pointer;
 }
+
+/* --- Modern Button Styles --- */
+.btn-modern {
+    border-radius: 20px;
+    padding: 10px 20px;
+    font-weight: bold;
+    border: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    display: block;
+    width: 100%;
+    color: white;
+    text-decoration: none;
+}
+
+.btn-modern:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-modern-primary {
+    background: linear-gradient(45deg, #0d6efd, #0dcaf0);
+}
+
+.btn-modern-success {
+    background: linear-gradient(45deg, #198754, #20c997);
+}
+
+.btn-modern-secondary {
+    background: linear-gradient(45deg, #6c757d, #adb5bd);
+}
+
+.btn-modern-danger {
+    background: linear-gradient(45deg, #dc3545, #ff416c);
+}
+
+.btn-modern-sm {
+    padding: 5px 12px;
+    font-size: 0.8rem;
+    border-radius: 15px;
+}

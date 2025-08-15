@@ -255,12 +255,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     const btnGroup = document.createElement('div');
 
                     const editBtn = document.createElement('button');
-                    editBtn.className = 'btn btn-sm btn-outline-secondary me-2';
+                    editBtn.className = 'btn-modern btn-modern-secondary btn-modern-sm me-2';
                     editBtn.textContent = 'Edit';
                     editBtn.onclick = () => editPoi(poi.id);
 
                     const deleteBtn = document.createElement('button');
-                    deleteBtn.className = 'btn btn-sm btn-outline-danger';
+                    deleteBtn.className = 'btn-modern btn-modern-danger btn-modern-sm';
                     deleteBtn.textContent = 'Del';
                     deleteBtn.onclick = () => deletePoi(poi.id);
 
@@ -555,27 +555,27 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isEditMode) {
             const saveBtn = document.createElement('button');
             saveBtn.id = 'save-guide-btn';
-            saveBtn.className = 'btn btn-primary';
+            saveBtn.className = 'btn-modern btn-modern-primary';
             saveBtn.textContent = 'Save Guide';
             saveBtn.onclick = saveGuide;
             modeControls.appendChild(saveBtn);
 
             const addPoiBtn = document.createElement('button');
             addPoiBtn.id = 'add-poi-btn';
-            addPoiBtn.className = 'btn btn-success';
+            addPoiBtn.className = 'btn-modern btn-modern-success';
             addPoiBtn.textContent = 'Add New POI';
             addPoiBtn.onclick = toggleAddPoiMode;
             modeControls.appendChild(addPoiBtn);
 
             const exitEditBtn = document.createElement('button');
-            exitEditBtn.className = 'btn btn-secondary';
+            exitEditBtn.className = 'btn-modern btn-modern-secondary';
             exitEditBtn.textContent = 'Exit Edit Mode';
             exitEditBtn.onclick = () => setMode('view');
             modeControls.appendChild(exitEditBtn);
 
         } else {
             const enterEditBtn = document.createElement('button');
-            enterEditBtn.className = 'btn btn-primary';
+            enterEditBtn.className = 'btn-modern btn-modern-primary';
             enterEditBtn.textContent = 'Edit This Guide';
             enterEditBtn.onclick = () => setMode('edit');
             modeControls.appendChild(enterEditBtn);
@@ -628,7 +628,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const link = document.createElement('a');
             link.href = `?gist=${guide.gistId}`;
-            link.className = 'btn btn-primary';
+            link.className = 'btn-modern btn-modern-primary';
             link.textContent = 'Load Guide';
 
             cardBody.appendChild(title);

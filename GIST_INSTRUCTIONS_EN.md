@@ -1,10 +1,10 @@
-# Cómo crear un Gist para una nueva guía
+# How to create a Gist for a new guide
 
-Aquí tienes un ejemplo de la estructura JSON multi-idioma y las instrucciones para subirlo a Gist.
+Here is an example of the multi-language JSON structure and the instructions for uploading it to Gist.
 
-## 1. Contenido del fichero `guide.json`
+## 1. Content of the `guide.json` file
 
-Tu fichero `guide.json` debe seguir esta estructura. Fíjate en cómo los textos (nombre y descripción) están anidados dentro de un objeto `texts` con códigos de idioma (`en`, `es`, `fr`, etc.).
+Your `guide.json` file must follow this structure. Notice how the texts (name and description) are nested inside a `texts` object with language codes (`en`, `es`, `fr`, etc.).
 
 ```json
 {
@@ -73,13 +73,13 @@ Tu fichero `guide.json` debe seguir esta estructura. Fíjate en cómo los textos
 }
 ```
 
-## 2. Instrucciones para subir a Gist
+## 2. Instructions for uploading to Gist
 
-1.  Ve a la página de Gist: **[https://gist.github.com/](https://gist.github.com/)**
-2.  En el campo "Gist description...", puedes escribir una descripción para tu guía.
-3.  En el campo "Filename including extension...", escribe exactamente `guide.json`. Es **muy importante** que el nombre sea ese.
-4.  Pega tu contenido JSON en el cuadro de texto grande.
-5.  Haz clic en el botón verde que dice **"Create public gist"**.
-6.  ¡Listo! La página se recargará y la URL en la barra de tu navegador será la URL de tu Gist. El **identificador (ID)** del Gist es la serie larga de letras y números que aparece al final de la URL (ej: `https://gist.github.com/TuUsuario/ESTE_ES_EL_ID`).
+1.  Go to the Gist website: **[https://gist.github.com/](https://gist.github.com/)**
+2.  In the "Gist description..." field, you can type a description for your guide.
+3.  In the "Filename including extension..." field, type exactly `guide.json`. It is **very important** that the filename is correct.
+4.  Paste your JSON content into the large text area.
+5.  Click the green button that says **"Create public gist"**.
+6.  Done! The page will reload, and the URL in your browser's address bar will be the URL of your Gist. The Gist **ID** is the long string of letters and numbers at the end of the URL (e.g., `https://gist.github.com/YourUser/THIS_IS_THE_ID`).
 
-Puedes usar ese ID para cargar la guía en la aplicación (`?gist=TU_ID_AQUI`) o para añadirla al catálogo `assets/guides.json`.
+You can use this ID to load the guide in the application (`?gist=YOUR_ID_HERE`) or to add it to the `assets/guides.json` catalog.
