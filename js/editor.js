@@ -524,7 +524,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    aboutBtn.addEventListener('click', () => aboutModal.classList.remove('hidden'));
+   /* aboutBtn.addEventListener('click', () => aboutModal.classList.remove('hidden'));
     modalCloseBtn.addEventListener('click', () => aboutModal.classList.add('hidden'));
     aboutModal.addEventListener('click', (event) => {
         if (event.target === aboutModal) {
@@ -535,7 +535,7 @@ document.addEventListener('DOMContentLoaded', () => {
     exportBtn.addEventListener('click', () => {
         downloadJson(poiBaseData, 'poi-base-updated.json');
     });
-
+*/
     function saveGuide() {
         const guideData = {
             initialView: {
