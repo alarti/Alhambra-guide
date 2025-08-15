@@ -146,15 +146,27 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function saveGuide() {
+        const guideName = prompt("Enter a name for your guide:", "My Awesome Guide");
+        if (!guideName) return;
+        const guideDescription = prompt("Enter a short description:", "An interactive voice guide.");
+        const authorName = prompt("Enter your name or nickname (optional):");
+        const donationLink = prompt("Enter your Patreon or BuyMeACoffee link (optional):");
+
         const guideData = {
+            guideName: guideName,
+            guideDescription: guideDescription,
+            author: authorName || "Anonymous",
+            donationLink: donationLink || "",
             initialView: { lat: map.getCenter().lat, lon: map.getCenter().lng, zoom: map.getZoom() },
+            availableLanguages: availableLanguages,
             poiBaseData: poiBaseData,
-            pois: pois.map(p => ({ id: p.id, name: p.name, description: p.description })),
+            pois: pois.map(p => ({ id: p.id, texts: p.texts })),
             tourRoute: tourRoute
         };
+
         const guideContent = JSON.stringify(guideData, null, 2);
         const gistPayload = {
-            description: "My Voice Guide Data",
+            description: `${guideName} - by ${authorName || "Anonymous"}`,
             public: true,
             files: { "guide.json": { content: guideContent } }
         };
@@ -164,14 +176,23 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const response = await fetch('https://api.github.com/gists', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/vnd.github.v3+json'
+                },
                 body: JSON.stringify(gistPayload)
             });
-            if (!response.ok) throw new Error(`GitHub API responded with ${response.status}`);
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(`GitHub API responded with ${response.status}: ${errorData.message}`);
+            }
+
             const gistData = await response.json();
             prompt("Success! Your guide is saved. Copy this URL:", gistData.html_url);
         } catch (error) {
-            prompt(`Error saving guide. Please copy the data below and save it manually.`, guideContent);
+            console.error("Gist save error:", error);
+            prompt(`Error saving guide: ${error.message}\n\nPlease copy the data below and save it manually.`, guideContent);
         }
     }
 
@@ -461,7 +482,7 @@ document.addEventListener('DOMContentLoaded', () => {
         themeToggle.addEventListener('change', () => applyTheme(themeToggle.checked ? 'light' : 'dark'));
         panelToggleBtn.addEventListener('click', () => {
             sidePanel.classList.toggle('collapsed');
-            panelToggleBtn.textContent = sidePanel.classList.contains('collapsed') ? '☰' : '→';
+            panelToggleBtn.textContent = sidePanel.classList.contains('collapsed') ? '☰' : '←';
         });
         poiList.addEventListener('click', (event) => {
             if (isSimulationMode && event.target.matches('span[data-poi-id]')) {
@@ -685,6 +706,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const file = gistData.files['guide.json'];
         if (!file) throw new Error('Gist does not contain a guide.json file.');
         const guideData = JSON.parse(file.content);
+
+        // Update UI with guide metadata
+        document.getElementById('guide-title').textContent = guideData.guideName || 'Interactive Guide';
+        // We could display author and donation link somewhere, for now just loading data.
 
         poiBaseData = guideData.poiBaseData;
         tourRoute = guideData.tourRoute;

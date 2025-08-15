@@ -61,13 +61,13 @@ html, body {
 #side-panel {
     position: fixed;
     top: 0;
-    right: 0;
+    left: 0;
     width: 320px;
     height: 100%;
     background-color: var(--panel-bg-color);
     backdrop-filter: blur(10px);
-    border-left: 1px solid var(--panel-border-color);
-    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
+    border-right: 1px solid var(--panel-border-color);
+    box-shadow: 5px 0 15px rgba(0, 0, 0, 0.5);
     transform: translateX(0);
     transition: transform 0.3s ease-in-out, background-color 0.3s;
     z-index: 1000;
@@ -75,7 +75,7 @@ html, body {
     flex-direction: column;
 }
 #side-panel.collapsed {
-    transform: translateX(320px);
+    transform: translateX(-320px);
 }
 .panel-content {
     padding: 20px;
@@ -85,17 +85,17 @@ html, body {
 #panel-toggle-btn {
     position: absolute;
     top: 50%;
-    left: -40px;
+    right: -40px;
     transform: translateY(-50%);
     width: 40px;
     height: 60px;
     background-color: var(--panel-bg-color);
     border: 1px solid var(--panel-border-color);
-    border-right: none;
+    border-left: none;
     color: var(--text-color-primary);
     cursor: pointer;
     font-size: 20px;
-    border-radius: 8px 0 0 8px;
+    border-radius: 0 8px 8px 0;
     z-index: -1;
     transition: background-color 0.3s;
 }
@@ -192,8 +192,8 @@ hr {
 #guide-text-overlay {
     position: fixed;
     bottom: 10px;
-    left: 10px;
-    right: 60px;
+    left: 340px; /* 320px panel width + 20px margin */
+    right: 20px;
     width: auto;
     max-height: 9rem;
     overflow-y: auto;
