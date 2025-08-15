@@ -567,8 +567,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             populateLanguageSelector();
 
-            // Set a default view instead of Alhambra
-            map = L.map('map-container').setView([48.8584, 2.2945], 13); // Centered on Paris
+            // Create map but don't set view yet
+            map = L.map('map-container');
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(map);
@@ -578,6 +578,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 style: 'bar',
             });
             map.addControl(searchControl);
+
+            // Set initial view
+            if (navigator.geolocation) {
+                updateGuideText("Requesting your location...");
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        map.setView([position.coords.latitude, position.coords.longitude], 13);
+                        updateGuideText("Location found! Welcome to the Guide Editor.");
+                    },
+                    () => {
+                        map.setView([48.8584, 2.2945], 13); // Paris fallback
+                        updateGuideText("Could not get location. Defaulting to Paris.");
+                    }
+                );
+            } else {
+                map.setView([48.8584, 2.2945], 13); // Paris fallback
+                updateGuideText("Geolocation not supported. Defaulting to Paris.");
+            }
 
             setupEventListeners();
 
@@ -591,9 +609,9 @@ document.addEventListener('DOMContentLoaded', () => {
             renderPoiList();
             drawTourRoute();
 
-            getLocation();
+            getLocation(); // This will still run for the blue dot marker
 
-            updateGuideText("Welcome to the Guide Editor! Use the map to create your tour.");
+            // Initial message is now handled by geolocation callbacks
 
         } catch (error) {
             console.error("Initialization failed:", error);
