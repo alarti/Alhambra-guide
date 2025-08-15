@@ -524,9 +524,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    exportBtn.addEventListener('click', () => {
-        downloadJson(poiBaseData, 'poi-base-updated.json');
-    });
+//    exportBtn.addEventListener('click', () => {
+//        downloadJson(poiBaseData, 'poi-base-updated.json');
+//    });
 
     function downloadJson(data, filename) {
         const jsonStr = JSON.stringify(data, null, 2);
