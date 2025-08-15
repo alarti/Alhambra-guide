@@ -46,11 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let pois = [];
     let poiBaseData = [];
     let availableLanguages = {};
-    const tourRoute = [
-        "poi-22", "poi-9", "poi-7", "poi-8", "poi-1", "poi-24", "poi-15", "poi-14", "poi-13", "poi-3",
-        "poi-25", "poi-16", "poi-2", "poi-6", "poi-17", "poi-5", "poi-20", "poi-21", "poi-10", "poi-12",
-        "poi-23", "poi-4", "poi-18", "poi-19"
-    ];
+    let tourRoute = [];
     let routePolylines = [];
     let visitedPois = new Set();
     let breadcrumbPath = [];
