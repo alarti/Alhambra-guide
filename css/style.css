@@ -13,6 +13,8 @@
     --form-border-color: #555;
     --form-focus-bg-color: #444;
     --form-focus-border-color: #888;
+    --list-item-hover-bg: rgba(255, 255, 255, 0.1);
+    --list-item-visited-bg: rgba(40, 167, 69, 0.2);
 }
 
 [data-theme='light'] {
@@ -27,6 +29,8 @@
     --form-border-color: #ced4da;
     --form-focus-bg-color: #fff;
     --form-focus-border-color: #86b7fe;
+    --list-item-hover-bg: rgba(0, 0, 0, 0.05);
+    --list-item-visited-bg: rgba(40, 167, 69, 0.1);
 }
 
 /* --- Base & Layout --- */
@@ -63,7 +67,7 @@ html, body {
     border-left: 1px solid var(--panel-border-color);
     box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
     transform: translateX(0);
-    transition: transform 0.3s, background-color 0.3s;
+    transition: transform 0.3s ease-in-out, background-color 0.3s;
     z-index: 1000;
     display: flex;
     flex-direction: column;
@@ -103,14 +107,25 @@ html, body {
     color: var(--text-color-heading);
 }
 
+.list-group-item {
+    background-color: transparent !important;
+    border-color: var(--hr-color) !important;
+    color: var(--text-color-primary) !important;
+    cursor: pointer;
+}
+.list-group-item:hover {
+    background-color: var(--list-item-hover-bg) !important;
+}
 .list-group-item.visited {
-    background-color: rgba(40, 167, 69, 0.2) !important;
+    background-color: var(--list-item-visited-bg) !important;
     color: var(--text-color-secondary) !important;
     text-decoration: line-through;
 }
 
 .form-label {
     color: var(--text-color-secondary);
+    width: 100%;
+    text-align: left;
 }
 
 .form-select, .form-check-input {
@@ -118,14 +133,12 @@ html, body {
     color: var(--text-color-primary);
     border-color: var(--form-border-color);
 }
-
 .form-select:focus, .form-check-input:focus {
     background-color: var(--form-focus-bg-color);
     color: var(--text-color-primary);
     border-color: var(--form-focus-border-color);
     box-shadow: none;
 }
-
 .form-check-input:checked {
     background-color: #0d6efd;
     border-color: #0d6efd;
@@ -138,21 +151,20 @@ hr {
 /* --- Guide Text Overlay --- */
 #guide-text-overlay {
     position: fixed;
-    bottom: 20px;
-    left: 20px;
-    width: 33%;
-    max-width: 450px;
-    max-height: 9rem; /* Approx 5 lines of text */
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    max-height: 9rem;
     overflow-y: auto;
-    padding: 1rem;
+    padding: 1rem 2rem;
     background-color: var(--panel-bg-color);
     backdrop-filter: blur(10px);
     color: var(--text-color-primary);
-    border-radius: 8px;
-    border: 1px solid var(--panel-border-color);
+    border-top: 1px solid var(--panel-border-color);
     z-index: 999;
-    pointer-events: auto; /* Allow scrolling */
+    pointer-events: auto;
     transition: background-color 0.3s, color 0.3s;
+    text-align: center;
 }
 
 #guide-text-overlay p {

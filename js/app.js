@@ -51,6 +51,8 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
     let routePolylines = [];
     let visitedPois = new Set();
+    let breadcrumbPath = [];
+    let breadcrumbLayer = null;
 
     const introPhrases = {
         en: ["You have arrived at", "You are now at", "This is"],
@@ -136,6 +138,21 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function drawBreadcrumbs() {
+        if (breadcrumbLayer) {
+            breadcrumbLayer.remove();
+        }
+        const breadcrumbMarkers = breadcrumbPath.map(pos => 
+            L.circleMarker(pos, {
+                radius: 2,
+                color: '#ff0000',
+                fillColor: '#ff0000',
+                fillOpacity: 0.8
+            })
+        );
+        breadcrumbLayer = L.layerGroup(breadcrumbMarkers).addTo(map);
+    }
+
     function renderPois() {
         for (const markerId in poiMarkers) {
             poiMarkers[markerId].remove();
@@ -168,7 +185,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 drawTourRoute();
-                console.log(`Updated ${poi.name} to ${position.lat}, ${position.lng}`);
             });
 
             poiMarkers[poi.id] = marker;
@@ -251,6 +267,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const { latitude: lat, longitude: lon } = position.coords;
         if (!userMarker) createUserMarker(lat, lon);
         else userMarker.setLatLng([lat, lon]);
+        
+        const lastBreadcrumb = breadcrumbPath[breadcrumbPath.length - 1];
+        if (!lastBreadcrumb || getDistance(lat, lon, lastBreadcrumb[0], lastBreadcrumb[1]) > 10) { // Add breadcrumb every 10 meters
+            breadcrumbPath.push([lat, lon]);
+            drawBreadcrumbs();
+        }
+
         if (!synth.speaking) {
             updateGuideText(`Your position: Latitude: ${lat.toFixed(4)}, Longitude: ${lon.toFixed(4)}`);
         }
@@ -309,19 +332,6 @@ document.addEventListener('DOMContentLoaded', () => {
         updateGuideText(errorMessages[error.code] || "An unknown error occurred.");
     }
 
-    function downloadJson(data, filename) {
-        const jsonStr = JSON.stringify(data, null, 2);
-        const blob = new Blob([jsonStr], { type: "application/json" });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = filename;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-    }
-
     // --- Event Listeners and Init ---
 
     function handleModeChange() {
@@ -329,6 +339,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isSimulationMode) {
             stopGpsTracking();
             if (userMarker) userMarker.setOpacity(0.5);
+            // Clear breadcrumbs when entering simulation mode
+            breadcrumbPath = [];
+            if (breadcrumbLayer) breadcrumbLayer.remove();
         } else {
             if (userMarker) userMarker.setOpacity(1.0);
             startGpsTracking();
@@ -337,7 +350,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     function handleEditModeChange() {
         isEditMode = editModeToggle.checked;
-        renderPois(); // Re-render markers with new draggable state
+        renderPois();
     }
 
     function applyTheme(theme) {
@@ -375,6 +388,19 @@ document.addEventListener('DOMContentLoaded', () => {
     exportBtn.addEventListener('click', () => {
         downloadJson(poiBaseData, 'poi-base-updated.json');
     });
+
+    function downloadJson(data, filename) {
+        const jsonStr = JSON.stringify(data, null, 2);
+        const blob = new Blob([jsonStr], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
 
     playBtn.addEventListener('click', () => {
         if (synth.paused) synth.resume();
