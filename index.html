@@ -47,12 +47,12 @@
                 <input class="form-check-input" type="checkbox" role="switch" id="theme-toggle">
                 <label class="form-check-label" for="theme-toggle">Light Mode</label>
             </div>
+            <hr>
 
-            <div class="form-check form-switch my-3">
-                <input class="form-check-input" type="checkbox" role="switch" id="edit-mode-toggle">
-                <label class="form-check-label" for="edit-mode-toggle">Edit Mode</label>
+            <div id="mode-controls" class="d-grid gap-2">
+                <!-- This will be populated by JS -->
             </div>
-            
+
             <hr>
 
             <div id="controls" class="d-grid gap-2">
@@ -81,6 +81,18 @@
         </div>
     </div>
 
+    <div id="welcome-modal" class="modal-overlay"> <!-- Initially visible -->
+        <div class="modal-content">
+            <h2>Welcome to the Interactive Guide</h2>
+            <p>Choose a featured guide or create your own.</p>
+            <div id="guide-catalog-list" class="list-group my-3">
+                <!-- Guide list will be populated here -->
+            </div>
+            <hr>
+            <button id="create-new-guide-btn" class="btn btn-lg btn-success w-100">Create a New Guide</button>
+        </div>
+    </div>
+
     <div id="about-modal" class="modal-overlay hidden">
         <div class="modal-content">
             <button class="modal-close-btn">&times;</button>
@@ -98,6 +110,6 @@
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-    <script src="js/app.js"></script>
+    <script src="js/main.js"></script>
 </body>
 </html>

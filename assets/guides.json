@@ -1,0 +1,12 @@
+[
+    {
+        "name": "Alhambra, Granada (Default)",
+        "description": "The original, comprehensive voice guide for the Alhambra palace and fortress complex.",
+        "gistId": "default"
+    },
+    {
+        "name": "Eiffel Tower, Paris",
+        "description": "A short example tour around the Eiffel Tower.",
+        "gistId": "e9a4f4e3a0c3f0d6b8a8b0c7c7d3d3e7"
+    }
+]
