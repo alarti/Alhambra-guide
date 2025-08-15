@@ -77,11 +77,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function editPoi(poiId) {
         const poi = pois.find(p => p.id === poiId);
-        if (!poi) return;
-        const newName = prompt("Enter new name:", poi.name);
-        if (newName) poi.name = newName;
-        const newDescription = prompt("Enter new description:", poi.description);
-        if (newDescription) poi.description = newDescription;
+        if (!poi || !poi.texts[currentLang]) return;
+
+        const currentText = poi.texts[currentLang];
+        const newName = prompt(`Enter new name for ${availableLanguages[currentLang]}:`, currentText.name);
+        if (newName) {
+            poi.texts[currentLang].name = newName;
+            poi.name = newName; // Update the top-level property for current view
+        }
+
+        const newDescription = prompt(`Enter new description for ${availableLanguages[currentLang]}:`, currentText.description);
+        if (newDescription) {
+            poi.texts[currentLang].description = newDescription;
+            poi.description = newDescription; // Update the top-level property for current view
+        }
+
         renderPoiList();
         renderPois();
     }
@@ -99,22 +109,36 @@ document.addEventListener('DOMContentLoaded', () => {
     function onMapClick(e) {
         if (!isAddingPoi) return;
         const { lat, lng } = e.latlng;
-        const poiName = prompt("Enter POI Name:");
+        const poiName = prompt(`Enter name for new POI (${availableLanguages[currentLang]}):`);
         if (!poiName) {
             toggleAddPoiMode();
             return;
         }
-        const poiDescription = prompt("Enter POI Description:");
+        const poiDescription = prompt(`Enter description for new POI (${availableLanguages[currentLang]}):`);
         if (!poiDescription) {
             toggleAddPoiMode();
             return;
         }
+
         const newPoiId = `poi-${Date.now()}`;
         const newPoiBase = { id: newPoiId, lat: lat, lon: lng };
-        const newPoiLang = { id: newPoiId, name: poiName, description: poiDescription };
+
+        const newPoiTexts = {};
+        // Initialize all available languages
+        for (const langCode in availableLanguages) {
+            if (langCode === currentLang) {
+                newPoiTexts[langCode] = { name: poiName, description: poiDescription };
+            } else {
+                newPoiTexts[langCode] = { name: `${poiName} [NEEDS TRANSLATION]`, description: "[NEEDS TRANSLATION]" };
+            }
+        }
+
+        const newPoi = { ...newPoiBase, texts: newPoiTexts, name: poiName, description: poiDescription };
+
         poiBaseData.push(newPoiBase);
-        pois.push({ ...newPoiBase, ...newPoiLang });
+        pois.push(newPoi);
         tourRoute.push(newPoiId);
+
         renderPois();
         renderPoiList();
         drawTourRoute();
@@ -188,6 +212,30 @@ document.addEventListener('DOMContentLoaded', () => {
             if (code === currentLang) option.selected = true;
             langSelector.appendChild(option);
         }
+        langSelector.addEventListener('change', (e) => switchLanguage(e.target.value));
+    }
+
+    function switchLanguage(langCode) {
+        currentLang = langCode;
+        // Update the name/description on each POI from the nested texts object
+        pois.forEach(poi => {
+            if (poi.texts && poi.texts[langCode]) {
+                poi.name = poi.texts[langCode].name;
+                poi.description = poi.texts[langCode].description;
+            } else {
+                // Fallback to english or first available language if current is missing
+                const fallbackLang = Object.keys(poi.texts)[0];
+                poi.name = poi.texts[fallbackLang].name;
+                poi.description = poi.texts[fallbackLang].description;
+            }
+        });
+
+        // Update voice synthesis language
+        const langMap = { en: 'en-US', es: 'es-ES', fr: 'fr-FR', de: 'de-DE', zh: 'zh-CN' };
+        utterance.lang = langMap[langCode] || 'en-US';
+
+        renderPois();
+        renderPoiList();
     }
 
     function renderPoiList() {
@@ -617,6 +665,10 @@ document.addEventListener('DOMContentLoaded', () => {
         populateLanguageSelector();
         const savedTheme = localStorage.getItem('alhambra-theme') || 'dark';
         applyTheme(savedTheme);
+
+        // Set initial language and render texts
+        switchLanguage(currentLang);
+
         // Set up event listeners and modes
         renderPois();
         renderPoiList();
@@ -636,9 +688,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         poiBaseData = guideData.poiBaseData;
         tourRoute = guideData.tourRoute;
-        // For simplicity, we'll use the english 'pois' data and ignore other languages for now
-        pois = guideData.pois.map(p => ({ ...poiBaseData.find(pb => pb.id === p.id), ...p }));
-        availableLanguages = { "en": "English" }; // Gist guides are single-language for now
+        availableLanguages = guideData.availableLanguages;
+
+        // Store all language data in a new structure
+        pois = guideData.pois.map(p => ({
+            ...poiBaseData.find(pb => pb.id === p.id),
+            texts: p.texts
+        }));
 
         const { lat, lon, zoom } = guideData.initialView;
         map.setView([lat, lon], zoom);
