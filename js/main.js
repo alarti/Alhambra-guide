@@ -305,31 +305,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    async function loadLanguageData(langCode) {
-        try {
-            updateGuideText(`Loading ${availableLanguages[langCode]} guide...`);
-            const response = await fetch(`assets/poi-${langCode}.json`);
-            if (!response.ok) throw new Error(`Could not load data for language: ${langCode}`);
-            const langData = await response.json();
-
-            pois = poiBaseData.map(basePoi => {
-                const langPoi = langData.find(p => p.id === basePoi.id);
-                return { ...basePoi, ...langPoi };
-            });
-
-            currentLang = langCode;
-            const langMap = { en: 'en-US', es: 'es-ES', fr: 'fr-FR', de: 'de-DE', zh: 'zh-CN' };
-            utterance.lang = langMap[langCode] || 'en-US';
-
-            renderPois();
-            renderPoiList();
-            drawTourRoute();
-        } catch (error) {
-            console.error("Error loading language data:", error);
-            updateGuideText(`Failed to load guide for ${availableLanguages[langCode]}.`);
-        }
-    }
-
     function simulateVisitToPoi(poiId) {
         const poi = pois.find(p => p.id === poiId);
         if (!poi) return;
@@ -499,35 +474,6 @@ document.addEventListener('DOMContentLoaded', () => {
         themeToggle.checked = theme === 'light';
     }
 
-    langSelector.addEventListener('change', (event) => {
-        loadLanguageData(event.target.value);
-    });
-
-    simulationModeToggle.addEventListener('change', handleModeChange);
-    themeToggle.addEventListener('change', () => applyTheme(themeToggle.checked ? 'light' : 'dark'));
-
-    panelToggleBtn.addEventListener('click', () => {
-        sidePanel.classList.toggle('collapsed');
-        panelToggleBtn.textContent = sidePanel.classList.contains('collapsed') ? '☰' : '→';
-    });
-    poiList.addEventListener('click', (event) => {
-        if (isSimulationMode && event.target.matches('li.list-group-item')) {
-            simulateVisitToPoi(event.target.dataset.poiId);
-        }
-    });
-
-    aboutBtn.addEventListener('click', () => aboutModal.classList.remove('hidden'));
-    modalCloseBtn.addEventListener('click', () => aboutModal.classList.add('hidden'));
-    aboutModal.addEventListener('click', (event) => {
-        if (event.target === aboutModal) {
-            aboutModal.classList.add('hidden');
-        }
-    });
-
-//    exportBtn.addEventListener('click', () => {
-//        downloadJson(poiBaseData, 'poi-base-updated.json');
-//    });
-
     function downloadJson(data, filename) {
         const jsonStr = JSON.stringify(data, null, 2);
         const blob = new Blob([jsonStr], { type: "application/json" });
@@ -676,7 +622,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const savedTheme = localStorage.getItem('alhambra-theme') || 'dark';
         applyTheme(savedTheme);
         // Set up event listeners and modes
-        await loadLanguageData(currentLang);
+        renderPois();
+        renderPoiList();
+        drawTourRoute();
         getLocation();
         updateGuideText("Welcome! Select a POI from the list or use your GPS in live mode.");
         setMode(isBlankEditor ? 'edit' : 'view');
