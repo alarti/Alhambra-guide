@@ -26,6 +26,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const aboutModal = document.getElementById('about-modal');
     const modalCloseBtn = aboutModal.querySelector('.modal-close-btn');
     const welcomeModal = document.getElementById('welcome-modal');
+    const guideMetaContainer = document.getElementById('guide-meta-container');
+    const authorNameSpan = document.getElementById('author-name');
+    const donationLink = document.getElementById('donation-link');
     const guideCatalogList = document.getElementById('guide-catalog-list');
     const createNewGuideBtn = document.getElementById('create-new-guide-btn');
 
@@ -675,8 +678,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (isBlankEditor) {
             // New guide, set default view and empty data
+            document.getElementById('guide-title').textContent = "New Guide";
+            guideMetaContainer.classList.add('hidden');
             map.setView([48.8584, 2.2945], 13); // Default to Paris
-            availableLanguages = { "en": "English" };
+            availableLanguages = { "en": "English", "es": "Español" };
             pois = [];
             poiBaseData = [];
             tourRoute = [];
@@ -710,7 +715,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Update UI with guide metadata
         document.getElementById('guide-title').textContent = guideData.guideName || 'Interactive Guide';
-        // We could display author and donation link somewhere, for now just loading data.
+        if (guideData.author) {
+            authorNameSpan.textContent = guideData.author;
+            guideMetaContainer.classList.remove('hidden');
+        }
+        if (guideData.donationLink) {
+            donationLink.href = guideData.donationLink;
+            donationLink.classList.remove('hidden');
+        } else {
+            donationLink.classList.add('hidden');
+        }
+
 
         poiBaseData = guideData.poiBaseData;
         tourRoute = guideData.tourRoute;
