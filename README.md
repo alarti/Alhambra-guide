@@ -1,51 +1,81 @@
-# Interactive Voice Guide Platform
+# Alhambra Guide - Versión Vanilla JS + Supabase
 
-This project is an advanced, offline-first Progressive Web App (PWA) that serves as a platform for creating, sharing, and experiencing interactive, multilingual voice guides for any location worldwide. What started as a guide for the Alhambra has evolved into a full-featured creation tool.
+Este proyecto es una versión "solo frontend" de la aplicación Alhambra Guide, diseñada para ser desplegada como un sitio estático en plataformas como GitHub Pages. Utiliza HTML, CSS y JavaScript "vanilla" (sin frameworks de compilación) y se conecta directamente a [Supabase](https://supabase.com) para la autenticación, base de datos y almacenamiento de archivos.
 
-## Features
+La versión original, una PWA con funcionalidades de mapa interactivo, se ha conservado en el fichero `README_PWA.md`.
 
-### For Viewers
-*   **Interactive Map:** Displays a dynamic, zoomable map using Leaflet.js and OpenStreetMap.
-*   **Guided Tour Route:** A predefined walking tour is drawn on the map, showing the suggested path through all points of interest.
-*   **Real-time GPS Tracking:** Uses the browser's Geolocation API to track your position in real-time.
-*   **Proximity-Based Audio Guide:** Approaching a Point of Interest (POI) automatically triggers a spoken description of that location using the Web Speech API.
-*   **Dynamic Subtitle Overlay:** The spoken description is simultaneously displayed as text in a semi-transparent overlay.
-*   **Full Multi-Language Support:** Guides can contain multiple languages. Users can switch languages on the fly.
-*   **Offline First (PWA):** Fully functional without an internet connection after the first visit. Can be installed on a mobile device's home screen.
+## Características
 
-### For Creators
-*   **Unified Interface:** Seamlessly switch between viewing and editing a guide with the click of a button.
-*   **Multi-Language Editor:** Create and edit POI names and descriptions in multiple languages.
-*   **Visual Editor:** Add new POIs by clicking directly on the map. Reposition existing POIs by dragging their markers.
-*   **Location Search:** Center the map anywhere in the world to start creating a new guide.
-*   **Gist Integration:** Save your complete guide data to a public, anonymous GitHub Gist. The platform provides you with a shareable URL to your new guide.
+-   **Sitio Estático**: Rápido, seguro y fácil de desplegar.
+-   **Backend con Supabase**:
+    -   **Autenticación**: Login con Google (OAuth).
+    -   **Base de Datos**: PostgreSQL con políticas de seguridad a nivel de fila (RLS).
+    -   **Almacenamiento**: Gestión de imágenes de portada para las guías.
+-   **Roles de Usuario**:
+    -   **Visitante (anónimo)**: Puede ver todas las guías publicadas.
+    -   **Viewer (registrado)**: Rol base para usuarios autenticados.
+    -   **Editor/Admin**: Puede crear, editar, publicar y eliminar guías.
+-   **Despliegue Continuo**: Automatizado con GitHub Actions para publicar en GitHub Pages.
 
-## How to Use
+## Cómo Ponerlo en Marcha
 
-### Running Locally
-The application now includes a serverless backend function for securely saving guides to GitHub Gist. To run this full-stack application locally, you need a development server that can handle both the static frontend files and the Node.js API endpoint. The recommended way is to use the [Vercel CLI](https://vercel.com/cli).
+### 1. Configuración de Supabase
 
-1.  Install the Vercel CLI: `npm i -g vercel`
-2.  Run the development server: `vercel dev`
-3.  The application will be available at a local URL provided by the CLI.
+Necesitarás una cuenta de Supabase para actuar como backend. Sigue las instrucciones detalladas en la guía de configuración:
 
-### Gist Saving Configuration
-To enable saving guides, you must provide a GitHub Personal Access Token with the `gist` scope.
+**➡️ [`SUPABASE_SETUP.md`](./SUPABASE_SETUP.md)**
 
-1.  Create a token [here](https://github.com/settings/tokens/new).
-2.  Create a file named `.env` in the root of the project.
-3.  Add your token to the `.env` file like this:
+Esta guía te explicará cómo:
+- Crear un proyecto en Supabase.
+- Obtener tu URL y tu clave `anon` pública.
+- Configurar la autenticación con Google OAuth.
+- Crear el bucket de almacenamiento.
+
+### 2. Aplicar las Migraciones de Base de Datos
+
+Una vez creado tu proyecto de Supabase, necesitas crear las tablas y políticas de seguridad.
+
+1.  Copia el contenido del fichero `supabase/migrations/0001_init.sql`.
+2.  Ve a tu panel de Supabase, entra en el **SQL Editor**.
+3.  Pega el contenido del script y haz clic en **"RUN"**.
+
+### 3. Configurar las Claves en la Aplicación
+
+La aplicación cliente necesita conocer la URL y la clave anónima de tu proyecto de Supabase.
+
+1.  Abre el fichero `vanilla-dist/app.js`.
+2.  Busca las siguientes líneas al principio del fichero:
+    ```javascript
+    const SUPABASE_URL = 'https://<ID-DE-PROYECTO-SUPABASE>.supabase.co';
+    const SUPABASE_ANON_KEY = '<TU-CLAVE-ANON-PUBLICA>';
     ```
-    GIST_TOKEN=your_github_personal_access_token_here
+3.  Reemplaza los valores de los placeholders con tu propia URL y clave anónima que obtuviste en el primer paso.
+
+### 4. Ejecutar Localmente
+
+Para probar el sitio en tu máquina local:
+
+1.  Necesitas un servidor web simple para servir los ficheros estáticos. Si tienes Python instalado, puedes usar:
+    ```bash
+    # Navega a la carpeta raíz del proyecto
+    cd /ruta/a/Alhambra-guide
+    # Inicia un servidor en la carpeta vanilla-dist en el puerto 8080
+    python3 -m http.server 8080 --directory vanilla-dist
     ```
-4.  When deploying to a platform like Vercel, you must set the `GIST_TOKEN` as an environment variable in the project settings.
+2.  Abre tu navegador y ve a `http://localhost:8080`.
 
-### Using the App
-    *   Upon launch, a welcome screen will show a catalog of featured guides. You can choose one to view or click "Create a New Guide".
-    *   **To View a Guide:** Simply explore the map. If you allow GPS access, the guide will speak as you approach points of interest.
-    *   **To Edit a Guide:** Click "Edit This Guide". You will enter edit mode, where you can drag existing points, or use the "Add New POI" button to create new ones. You can also edit or delete POIs from the list in the side panel.
-    *   **To Save Your Guide:** In edit mode, click "Save Guide". Your guide will be uploaded to a GitHub Gist, and you will be provided with a new, shareable URL. You can add this URL to the `assets/guides.json` file to make it appear in the welcome catalog.
+**¡Importante!** Recuerda añadir `http://localhost:8080` a tus URLs de redirección en Supabase para que el login con Google funcione localmente.
 
-## Author
+## Despliegue
 
-This project was originally developed by **Alberto Arce** ([alarti](https://github.com/alarti)) and has been significantly expanded with new platform features.
+El despliegue en GitHub Pages está automatizado. Cada vez que se realiza un `push` a la rama `main`, una GitHub Action se encarga de publicar el contenido de la carpeta `vanilla-dist`.
+
+Consulta la guía de publicación para más detalles:
+**➡️ [`docs/PUBLISHING.md`](./docs/PUBLISHING.md)**
+
+## Documentación Adicional
+
+-   **Autenticación**: [`docs/README_AUTH.md`](./docs/README_AUTH.md)
+-   **Base de Datos y RLS**: [`docs/README_DB.md`](./docs/README_DB.md)
+-   **Almacenamiento**: [`docs/README_STORAGE.md`](./docs/README_STORAGE.md)
+-   **Resolución de Problemas**: [`docs/TROUBLESHOOTING.md`](./docs/TROUBLESHOOTING.md)
