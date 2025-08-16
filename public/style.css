@@ -1,0 +1,92 @@
+/* Basic styles recreated from memory to make the app usable */
+/* This is not the complete stylesheet */
+
+:root {
+    --primary-color: #333;
+    --background-color: #f4f4f4;
+    --text-color: #333;
+    --panel-background: #fff;
+    --modal-background: rgba(0, 0, 0, 0.7);
+}
+
+body[data-theme="dark"] {
+    --primary-color: #fff;
+    --background-color: #1a1a1a;
+    --text-color: #eee;
+    --panel-background: #2c2c2c;
+}
+
+body {
+    font-family: sans-serif;
+    margin: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+#map-container {
+    height: 100vh;
+    width: 100%;
+}
+
+#side-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 350px;
+    height: 100vh;
+    background: var(--panel-background);
+    box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease-in-out;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+}
+
+#side-panel.collapsed {
+    transform: translateX(100%);
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--modal-background);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.modal-overlay.hidden {
+    display: none;
+}
+
+.modal-content {
+    background: var(--panel-background);
+    padding: 2rem;
+    border-radius: 5px;
+    max-width: 500px;
+}
+
+#guide-text-overlay {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    z-index: 1000;
+}
+
+/* Add other basic styles for buttons, inputs, etc. */
+.btn-modern {
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    background-color: #eee;
+    cursor: pointer;
+}

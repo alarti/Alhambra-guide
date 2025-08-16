@@ -1,0 +1,86 @@
+---
+// Este componente manejará la lógica de autenticación.
+---
+<div id="auth-container">
+    <button id="google-login-btn" class="btn-modern btn-modern-primary">
+        Continuar con Google
+    </button>
+</div>
+
+<style>
+    #auth-container {
+        margin: 1rem 0;
+    }
+    .btn-modern {
+        width: 100%;
+        padding: 12px;
+        font-size: 1rem;
+        cursor: pointer;
+    }
+</style>
+
+<script>
+    import { supabase } from '../../lib/supabase';
+    import { profileStore } from '../../stores/profileStore';
+
+    const loginContainer = document.getElementById('login-container');
+    const sessionContainer = document.getElementById('session-container');
+    const userEmailDisplay = document.getElementById('user-email-display');
+    const logoutButton = document.getElementById('logout-button');
+    const googleLoginBtn = document.getElementById('google-login-btn');
+
+    // Función para obtener y establecer el perfil del usuario
+    async function fetchAndSetProfile(userId) {
+        const { data, error } = await supabase
+            .from('profiles')
+            .select('id, email, role')
+            .eq('id', userId)
+            .single();
+
+        if (error) {
+            console.error('Error fetching profile:', error);
+            profileStore.set(null);
+        } else {
+            profileStore.set(data);
+        }
+    }
+
+    // 1. Listener para el estado de la autenticación
+    supabase.auth.onAuthStateChange(async (event, session) => {
+        if (session) {
+            // Usuario ha iniciado sesión
+            loginContainer.style.display = 'none';
+            sessionContainer.style.display = 'block';
+            userEmailDisplay.textContent = session.user.email;
+            // Obtenemos el perfil y lo guardamos en el store
+            await fetchAndSetProfile(session.user.id);
+        } else {
+            // Usuario ha cerrado sesión
+            loginContainer.style.display = 'block';
+            sessionContainer.style.display = 'none';
+            userEmailDisplay.textContent = '';
+            // Limpiamos el store
+            profileStore.set(null);
+        }
+    });
+
+    // 2. Lógica para el botón de Login con Google
+    googleLoginBtn.addEventListener('click', async () => {
+        const { error } = await supabase.auth.signInWithOAuth({
+            provider: 'google',
+        });
+        if (error) {
+            console.error('Error during Google login:', error);
+            alert('Hubo un error al intentar iniciar sesión con Google.');
+        }
+    });
+
+    // 3. Lógica para el botón de Logout
+    logoutButton.addEventListener('click', async () => {
+        const { error } = await supabase.auth.signOut();
+        if (error) {
+            console.error('Error during logout:', error);
+            alert('Hubo un error al cerrar la sesión.');
+        }
+    });
+</script>
