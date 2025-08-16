@@ -22,11 +22,25 @@ This project is an advanced, offline-first Progressive Web App (PWA) that serves
 
 ## How to Use
 
-1.  **Run from a local web server.** Due to browser security policies (CORS, Service Workers), you must serve the files from a server.
-    *   If you have Python 3: `python -m http.server`
-    *   Navigate to `http://localhost:8000` in your browser.
+### Running Locally
+The application now includes a serverless backend function for securely saving guides to GitHub Gist. To run this full-stack application locally, you need a development server that can handle both the static frontend files and the Node.js API endpoint. The recommended way is to use the [Vercel CLI](https://vercel.com/cli).
 
-2.  **Using the App:**
+1.  Install the Vercel CLI: `npm i -g vercel`
+2.  Run the development server: `vercel dev`
+3.  The application will be available at a local URL provided by the CLI.
+
+### Gist Saving Configuration
+To enable saving guides, you must provide a GitHub Personal Access Token with the `gist` scope.
+
+1.  Create a token [here](https://github.com/settings/tokens/new).
+2.  Create a file named `.env` in the root of the project.
+3.  Add your token to the `.env` file like this:
+    ```
+    GIST_TOKEN=your_github_personal_access_token_here
+    ```
+4.  When deploying to a platform like Vercel, you must set the `GIST_TOKEN` as an environment variable in the project settings.
+
+### Using the App
     *   Upon launch, a welcome screen will show a catalog of featured guides. You can choose one to view or click "Create a New Guide".
     *   **To View a Guide:** Simply explore the map. If you allow GPS access, the guide will speak as you approach points of interest.
     *   **To Edit a Guide:** Click "Edit This Guide". You will enter edit mode, where you can drag existing points, or use the "Add New POI" button to create new ones. You can also edit or delete POIs from the list in the side panel.

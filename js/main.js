@@ -167,35 +167,28 @@ document.addEventListener('DOMContentLoaded', () => {
             tourRoute: tourRoute
         };
 
-        const guideContent = JSON.stringify(guideData, null, 2);
-        const gistPayload = {
-            description: `${guideName} - by ${authorName || "Anonymous"}`,
-            public: true,
-            files: { "guide.json": { content: guideContent } }
-        };
-
-        alert("Saving to Gist... you will be notified.");
+        alert("Saving guide via our secure service...");
 
         try {
-            const response = await fetch('https://api.github.com/gists', {
+            const response = await fetch('/api/create-gist', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/vnd.github.v3+json'
+                    'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(gistPayload)
+                body: JSON.stringify({ guideData: guideData })
             });
 
+            const result = await response.json();
+
             if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(`GitHub API responded with ${response.status}: ${errorData.message}`);
+                throw new Error(result.message || 'Failed to save guide.');
             }
 
-            const gistData = await response.json();
-            prompt("Success! Your guide is saved. Copy this URL:", gistData.html_url);
+            prompt("Success! Your guide is saved. Copy this URL:", result.html_url);
+
         } catch (error) {
-            console.error("Gist save error:", error);
-            prompt(`Error saving guide: ${error.message}\n\nPlease copy the data below and save it manually.`, guideContent);
+            console.error("Save guide error:", error);
+            prompt(`Error saving guide: ${error.message}\n\nPlease copy the data below and save it manually.`, JSON.stringify(guideData, null, 2));
         }
     }
 
